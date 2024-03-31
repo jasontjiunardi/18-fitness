@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Plan Details</title>
+</head>
+<body>
+    <h1 th:text="${planType} + ' Plan Details'">Plan Type Details</h1>
+    <div th:each="plan : ${plans}">
+        <p><strong>Duration:</strong> <span th:text="${plan.durationType} + ' months'"></span></p>
+        <p><strong>Price:</strong> <span th:text="${'¥'} + ${plan.price}"></span></p>
+    </div>
+    <a href="/browse_plans">Back to Plans</a>
+</body>
+</html>
