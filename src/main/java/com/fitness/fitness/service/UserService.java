@@ -14,4 +14,13 @@ public class UserService {
     public User saveUser(User user){
         return userRepo.save(user);
     }
+
+    public boolean userLogin(User user) {
+        User u = userRepo.findByEmail(user.getEmail());
+        if (u != null && u.getPassword().equals(user.getPassword())) {
+            return true;
+        }
+        return false;
+    }
+
 }
