@@ -1,13 +1,32 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Browse Plans</title>
+    <meta charset="UTF-8">
+    <title>Plan Browsing Design</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Keeping the latest version of FontAwesome you're using -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
 </head>
 <body>
-    <h1>Choose Fitness Plans</h1>
-    <div th:each="planType : ${planTypes}">
-        <h2 th:text="${planType} + ' Plan'"></h2>
-        <a th:href="@{'/browsePlan/' + ${planType}}"><button>Choose Plan</button></a>
+    <div class="header">Browse Your Plan</div>
+    <div class="wrapper">
+        <div th:each="planType : ${planTypes}">
+            <div class="card" th:classappend="${planType.toLowerCase()} + 'Active'">
+                <div class="card-content"> <!-- Container for the content above the button -->
+                    <h3 th:text="${planType}"></h3>
+                    <p>Price starting from: 
+                        <span>
+                            <span class="currency-symbol">¥</span>
+                            <span th:text="${startingPrices.get(planType)}"></span>
+                        </span>
+                    </p>
+                    <ul>
+                        <li th:each="benefit : ${planBenefits.get(planType)}" th:text="${benefit.description}"></li>
+                    </ul>
+                </div>
+                <a th:href="@{/browsePlan/{planType}(planType=${planType})}" class="explore-button">Explore Plans</a>
+            </div>
+        </div>
     </div>
 </body>
 </html>

@@ -1,0 +1,166 @@
+.header {
+    width: 100%;
+    height: 20vh; /* 1/5 of the screen size */
+    background-color: #5f30e2; /* Matching the "Explore Plans" button color */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: fixed; /* Keep the header at the top */
+    top: 0;
+    left: 0;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+body {
+    background-color: #ebeef1;
+    display: flex;
+    flex-direction: column; /* Align items vertically */
+    align-items: center; /* Center items horizontally */
+    min-height: 100vh;
+    padding-top: 20vh; /* Make space for the header */
+}
+
+.wrapper {
+    display: flex;
+    flex-wrap: wrap; /* Allow the cards to wrap to the next line */
+    justify-content: center; /* Center the cards within the wrapper */
+    gap: 30px; /* Provides space between the cards */
+    width: 100%; /* Ensures the wrapper takes the full width */
+}
+
+.wrapper .card {
+    flex: 1 0 300px; /* flex-grow, flex-shrink, and flex-basis */
+    display: flex;
+    flex-direction: column;
+    max-width: 350px; /* Maximum width of each card */
+    min-height: 100%; /* Adjust if necessary to ensure cards take up full height */
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px; /* Margin to separate rows of cards */
+}
+
+/* General hover effect for cards */
+.wrapper .card:hover {
+    transform: scale(1.05);
+}
+
+.wrapper .card h3, .wrapper .card h1, .wrapper .card p, .wrapper .card ul li {
+    transition: color 0.3s ease;
+}
+
+.wrapper .card h3 {
+    margin-bottom: 0%;
+}
+
+.wrapper .card h1 {
+    margin-bottom: 10px;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.wrapper .card h1 span {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.wrapper .card p {
+    margin: 20px 0;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.wrapper .card ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.wrapper .card ul li {
+    position: relative;
+    line-height: 3;
+    padding-left: 25px;
+    color: rgba(0, 0, 0, 0.9);
+}
+.wrapper .card ul li::before {
+    content: "\f00c"; /* FontAwesome check icon */
+    font-family: 'Font Awesome 5 Free'; /* Specify the font-family for FontAwesome */
+    font-weight: 900; /* FontAwesome 5 requires font-weight 900 for solid icons */
+    color: #5f30e2; /* Match the "Explore Plans" button color or choose another */
+    position: absolute;
+    left: 0; /* Aligns icon to the left of the list item content */
+    top: 0; /* Adjusts vertical alignment of the icon */
+}
+
+.wrapper .card ul li i {
+    color: rgba(0, 0, 0, 0.4);
+    margin-right: 10px;
+}
+
+.wrapper .card a {
+    margin: 20px 0;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid #5f30e2;
+    color: #5f30e2;
+    padding: 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.wrapper .card a:hover {
+    background-color: #5f30e2;
+    color: white;
+}
+
+/* Specific Active Card Styles */
+.wrapper .card.diamondActive,
+.wrapper .card.goldActive,
+.wrapper .card.silverActive {
+    color: white;
+}
+
+.wrapper .card.diamondActive {
+    background-color: #b0c4de; /* Light Steel Blue for a glossy diamond look */
+}
+
+.wrapper .card.goldActive {
+    background-color: #ffd700; /* Gold */
+}
+
+.wrapper .card.silverActive {
+    background-color: #c0c0c0; /* Silver */
+}
+
+/* Hover styles for specific active cards */
+.wrapper .card.diamondActive:hover {
+    background-color: #8abbd0; /* Glossy Diamond Hover */
+}
+
+.wrapper .card.goldActive:hover {
+    background-color: #ffdf00; /* Glossy Gold Hover */
+}
+
+.wrapper .card.silverActive:hover {
+    background-color: #dcdcdc; /* Glossy Silver Hover */
+}
+.currency-symbol {
+    font-weight: bold;
+    font-size: 1.7em; /* Adjust the size as needed */
+}
+.card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
