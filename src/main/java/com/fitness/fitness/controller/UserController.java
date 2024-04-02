@@ -14,6 +14,23 @@ import com.fitness.fitness.service.UserService;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    
+    @GetMapping("/user_signin")
+    public String showLoginForm(Model model) {
+        User existingUser = new User();
+        model.addAttribute("user", existingUser ) ;
+        return "sign";
+    }
+
+    @PostMapping("/user_signin")
+    public String userLoginPage (@ModelAttribute User user){
+        if(userService.userLogin(user)){
+            return "loginsuccess";}
+        return "sign";
+    }
+
+
     
     @GetMapping("/register_user_form")
     public String getNewUserPage(Model model){
@@ -27,4 +44,5 @@ public class UserController {
 
         return "home";
     }
+
 }
