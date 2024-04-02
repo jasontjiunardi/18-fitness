@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
-    <head>
-        <title>Sign In</title>
-    </head>
-    <body>
-        <h1>Sign in</h1>
-        <form method="POST" th:action="@{/user_signin}"th:object="${user}">
-            Email: <input type="text" th:field="*{email}" /> <br />
-            Password: <input type="password" th:field="*{password}" /> <br />
-            <input type="submit" value="Sign In" />
-        </form>
-    </body>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form method="post" action="/user_signin">
+        Email: <input type="text" name="email" required><br />
+        Password: <input type="password" name="password" required><br />
+        <button type="submit">Login</button>
+        <a href="/forget_password">Forget password?</a>
+    </form>
+</body>
 </html>

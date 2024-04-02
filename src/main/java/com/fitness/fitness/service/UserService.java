@@ -14,6 +14,8 @@ public class UserService {
     public User saveUser(User user){
         return userRepo.save(user);
     }
+
+
     public boolean userLogin(User user) {
         User u = userRepo.findByEmail(user.getEmail());
         if (u != null && u.getPassword().equals(user.getPassword())) {
@@ -21,4 +23,32 @@ public class UserService {
         }
         return false;
     }
+
+    public boolean userRecoveryCode(User user) {
+        User u = userRepo.findByEmail(user.getEmail());
+        if (u != null && u.getRecoveryCode() == (user.getRecoveryCode())) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean newPassword(User user) {
+        User u = userRepo.findByEmail(user.getEmail());
+        if (u != null && !u.getPassword().equals(user.getPassword())) {
+            return true;
+        }
+        return false;
+    }
+
+    public void updatePasswordByEmail(String email, String newPassword) {
+        userRepo.updatePasswordByEmail(email, newPassword);
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepo.findByEmail(email);
+    }
+
 }
+
+     
+
