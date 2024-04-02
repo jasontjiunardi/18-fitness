@@ -15,7 +15,6 @@ public class UserService {
         return userRepo.save(user);
     }
 
-
     public boolean userLogin(User user) {
         User u = userRepo.findByEmail(user.getEmail());
         if (u != null && u.getPassword().equals(user.getPassword())) {
@@ -27,7 +26,6 @@ public class UserService {
     public boolean userRecoveryCode(User user) {
         User u = userRepo.findByEmail(user.getEmail());
         if (u != null && u.getRecoveryCode() == (user.getRecoveryCode())) {
-            return true;
         }
         return false;
     }
@@ -49,6 +47,4 @@ public class UserService {
     }
 
 }
-
-     
 

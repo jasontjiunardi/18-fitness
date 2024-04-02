@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
 import com.fitness.fitness.model.User;
 import com.fitness.fitness.service.UserService;
 
@@ -65,8 +64,23 @@ public class UserController {
         model.addAttribute("error", "User not found");
         return "profile";
     }
+    }
+    
+    @GetMapping("/register_user_form")
+    public String getNewUserPage(Model model){
+        model.addAttribute("user", new User());
+        return "registeruserform";
+    }
+
+    @PostMapping("/register_user")
+    public String registerUser(@ModelAttribute User user){
+        userService.saveUser(user);
+
+        return "home";
+    }
+
 }
-}
+
 
 
 
