@@ -3,6 +3,10 @@
         <title>Home</title>
     </head>
     <body>
-        <h1>Home</h1>
+            <!-- Form to view profile -->
+    <form method="get" action="/profile">
+        <input type="hidden" name="email" th:value="${user.email}">
+        <button type="submit">View Profile</button>
+    </form>
     </body>
 </html>
