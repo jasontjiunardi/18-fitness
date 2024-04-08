@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Purchase Form</title>
+    <script>
+        function togglePaymentFields() {
+            var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            document.getElementById('mobilePaymentFields').style.display = paymentMethod == 'Alipay' || paymentMethod == 'WeChat' ? 'block' : 'none';
+            document.getElementById('cardPaymentFields').style.display = paymentMethod == 'Debit' || paymentMethod == 'Credit' ? 'block' : 'none';
+        }
+    </script>
+</head>
+<body>
+    <h1>Purchase Form</h1>
+    <div>
+        <p>Plan Type: <span th:text="${planType}"></span></p>
+        <p>Selected Duration: <span th:text="${selectedDuration} + ' months'"></span></p>
+        <p>Price: ¥<span th:text="${price}"></span></p>
+    </div>
+
+    <h2>Select Payment Method:</h2>
+    <form th:action="@{/finalizePurchase}" method="post" onchange="togglePaymentFields()">
+        <!-- Mobile Payment Options -->
+        
+        <div>
+            <input type="radio" id="alipay" name="paymentMethod" value="Alipay">
+            <label for="alipay">Alipay</label>
+            <input type="radio" id="wechat" name="paymentMethod" value="WeChat">
+            <label for="wechat">WeChat</label>
+        </div>
+        
+        <!-- Card Payment Options -->
+        <div>
+            <input type="radio" id="debit" name="paymentMethod" value="Debit">
+            <label for="debit">Debit</label>
+            <input type="radio" id="credit" name="paymentMethod" value="Credit">
+            <label for="credit">Credit</label>
+        </div>
+        
+        <!-- Mobile Payment Fields -->
+        <div id="mobilePaymentFields" style="display:none;">
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" pattern="\d{8,12}" placeholder="8-12 digits" title="Phone number must be 8 to 12 digits">
+        </div>
+        
+        <!-- Card Payment Fields -->
+        <div id="cardPaymentFields" style="display:none;">
+            <label for="cardholderName">Cardholder Name:</label>
+            <input type="text" id="cardholderName" name="cardholderName">
+            
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" id="cardNumber" name="cardNumber" pattern="\d{13,16}" placeholder="13-16 digits" title="Card number must be 13 to 16 digits">
+            
+            <label for="cvv">CVV:</label>
+            <input type="text" id="cvv" name="cvv" pattern="\d{3,4}" placeholder="3-4 digits" title="CVV must be 3 to 4 digits">
+            
+            <label for="expiryDate">Expiry Date:</label>
+            <input type="month" id="expiryDate" name="expiryDate">
+        </div>
+
+        <!-- Hidden inputs for planType, duration, and price -->
+        <!-- Confirm Purchase Button -->
+    </form>
+
+    <a href="/browse_plans">Back to Plans</a>
+</body>
+</html>

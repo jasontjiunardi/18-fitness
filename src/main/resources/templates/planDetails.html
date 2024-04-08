@@ -6,10 +6,35 @@
 </head>
 <body>
     <h1 th:text="${planType} + ' Plan Details'">Plan Type Details</h1>
-    <div th:each="plan : ${plans}">
-        <p><strong>Duration:</strong> <span th:text="${plan.durationType} + ' months'"></span></p>
-        <p><strong>Price:</strong> <span th:text="${'¥'} + ${plan.price}"></span></p>
-    </div>
+    <p th:text="${planDetails}">Plan Description</p>
+    <h2>Benefits</h2>
+    <ul>
+        <li th:each="benefit : ${benefits}" th:text="${benefit.description}"></li>
+    </ul>
+    <h2>Choose a duration:</h2>
+    <form th:action="@{/browsePlan/{planType}/purchaseForm(planType=${planType})}" method="get">
+        <div th:each="durationPrice : ${durationPrices}">
+            <input type="radio" th:id="${'duration' + durationPrice.planDuration}" 
+                   name="duration" th:value="${durationPrice.planDuration}" 
+                   th:data-price="${durationPrice.planPrice}" 
+                   onchange="updatePrice(this)" />
+            <label th:for="${'duration' + durationPrice.planDuration}" 
+                   th:text="${durationPrice.planDuration + ' months'}"></label>
+        </div>
+        <input type="hidden" id="selectedPrice" name="price" value="" />
+        <button type="submit">Proceed to Purchase</button>
+    </form>
+    
+    <script>
+        function updatePrice(selectedDuration) {
+            const price = selectedDuration.getAttribute('data-price');
+            document.getElementById('selectedPrice').value = price;
+            document.getElementById('priceDisplay').textContent = '¥ ' + price;
+        }
+    </script>
+
+    <p>Price: <span id="priceDisplay">Select a duration</span></p>
+    
     <a href="/browse_plans">Back to Plans</a>
 </body>
 </html>

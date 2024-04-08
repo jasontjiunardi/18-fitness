@@ -1,5 +1,6 @@
 package com.fitness.fitness.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +9,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,10 +20,12 @@ public class Plan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String planType;
-    private int durationType;
-    private double price;
+    private String planDetails; 
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<PlanDurationPrice> planDurationPrices = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
         name = "plan_benefit",
         joinColumns = @JoinColumn(name = "plan_id"),
@@ -29,16 +34,14 @@ public class Plan {
     private Set<Benefit> benefits = new HashSet<>();
 
     public Plan() {
-        // Default constructor for JPA
     }
 
-    public Plan(String planType, int durationType, double price) {
+
+    public Plan(String planType, String planDetails) {
         this.planType = planType;
-        this.durationType = durationType;
-        this.price = price;
+        this.planDetails = planDetails;
     }
 
-    // Standard getters and setters
     public int getId() {
         return id;
     }
@@ -55,20 +58,20 @@ public class Plan {
         this.planType = planType;
     }
 
-    public int getDurationType() {
-        return durationType;
+    public String getPlanDetails() {
+        return planDetails;
     }
 
-    public void setDurationType(int durationType) {
-        this.durationType = durationType;
+    public void setPlanDetails(String planDetails) {
+        this.planDetails = planDetails;
     }
 
-    public double getPrice() {
-        return price;
+    public Set<PlanDurationPrice> getPlanDurationPrices() {
+        return planDurationPrices;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setPlanDurationPrices(Set<PlanDurationPrice> planDurationPrices) {
+        this.planDurationPrices = planDurationPrices;
     }
 
     public Set<Benefit> getBenefits() {
@@ -78,4 +81,5 @@ public class Plan {
     public void setBenefits(Set<Benefit> benefits) {
         this.benefits = benefits;
     }
+
 }
