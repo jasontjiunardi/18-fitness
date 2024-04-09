@@ -2,26 +2,25 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Plan Browsing Design</title>
+    <title>Plan Browsing Page</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Keeping the latest version of FontAwesome you're using -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
 </head>
 <body>
     <div class="header">Browse Your Plan</div>
     <div class="wrapper">
-        <div th:each="planType : ${planTypes}">
-            <div class="card" th:classappend="${planType.toLowerCase()} + 'Active'">
+        <div th:each="planType, iterStat : ${planTypes}">
+            <div class="card" th:classappend="${planType} + (iterStat.even ? ' even' : ' odd')">
                 <div class="card-content"> <!-- Container for the content above the button -->
-                    <h3 th:text="${planType}"></h3>
+                    <h3 th:text="${planType}">Plan Type</h3>
                     <p>Price starting from: 
                         <span>
                             <span class="currency-symbol">¥</span>
-                            <span th:text="${startingPrices.get(planType)}"></span>
+                            <span th:text="${startingPrices[__${planType}__]} ?: 'Unavailable'">Price</span>
                         </span>
                     </p>
                     <ul>
-                        <li th:each="benefit : ${planBenefits.get(planType)}" th:text="${benefit.description}"></li>
+                        <li th:each="benefit : ${planBenefits[__${planType}__]}" th:text="${benefit.description}">Benefit Description</li>
                     </ul>
                 </div>
                 <a th:href="@{/browsePlan/{planType}(planType=${planType})}" class="explore-button">Explore Plans</a>

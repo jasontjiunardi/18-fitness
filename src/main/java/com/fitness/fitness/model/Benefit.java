@@ -11,7 +11,7 @@ public class Benefit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String description;
-
+    //no many to many @ constructed here so that benefit can only be accessed from plans
     public Benefit() {
     }
 
@@ -19,7 +19,6 @@ public class Benefit {
         this.description = description;
     }
 
-    // Getters and setters
     public int getId() {
         return id;
     }
