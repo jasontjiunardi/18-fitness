@@ -13,7 +13,7 @@ public class PaymentDTO {
     @DateTimeFormat(pattern = "yyyy-MM")
     private Date expiryDate;
     private String phoneNumber;
-    private int userId; // ID pengguna yang terkait dengan pembayaran
+    private int userId; 
     private String paymentMethod;
 
     public PaymentDTO() {}
