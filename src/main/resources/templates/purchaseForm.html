@@ -9,6 +9,38 @@
             document.getElementById('mobilePaymentFields').style.display = paymentMethod == 'Alipay' || paymentMethod == 'WeChat' ? 'block' : 'none';
             document.getElementById('cardPaymentFields').style.display = paymentMethod == 'Debit' || paymentMethod == 'Credit' ? 'block' : 'none';
         }
+
+        function validateUserAgreement() {
+        // Mengecek apakah checkbox "User Agreement" dicentang
+        var userAgreementChecked = document.getElementById('userAgreement').checked;
+        
+        // Jika checkbox tidak dicentang, tampilkan popup
+        if (!userAgreementChecked) {
+            return false; // Mencegah pengiriman formulir
+        }
+        return true; // Memungkinkan pengiriman formulir
+        }
+
+        function showUserAgreement() {
+            var userAgreementText = "\
+            FITNESS MEMBERSHIP AGREEMENT\n\
+            ------------------------------\n\
+            By purchasing a membership with us, you agree to the following terms and conditions:\n\
+            \n\
+            1. Membership Duration: Your membership is valid for the duration specified at the time of purchase.\n\
+            \n\
+            2. Payment Terms: You agree to pay all applicable fees and charges associated with your membership on time.\n\
+            \n\
+            3. Usage Policies: You agree to abide by the facility rules and regulations as outlined by our fitness center.\n\
+            \n\
+            4. Cancellation Policy: Membership cancellations must be made in accordance with the terms specified in our cancellation policy.\n\
+            \n\
+            5. Personal Responsibility: You acknowledge that participation in fitness activities carries inherent risks, and you assume full responsibility for any injuries or damages incurred.\n\
+            \n\
+            By checking this box, you confirm that you have read, understood, and agree to the terms of this agreement.\n\
+            ";
+            alert(userAgreementText);
+        }
     </script>
 </head>
 <body>
@@ -22,7 +54,6 @@
     <h2>Select Payment Method:</h2>
     <form th:action="@{/finalizePurchase}" method="post" onchange="togglePaymentFields()">
         <!-- Mobile Payment Options -->
-        
         <div>
             <input type="radio" id="alipay" name="paymentMethod" value="Alipay">
             <label for="alipay">Alipay</label>
@@ -37,7 +68,7 @@
             <input type="radio" id="credit" name="paymentMethod" value="Credit">
             <label for="credit">Credit</label>
         </div>
-        
+
         <!-- Mobile Payment Fields -->
         <div id="mobilePaymentFields" style="display:none;">
             <label for="phoneNumber">Phone Number:</label>
@@ -59,8 +90,19 @@
             <input type="month" id="expiryDate" name="expiryDate">
         </div>
 
+        <!-- Tombol View User Agreement -->
+        <button type="button" onclick="showUserAgreement()">View User Agreement</button>
+
+        <!-- User Agreement Checkbox -->
+        <div>
+            <input type="checkbox" id="userAgreement" name="userAgreement" required>
+            <label for="userAgreement">I agree to the terms and conditions</label>
+        </div>
+
+        
         <!-- Hidden inputs for planType, duration, and price -->
         <!-- Confirm Purchase Button -->
+        <button type="submit" onclick="redirectToConfirmationPage()">Confirm Purchase</button>
     </form>
 
     <a href="/browse_plans">Back to Plans</a>
