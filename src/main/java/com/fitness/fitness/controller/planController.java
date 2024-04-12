@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fitness.fitness.model.Benefit;
@@ -88,7 +89,20 @@ public class planController {
         model.addAttribute("price", price);
         return "purchaseForm";
     }
-    
-    
-    
+
+    @GetMapping("/confirm_purchase")
+    public String showPurchaseConfirmationPage(Model model) {
+        return "purchaseConfirmation";
+    }
+
+    @PostMapping("/finalizePurchase")
+    public String finalizePurchase(@RequestParam("userAgreement") boolean userAgreement, Model model) {
+        if (userAgreement) {
+            return "redirect:/confirm_purchase"; 
+        } else {
+            model.addAttribute("error", "You must agree to the user agreement to proceed!");
+            return "purchaseForm"; 
+        }
+    }
+       
 }
