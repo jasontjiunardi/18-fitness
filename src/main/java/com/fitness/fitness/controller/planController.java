@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fitness.fitness.model.Benefit;
+import com.fitness.fitness.model.PaymentTransaction;
 import com.fitness.fitness.model.Plan;
 import com.fitness.fitness.model.PlanDurationPrice;
+import com.fitness.fitness.repository.PaymentTransactionRepo;
 import com.fitness.fitness.service.PlanService;
 
 
@@ -33,6 +36,8 @@ public class planController {
 
     @Autowired
     private PlanService planService;
+    @Autowired
+    private PaymentTransactionRepo paymentTransactionRepo;
     @GetMapping("/browse_plans")
     public String browsePlans(Model model) {
         Map<String, Double> startingPrices = planService.getStartingPricesForAllPlanTypes();
@@ -96,13 +101,36 @@ public class planController {
     }
 
     @PostMapping("/finalizePurchase")
-    public String finalizePurchase(@RequestParam("userAgreement") boolean userAgreement, Model model) {
+    public String finalizePurchase(@RequestParam("userAgreement") boolean userAgreement, 
+                                    @RequestParam("paymentMethod") String paymentMethod,
+                                    @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+                                    @RequestParam(value = "cardholderName", required = false) String cardholderName,
+                                    @RequestParam(value = "cardNumber", required = false) String cardNumber,
+                                    @RequestParam(value = "cvv", required = false) String cvv,
+                                    @RequestParam(value = "expiryDate", required = false) String expiryDate,
+                                    Model model) {
         if (userAgreement) {
+            String transactionId = UUID.randomUUID().toString();
+
+            PaymentTransaction paymentTransaction = new PaymentTransaction();
+            paymentTransaction.setTransactionId(transactionId);
+            paymentTransaction.setPaymentMethod(paymentMethod);
+            paymentTransaction.setAccountNumber(phoneNumber);
+            paymentTransaction.setCardholderName(cardholderName);
+            paymentTransaction.setCardNumber(cardNumber);
+            paymentTransaction.setCvv(cvv);
+            paymentTransaction.setExpiryDate(expiryDate);
+        
+            
+            // Save the payment transaction to the database
+            paymentTransactionRepo.save(paymentTransaction);
+            
             return "redirect:/confirm_purchase"; 
         } else {
             model.addAttribute("error", "You must agree to the user agreement to proceed!");
             return "purchaseForm"; 
         }
     }
+
        
 }
