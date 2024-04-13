@@ -10,11 +10,39 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.fitness.fitness.model.User;
 import com.fitness.fitness.service.UserService;
 
+import jakarta.servlet.http.HttpSession;
+
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
+
+
+
+
+
 @Controller
+@SessionAttributes("user")
 public class UserController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/register_user")
+    public String getNewUserPage(Model model){
+        model.addAttribute("user", new User());
+        return "registeruserform";
+    }
+
+    @PostMapping("/register_user")
+    public String registerUser(@ModelAttribute User user, HttpSession session) {
+        if (userService.verifyUser(user)) {
+            if(userService.emailValid(user.getEmail()) && userService.passwordValid(user.getPassword())){
+                userService.saveUser(user); 
+                session.setAttribute("user", user);
+                return "home";
+            }
+        }
+        return "registeruserform";
+    }
     
     @GetMapping("/user_signin")
     public String showLoginForm(Model model) {
@@ -24,9 +52,11 @@ public class UserController {
     }
 
     @PostMapping("/user_signin")
-    public String userLoginPage (@ModelAttribute User user){
-        if(userService.userLogin(user)){
-            return "home";}
+    public String login(@ModelAttribute User user, HttpSession session) {
+        if (userService.userLogin(user)) {
+            session.setAttribute("user", user);
+            return "home";
+        }
         return "login_fail";
     }
 
@@ -42,7 +72,6 @@ public class UserController {
     public String userEnterCode(@ModelAttribute User user, Model model){
         if (userService.userRecoveryCode(user) && userService.newPassword(user)) {
             userService.saveUser(user);
-            // Redirect to the sign-in page after successful password update
             return "sign";
         }
         
@@ -52,34 +81,43 @@ public class UserController {
     
     @GetMapping("/profile")
     public String userProfile(Model model, User user) {
-    // Retrieve user information based on the provided user object
     User retrievedUser = userService.getUserByEmail(user.getEmail());
 
     if (retrievedUser != null) {
-        // If the user exists, add user information to the model
         model.addAttribute("user", retrievedUser);
         return "profile";
     } else {
-        // If the user does not exist, handle it accordingly (e.g., show an error message)
         model.addAttribute("error", "User not found");
         return "profile";
     }
     }
+
+    @GetMapping("/add_credit_card")
+    public String addCreditCard(Model model,User user) {
+        User u = userService.getUserByEmail(user.getEmail());
+        model.addAttribute("user", u);
+        return "profile";
+    }
     
-    @GetMapping("/register_user_form")
-    public String getNewUserPage(Model model){
-        model.addAttribute("user", new User());
-        return "registeruserform";
+    @PostMapping("/add_credit_card")
+    public String userAddCreditCard(@ModelAttribute User user, Model model) {
+        String cardNumber = user.getCardNumber();
+        userService.setCreditCardNumber(user.getEmail(), cardNumber);
+        return "profile"; 
     }
-
-    @PostMapping("/register_user")
-    public String registerUser(@ModelAttribute User user){
-        userService.saveUser(user);
-
-        return "home";
-    }
-
+    @GetMapping("/home_page")
+    public String getHomePage(Model model, @SessionAttribute("user") User user) {
+        if (user != null) {
+            model.addAttribute("user", user);
+            return "home";
+        } else {
+            return "login";
+        }
 }
+}
+    
+
+
 
 
 
