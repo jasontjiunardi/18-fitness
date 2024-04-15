@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
+<<<<<<< HEAD
     <head>
         <title>Register New User</title>
     </head>
@@ -16,3 +17,22 @@
         </form>
     </body>
 </html>
+=======
+<head>
+    <title>Register New User</title>
+</head>
+<body>
+    <h1>Register New User</h1>
+    <form method="POST" th:action="@{/register_user}" th:object="${user}">
+        Username: <input type="text" th:field="*{username}" required /> <br />
+        Password: <input type="password" th:field="*{password}" required /> <br />
+        Name: <input type="text" th:field="*{name}" required /> <br />
+        Email: <input type="email" th:field="*{email}" required/><br />
+        Birth Date: <input type="date" th:field="*{dob}" required /> <br />
+        Phone Number: <input type="text" th:field="*{phoneNumber}" required /> <br />
+        <input type="submit" value="Register" />
+    </form>
+</body>
+</html>
+
+>>>>>>> 5259227a1f6a9dc324dfaad7818b9901d25c0b2f

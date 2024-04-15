@@ -2,6 +2,8 @@ package com.fitness.fitness.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,16 +18,18 @@ public class User {
     private String username;
     private String password;
     private String email;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dob;
     private String phoneNumber;
     private int status; // 0 - active, 1 - inactive, 2 - deleted
     private int recoveryCode;
+    private String cardNumber;
 
     public User() {
     }
 
     public User(int id, String name, String username, String password, String email, Date dob, String phoneNumber,
-            int status, int recoveryCode) {
+            int status, int recoveryCode, String cardNumber) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -35,6 +39,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.status = status;
         this.recoveryCode = recoveryCode;
+        this.cardNumber = cardNumber;
     }
     public int getRecoveryCode() {
         return recoveryCode;
@@ -92,6 +97,14 @@ public class User {
     public void setStatus(int status) {
         this.status = status;
     }
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
 
     
 }
