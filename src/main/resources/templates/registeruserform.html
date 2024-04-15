@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
-    <head>
-        <title>Register New User</title>
-    </head>
-    <body>
-        <h1>Register New User</h1>
-        <form method="POST" th:action="@{/register_user}" th:object="${user}">
-            Username: <input type="text" th:field="*{username}" /> <br />
-            Password: <input type="password" th:field="*{password}" /> <br />
-            Name: <input type="text" th:field="*{name}" /> <br />
-            Email: <input type="text" th:field="*{email}" /> <br />
-            Birth Date: <input type="text" th:field="*{dob}" /> <br />
-            Phone Number: <input type="text" th:field="*{phoneNumber}" /> <br />
-            <input type="submit" value="Register" />
-        </form>
-    </body>
+<head>
+    <title>Register New User</title>
+</head>
+<body>
+    <h1>Register New User</h1>
+    <form method="POST" th:action="@{/register_user}" th:object="${user}">
+        Username: <input type="text" th:field="*{username}" required /> <br />
+        Password: <input type="password" th:field="*{password}" required /> <br />
+        Name: <input type="text" th:field="*{name}" required /> <br />
+        Email: <input type="email" th:field="*{email}" required/><br />
+        Birth Date: <input type="date" th:field="*{dob}" required /> <br />
+        Phone Number: <input type="text" th:field="*{phoneNumber}" required /> <br />
+        <input type="submit" value="Register" />
+    </form>
+</body>
 </html>
+

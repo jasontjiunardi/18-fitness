@@ -10,7 +10,24 @@
     <div>
         <p>Email: <span th:text="${user.email}"></span></p>
         <p>Name: <span th:text="${user.name}"></span></p>
-        <!-- Add more fields as needed -->
+    </div>
+    
+    <!-- If user has a credit card, display the credit card information -->
+    <div th:if="${user.cardNumber != null}">
+        <p>Credit Card Number: <span th:text="${user.cardNumber}"></span></p>
+    </div>
+    
+    <!-- If user doesn't have a credit card, display the form to add a credit card -->
+    <div th:unless="${user.cardNumber != null}">
+        <form method="POST" action="/add_credit_card" th:object="${creditCard}">
+            <input type="hidden" name="email" th:value="${user.email}">
+            <label for="cardNumber">Credit Card Number:</label>
+            <input type="text" id="cardNumber" name="cardNumber" required pattern="\d{16}" title="Credit card number must be 16 digits" maxlength="16"><br>
+            <button type="submit">Add Credit Card</button>
+        </form>
     </div>
 </body>
+<form method="GET" action="/home_page">
+    <button type="submit">Go Back</button>
+</form>
 </html>
