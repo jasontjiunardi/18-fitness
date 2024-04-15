@@ -1,11 +1,13 @@
+/* Reset default browser styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
+    background-color: #f6f6f6;
+    color: #444;
 }
 
+/* Main content container */
 .container {
     max-width: 800px;
     margin: 20px auto;
@@ -15,27 +17,86 @@ body {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
+/* Page heading */
 h1 {
     text-align: center;
     margin-bottom: 20px;
-    color: #555;
+    color: #333;
+    font-size: 32px;
+    border-bottom: 2px solid #4CAF50; /* Add a border at the bottom of the heading */
+    padding-bottom: 10px; /* Add some space between the heading and border */
 }
 
+/* List styles */
 ul {
     list-style-type: none;
     padding: 0;
 }
 
+/* Individual fitness class entry */
 .fitness-class {
     border-bottom: 1px solid #eee;
     padding: 20px 0;
+    transition: background-color 0.3s ease; /* Add smooth transition */
 }
 
+/* Fitness class details */
 .fitness-class-details {
     text-align: center;
 }
 
-span {
+/* Label styles */
+span.label {
     font-weight: bold;
     color: #666;
+}
+
+/* Value styles */
+span.value {
+    font-weight: normal;
+    color: #333;
+    margin-left: 10px;
+}
+
+/* Button styles */
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Center align button */
+button.center {
+    display: block;
+    margin: 20px auto;
+}
+
+/* Add border radius to list items */
+.fitness-class {
+    border-radius: 5px;
+}
+
+/* Add background color and padding to even list items */
+.fitness-class:nth-child(even) {
+    background-color: #f9f9f9;
+    padding: 20px;
+}
+
+/* Add border to even list items */
+.fitness-class:nth-child(even) {
+    border: 1px solid #ddd;
+}
+
+/* Darken fitness class on hover */
+.fitness-class:hover {
+    background-color: #e0e0e0; /* Adjust the color as desired */
 }
