@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+</head>
+<body>
+    <h1>Edit Profile</h1>
+    <form method="POST" action="/edit_profile" th:object="${user}">
+        <!-- Hidden field to send user's email for identification -->
+        <input type="hidden" name="email" th:value="${user.email}">
+        
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" th:value="${user.name}" required pattern="[A-Za-z ]+" title="Name must contain only letters and spaces"><br>
+        
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" th:value="${#dates.format(user.dob, 'yyyy-MM-dd')}" required><br>
+        
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" th:value="${user.phoneNumber}" required pattern="[0-9]+" title="Phone number must contain only numbers"><br>
+        
+        <label for="cardNumber">Credit Card Number:</label>
+        <input type="text" id="cardNumber" name="cardNumber" th:value="${user.cardNumber}" required pattern="\d{16}" title="Credit card number must be 16 digits" maxlength="16"><br>
+    
+        <button type="submit">Save Changes</button>
+    </form>
+    
+    
+    <!-- Link to go back to the profile page -->
+    <form method="GET" action="/profile">
+        <a th:href="@{/profile}"><button>Go Back</button></a>
+    </form>
+</body>
+</html>
