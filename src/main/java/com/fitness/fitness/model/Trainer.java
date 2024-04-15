@@ -14,15 +14,15 @@ public class Trainer {
     private int age;
     private String dob;
     private String email;
+    private String imageUrl;
     private String phone;
-    private String trainer_since;
-    private int rank; 
-    private String imageUrl;// 3 for 3 star, 4 for 4-star, 5 for 5-star
-
+    private int rank; //3 for 3 star. 4 for 4 star, 5 for 5 star
+    private String trainerSince;
     
+    public Trainer() {
+    }
     
-    
-    public Trainer(int id, String name, int age, String dob, String email, String phone, String trainer_since, int rank,
+    public Trainer(int id, String name, int age, String dob, String email, String phone, String trainerSince, int rank,
             String imageUrl) {
         this.id = id;
         this.name = name;
@@ -30,7 +30,7 @@ public class Trainer {
         this.dob = dob;
         this.email = email;
         this.phone = phone;
-        this.trainer_since = trainer_since;
+        this.trainerSince = trainerSince;
         this.rank = rank;
         this.imageUrl = imageUrl;
     }
@@ -61,11 +61,11 @@ public class Trainer {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    public String getTrainer_since() {
-        return trainer_since;
+    public String getTrainerSince() {
+        return trainerSince;
     }
-    public void setTrainer_since(String trainer_since) {
-        this.trainer_since = trainer_since;
+    public void setTrainerSince(String trainerSince) {
+        this.trainerSince = trainerSince;
     }
     public int getRank() {
         return rank;

@@ -1,25 +1,33 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale = 1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale = 1.0" />
+    <link rel="stylesheet" href="trainerprofile.css" />
     <title>Trainer's profile</title>
     <style>
-      img {
-        width: 100 px;
-        border-radius: 50 px;
-        float: left;
-        margin-right: 10 px;
-        name {
-          font-weight: bold;
-        }
-      }
+      .stars {
+    color: gold;
+}
     </style>
   </head>
   <body>
     <h1>Trainer's profile</h1>
-    <img src="src\main\resources\images\1.jpg" alt="Trainer image"/>
-    <br>
-    <p class="name">Trainer's name:</p>
+    <img th:src="${trainer.imageUrl}" alt="Trainer Image" />
+    <br />
+    <h2 th:text="${trainer.name}">Trainer Name</h2>
+    <h3>Trainer rank:
+      <div class="stars">
+        <span
+          th:each="starNumber : ${#numbers.sequence(1, trainer.rank)}">&#9733;
+        </span>
+      </div>
+      <h3>Contact at:</h3>
+    <p th:text="${trainer.email}">trainer@example.com</p>
+    <p th:text="${trainer.phone}"> Trainer's phone number:</p>
+    </h3>
+    <form method="get" action="/book_appointment">
+      <button type="submit" value="appointment">Book appointment</button>
+    </form>
   </body>
 </html>
