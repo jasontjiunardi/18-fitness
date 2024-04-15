@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="trainers.css">
+    <title>Trainer cards</title>
+    <style>
+        img {
+            width: 50px;
+            border-radius: 50px;
+            float: left;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="trainer-grid">
+    <h3 th:each="trainer : ${Trainers}" class="trainer-card">
+      <img th:src="${trainer.imgae_url}" alt="Trainer image">
+        <br>
+        <span th:text="${trainer.name}">Trainer name</span>
+        <th:block th:if="${trainer.id}">
+            <a th:href="@{/trainerprofile(id=${trainer.id})}">View profile</a>
+        </th:block>
+    </h3>
+</div>
+
+<br>
+<form method="get" action="/trainer_profile/{trainer}"></form>
+<button type="submit" value="Trainer">View Trainer profile</button>
+</body>
+</html>
