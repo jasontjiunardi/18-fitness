@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Fitness Classes</title>
+    <link rel="stylesheet" type="text/css" href="fitnessClassstyle.css">
+</head>
+<body>
+    <div class="container">
+        <h1>All Fitness Classes</h1>
+        <ul>
+            <li th:each="fitnessClass : ${allClasses}" class="fitness-class">
+                <div class="fitness-class-details">
+                    
+                    <span>Name:</span> <span th:text="${fitnessClass.fitnessclassname}"></span><br>
+                    <span>Description:</span> <span th:text="${fitnessClass.classdescription}"></span><br>
+                    <span>Duration:</span> <span th:text="${fitnessClass.classduration}"></span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+<div style="text-align: center;">
+<form method="GET" action="/home_page">
+    <button type="submit">Go Back to HomePage</button>
+</html>
