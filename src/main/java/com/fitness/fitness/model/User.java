@@ -24,12 +24,13 @@ public class User {
     private int status; // 0 - active, 1 - inactive, 2 - deleted
     private int recoveryCode;
     private String cardNumber;
+    private String profilePictureUrl;
 
     public User() {
     }
 
     public User(int id, String name, String username, String password, String email, Date dob, String phoneNumber,
-            int status, int recoveryCode, String cardNumber) {
+            int status, int recoveryCode, String cardNumber, String profilePictureUrl) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -40,6 +41,7 @@ public class User {
         this.status = status;
         this.recoveryCode = recoveryCode;
         this.cardNumber = cardNumber;
+        this.profilePictureUrl = profilePictureUrl;
     }
     public int getRecoveryCode() {
         return recoveryCode;
@@ -105,6 +107,12 @@ public class User {
         this.cardNumber = cardNumber;
     }
 
-
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+    
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
+    }
     
 }

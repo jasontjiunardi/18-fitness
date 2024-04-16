@@ -86,10 +86,16 @@ public class UserService {
         userRepo.save(user);
     }
 
+    public String setProfilePicture(String email, String profilePictureUrl) {
+        User user = userRepo.findByEmail(email);
+        user.setProfilePictureUrl(profilePictureUrl);
+        userRepo.save(user);
+        return profilePictureUrl;
+    }
+    
+    public String getProfilePicture(String email) {
+        User user = userRepo.findByEmail(email);
+        return user.getProfilePictureUrl();
+    }
+    
 }
-
-
-
-
-
-
