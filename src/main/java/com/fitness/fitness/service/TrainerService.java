@@ -17,5 +17,11 @@ public class TrainerService {
         return trainerRepo.findAllByRank(rank);
     }
 
+    public List<Trainer> getAllTrainers() {
+        // // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'getAllTrainers'");
+            return trainerRepo.findAll();
+        }
+    }
+
     // You can add more methods here depending on your business logic
-}
