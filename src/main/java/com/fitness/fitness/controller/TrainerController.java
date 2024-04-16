@@ -8,9 +8,7 @@ import org.springframework.ui.Model;
 
 import com.fitness.fitness.model.Trainer;
 import com.fitness.fitness.repository.TrainerRepo;
-import com.fitness.fitness.service.TrainerService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
