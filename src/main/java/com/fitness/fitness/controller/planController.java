@@ -37,7 +37,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 @SessionAttributes("user")
-public class planController {
+public class PlanController {
 
     @Autowired
     private PlanService planService;
