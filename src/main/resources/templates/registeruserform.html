@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
-    <head>
-        <title>Register New User</title>
-    </head>
-    <body>
-        <h1>Register New User</h1>
-        <form method="POST" th:action="@{/register_user}" th:object="${user}">
-            Username: <input type="text" th:field="*{username}" /> <br />
-            Password: <input type="password" th:field="*{password}" /> <br />
-            Name: <input type="text" th:field="*{name}" /> <br />
-            Email: <input type="text" th:field="*{email}" /> <br />
-            Birth Date: <input type="date" th:field="*{dob}" /> <br />
-            Phone Number: <input type="text" th:field="*{phoneNumber}" /> <br />
-            <input type="submit" value="Register" />
-        </form>
-    </body>
+<head>
+    <title>Register New User</title>
+</head>
+<body>
+    <h1>Register New User</h1>
+    <form method="POST" th:action="@{/register_user}" th:object="${user}">
+        Username: <input type="text" th:field="*{username}" /> <br />
+        Password: <input type="password" th:field="*{password}" /> <br />
+        <span style="color: #888;font-size: 12px;">(Password must include at least one uppercase letter, one number, and be at least 8 characters long)</span><br />
+        Name: <input type="text" th:field="*{name}" /> <br />
+        Email: <input type="text" th:field="*{email}" /> <br />
+        <span style="color: #888;font-size: 12px;">(Email must be in the format example@gmail.com)</span><br />
+        Birth Date: <input type="date" th:field="*{dob}" /> <br />
+        Phone Number: <input type="text" th:field="*{phoneNumber}" /> <br />
+        <input type="submit" value="Register" />
+    </form>
+</body>
 </html>
