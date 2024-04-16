@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+//import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Appointment {
@@ -19,6 +20,14 @@ public class Appointment {
     private String trainer;
     private String classtype;
     private String status;
+
+    //connect to fitness class table
+    //@ManyToOne
+    //private FitnessClass fitnessClass;
+
+    //public void setFitnessClass(FitnessClass fitnessClass) {
+        //this.fitnessClass = fitnessClass;
+    //}
 
     public Appointment() {
     }
