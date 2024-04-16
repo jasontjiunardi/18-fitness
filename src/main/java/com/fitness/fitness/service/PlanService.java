@@ -10,8 +10,10 @@ import com.fitness.fitness.model.PlanDurationPrice;
 import com.fitness.fitness.repository.PlanDurationPriceRepo;
 import com.fitness.fitness.repository.PlanRepo;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,6 +24,9 @@ public class PlanService {
     private PlanRepo planRepo;
     @Autowired
     private PlanDurationPriceRepo planDurationPriceRepo;
+    public List<Plan> findByPlanType(String planType) {
+        return planRepo.findByPlanType(planType);
+    }
 
     public Map<String, Double> getStartingPricesForAllPlanTypes() {
         List<PlanDurationPrice> plans = planDurationPriceRepo.findAll();
@@ -38,7 +43,16 @@ public class PlanService {
         });
         return startingPrices;
     }
-
+    public LinkedHashMap<String,Double> getSortedPrices(){
+    LinkedHashMap<String, Double> sortedStartingPrices = getStartingPricesForAllPlanTypes().entrySet().stream()
+            .sorted(Map.Entry.comparingByValue())
+            .collect(Collectors.toMap(
+                Map.Entry::getKey, 
+                Map.Entry::getValue, 
+                (oldValue, newValue) -> oldValue,
+                LinkedHashMap::new));
+                return sortedStartingPrices;
+    }
     public Map<String, List<Benefit>> findBenefitsByPlanType(String planType) {
         Map<String, List<Benefit>> planBenefits = new HashMap<>();
         
@@ -51,10 +65,17 @@ public class PlanService {
         
         return planBenefits;
     }
-
-    public List<Plan> findByPlanType(String planType) {
-        return planRepo.findByPlanType(planType);
+    public Map<String, List<Benefit>> sortedBenefits(){
+        List<String> sortedPlanTypes = new ArrayList<>(getSortedPrices().keySet());
+        Map<String, List<Benefit>> planBenefits = new HashMap<>();
+        sortedPlanTypes.forEach(planType -> {
+            List<Benefit> benefits = findBenefitsByPlanType(planType).get(planType);
+            planBenefits.put(planType, benefits);
+        });
+        return planBenefits;
     }
-    
-    
 }
+    
+    
+    
+
