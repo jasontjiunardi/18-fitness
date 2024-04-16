@@ -12,6 +12,10 @@
         <p>Name: <span th:text="${user.name}"></span></p>
         <p>Date of Birth: <span th:text="${user.dob}"></span></p>
         <p>Phone Number: <span th:text="${user.phoneNumber}"></span></p>
+
+        <!-- Display profile picture -->
+        <img th:src="${user.profilePictureUrl}" alt="Profile Picture" width="200">
+
     </div>    
     <!-- If user has a credit card, display the credit card information -->
     <div th:if="${user.cardNumber != null}">
