@@ -51,5 +51,10 @@ public class TrainerController {
         model.addAttribute("trainer", trainer);
         return "trainerprofile";
     }
+    // @GetMapping("book_appointment")
+    // public String getMethodName(@RequestParam (value = "trainer.id", required=false)Integer trainerId, Model model) {
+    //     return new String();
+    // }
+    
     
 }
