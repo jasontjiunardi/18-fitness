@@ -1,5 +1,6 @@
 package com.fitness.fitness.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,6 +17,7 @@ public class Trainer {
     private String email;
     private String imageUrl;
     private String phone;
+    @Column(name = "`rank`") // Enclosing rank in backticks to avoid SQL syntax error
     private int rank; //3 for 3 star. 4 for 4 star, 5 for 5 star
     private String trainerSince;
     
