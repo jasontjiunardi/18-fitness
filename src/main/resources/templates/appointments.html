@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Appointments</title>
+</head>
+<body>
+    <h1>My Appointments</h1>
+    
+    <!-- Table to display appointments -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Trainer</th>
+                <th>Class</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iterate over each appointment -->
+            <tr th:each="appointment : ${appointments}">
+                <!-- Display appointment details -->
+                <td th:text="${appointment.date}"></td>
+                <td th:text="${appointment.trainer}"></td>
+                <td th:text="${appointment.classtype}"></td>
+                <td th:text="${appointment.status}"></td>
+                <!-- Actions: Edit and Cancel buttons -->
+                <td>
+                    <!-- Edit button -->
+                    <form method="get" th:action="@{/editAppointment}">
+                        <input type="hidden" name="appointmentId" th:value="${appointment.id}">
+                        <button type="submit">Edit</button>
+                    </form>
+                    <!-- Cancel button -->
+                    <form method="post" th:action="@{/cancelAppointment}">
+                        <input type="hidden" name="appointmentId" th:value="${appointment.id}">
+                        <button type="submit">Cancel</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Return to Homepage button -->
+    <form method="get" action="/">
+        <button type="submit">Return to Homepage</button>
+    </form>
+</body>
+</html>

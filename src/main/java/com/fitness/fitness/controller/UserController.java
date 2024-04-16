@@ -15,11 +15,6 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-
-
-
-
-
 @Controller
 @SessionAttributes("user")
 public class UserController {
@@ -80,7 +75,7 @@ public class UserController {
     }
     
     @GetMapping("/profile")
-    public String userProfile(Model model, User user) {
+    public String userProfile(Model model, @SessionAttribute("user") User user) {
     User retrievedUser = userService.getUserByEmail(user.getEmail());
 
     if (retrievedUser != null) {
@@ -91,6 +86,20 @@ public class UserController {
         return "profile";
     }
     }
+
+    @GetMapping("/edit_profile")
+    public String userEditInformation(Model model, @SessionAttribute("user") User user) {
+    String userEmail = user.getEmail();
+    User existingUser = userService.getUserByEmail(userEmail);
+    model.addAttribute("user", existingUser);
+        return "editProfile";
+}
+
+    @PostMapping("/edit_profile")
+    public String userEditInformation(@ModelAttribute User user, Model model) {
+        userService.saveUser(user);
+        return "editProfile"; // Redirect to the profile page after saving
+}
 
     @GetMapping("/add_credit_card")
     public String addCreditCard(Model model,User user) {
@@ -115,10 +124,3 @@ public class UserController {
         }
 }
 }
-    
-
-
-
-
-
-

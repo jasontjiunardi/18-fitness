@@ -10,8 +10,9 @@
     <div>
         <p>Email: <span th:text="${user.email}"></span></p>
         <p>Name: <span th:text="${user.name}"></span></p>
-    </div>
-    
+        <p>Date of Birth: <span th:text="${user.dob}"></span></p>
+        <p>Phone Number: <span th:text="${user.phoneNumber}"></span></p>
+    </div>    
     <!-- If user has a credit card, display the credit card information -->
     <div th:if="${user.cardNumber != null}">
         <p>Credit Card Number: <span th:text="${user.cardNumber}"></span></p>
@@ -27,7 +28,11 @@
         </form>
     </div>
 </body>
-<form method="GET" action="/home_page">
-    <button type="submit">Go Back</button>
+<form method="GET" action="/user_signin">
+<a th:href="@{/user_signin}"><button>Go Back</button></a>
+</form>
+
+<form method="GET" action="/edit_profile">
+    <a th:href="@{/edit_profile}"><button>Edit Profile</button></a>
 </form>
 </html>

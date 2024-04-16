@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="trainers.css" />
+    <title>Trainers</title>
+  </head>
+  <body>
+    <div>
+      <form action="/view_trainers" method="get">
+        <label for="rankFilter">Filter rank:</label>
+        <select id="rankFilter" name="rank">
+          <option value="">view all</option>
+          <option value="3">3-star</option>
+          <option value="4">4-star</option>
+          <option value="5">5-star</option>
+        </select>
+        <button type="submit">View trainers</button>
+      </form>
+    </div>
+    <div class="trainer-grid">
+      <h1>Our Trainers</h1>
+      <ul>
+        <li th:each="trainer : ${trainers}" class="trainer-grid">
+          <div class="trainer-info">
+            <img th:src="${trainer.imageUrl}" alt="Trainer image" />
+            <span th:text="${trainer.name}">Trainer name</span><br />
+            <span th:text="${trainer.rank}">Trainer rank</span>
+            <th:block th:if="${trainer.id}">
+              <form method="get" action="/trainer_profile">
+                <!-- Hidden input field to store the trainer ID -->
+                <input type="hidden" name="id" th:value="${trainer.id}" />
+                <button type="submit">View Trainer profile</button>
+              </form>
+            </th:block>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>
