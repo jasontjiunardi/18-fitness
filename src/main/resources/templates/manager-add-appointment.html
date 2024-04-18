@@ -5,19 +5,16 @@
 </head>
 <body>
     <h1>Add Appointment</h1>
-    <form th:action="@{/add}" method="post">
+    <form th:action="@{/manager_add_appointment}" method="post">
         <div>
             <label for="customerEmail">Customer Email:</label>
             <input type="email" id="customerEmail" name="customerEmail" th:value="${appointment.customerEmail}" required />
         </div>
         <div>
             <label for="preferredTrainer">Preferred Trainer:</label>
-            <select id="preferredTrainer" name="preferredTrainer" th:value="${appointment.preferredTrainer}" required>
-                <!-- Populate options dynamically based on available trainers -->
-                <option value="Trainer1">Trainer1</option>
-                <option value="Trainer2">Trainer2</option>
-                <!-- Add more options as needed -->
-            </select>
+            <select id="preferredTrainer" name="preferredTrainer" required>
+                <option th:each="trainer : ${trainers}" th:value="${trainer.id}" th:text="${trainer.name}"></option>
+            </select>            
         </div>
         <div>
             <label for="className">Class:</label>
@@ -30,8 +27,8 @@
         </div>
         <div>
             <label for="date">Date:</label>
-            <input type="date" id="date" name="date" th:value="${appointment.date}" required />
-        </div>
+            <input type="date" id="date" name="date" th:value="${appointment.date}" th:attr="min=${currentDate}" required />
+        </div>        
         <div>
             <label for="timeSlot">Time Slot:</label>
             <select id="timeSlot" name="timeSlot" th:value="${appointment.timeSlot}" required>
