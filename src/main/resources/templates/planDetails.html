@@ -3,8 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Plan Details</title>
+    <script>
+        function validateUserPlanType() {
+        var selectedPlanType = document.getElementById('planType').value;
+        var userPlanStatus = document.getElementById('userPlanStatus').value;
+        if (userPlanStatus === 'Paused') {
+            alert('Your subscription is currently paused. Please resume or contact staff.');
+            return false;  // Stop form submission
+        }
+        if (userPlanStatus === selectedPlanType) {
+            const proceed = confirm('You are already enrolled in this plan type. Purchasing again will extend your plan duration. Do you want to proceed?');
+            if (!proceed) {
+                return false;  
+            }
+        }
+        if (userPlanStatus !== 'Inactive' && userPlanStatus !== 'Paused' && userPlanStatus !== selectedPlanType) {
+            const proceed = confirm('You are already enrolled in another plan (' + userPlanStatus + '). Purchasing this plan will overwrite your current plan. Do you want to proceed?');
+            if (!proceed) {
+                return false; 
+            }
+        }
+            return true; 
+        }
+        function updatePrice(selectedDuration) {
+            const price = selectedDuration.getAttribute('data-price');
+            document.getElementById('selectedPrice').value = price;
+            document.getElementById('priceDisplay').textContent = '¥ ' + price;
+        }
+    </script>
 </head>
 <body>
+    <div th:if = "${user != null}">
+        <p>Welcome User: <span th:text="${user.name}">User</span></p>
+        <p>Membership Status: <span th:text="${user.status}">status</span></p>
+        <input type="hidden" id="userPlanStatus" th:value="${user.status}" />
+        <p th:if = "${#strings.equals(user.status, 'Inactive')}">Valid Date: -</p>
+        <p th:if = "${#strings.equals(user.status, 'Paused')}">Valid Date: Paused</p>
+        <p th:if = "${!#strings.equals(user.status, 'Inactive') and !#strings.equals(user.status, 'Paused')}">Valid Date: <span th:text="${user.activeDate}">date</span></p>
+    </div>
     <h1 th:text="${planType} + ' Plan Details'">Plan Type Details</h1>
     <p th:text="${planDetails}">Plan Description</p>
     <h2>Benefits</h2>
@@ -12,28 +48,25 @@
         <li th:each="benefit : ${benefits}" th:text="${benefit.description}"></li>
     </ul>
     <h2>Choose a duration:</h2>
-    <form th:action="@{/browsePlan/{planType}/purchaseForm(planType=${planType})}" method="get">
+    <form th:action="@{/browsePlan/{planType}/purchaseForm(planType=${planType})}" method="get" onsubmit="return validateUserPlanType()">
+        <input type="hidden" id="planType" th:value="${planType}" />
         <div th:each="durationPrice : ${durationPrices}">
             <input type="radio" th:id="${'duration' + durationPrice.planDuration}" 
                    name="duration" th:value="${durationPrice.planDuration}" 
                    th:data-price="${durationPrice.planPrice}" 
-                   onchange="updatePrice(this)" />
+                   onchange="updatePrice(this)" required/>
             <label th:for="${'duration' + durationPrice.planDuration}" 
                    th:text="${durationPrice.planDuration + ' months'}"></label>
         </div>
+        <p>Price: <span id="priceDisplay">Select a duration</span></p>
         <input type="hidden" id="selectedPrice" name="price" value="" />
-        <button type="submit">Proceed to Purchase</button>
+        <div th:if = "${user != null}">
+            <button type="submit">Proceed to Purchase</button>
+        </div>
+        <div th:if = "${user == null}">
+            <p>You are not signed in please <a th:href = "@{/user_signin}">sign in</a> before proceeding to purchase</p>
+        </div>
     </form>
-    
-    <script>
-        function updatePrice(selectedDuration) {
-            const price = selectedDuration.getAttribute('data-price');
-            document.getElementById('selectedPrice').value = price;
-            document.getElementById('priceDisplay').textContent = '¥ ' + price;
-        }
-    </script>
-
-    <p>Price: <span id="priceDisplay">Select a duration</span></p>
     
     <a href="/browse_plans">Back to Plans</a>
 </body>
