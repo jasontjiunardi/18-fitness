@@ -29,7 +29,9 @@ public class Appointment {
         //this.fitnessClass = fitnessClass;
     //}
 
-    public Appointment() {
+     // Default constructor
+     public Appointment() {
+        this.status = "active"; // Set default value for status
     }
 
     public Appointment(int id, Date date, String trainer, String classtype, String status) {

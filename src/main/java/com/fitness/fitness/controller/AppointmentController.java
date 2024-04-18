@@ -1,5 +1,6 @@
 package com.fitness.fitness.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.fitness.fitness.model.Appointment;
+import com.fitness.fitness.model.FitnessClass;
 // import com.fitness.fitness.model.FitnessClass;
 import com.fitness.fitness.model.Trainer;
 import com.fitness.fitness.service.AppointmentService;
+import com.fitness.fitness.service.FitnessClassService;
 // import com.fitness.fitness.service.FitnessClassService;
 import com.fitness.fitness.service.TrainerService;
 
@@ -24,6 +27,9 @@ public class AppointmentController {
 
     @Autowired
     private TrainerService trainerService;
+
+    @Autowired
+    private FitnessClassService fitnessClassService;
 
     // @Autowired
     // private FitnessClassService fitnessClassService;
@@ -49,6 +55,33 @@ public class AppointmentController {
         m.addAttribute("appointment", appointment);
         return "editAppointment";
     }
+
+    @GetMapping("/bookAppointment")
+    public String bookAppointmentForm(Model m) {
+        // Load the list of trainers and classes and add them to the model
+        List<Trainer> allTrainers = trainerService.getAllTrainers();
+        List<FitnessClass> allClasses = fitnessClassService.getAllClasses();
+        m.addAttribute("allTrainers", allTrainers);
+        m.addAttribute("allClasses", allClasses);
+        // Set minimum date for the date input field to today
+        m.addAttribute("minDate", LocalDate.now());
+        
+        // Add an empty appointment object to bind the form data
+        m.addAttribute("appointment", new Appointment());
+        
+        return "bookAppointmentForm"; // Rendering the booking form
+    }
+
+    @PostMapping("/bookAppointment")
+public String saveAppointment(@ModelAttribute("appointment") Appointment appointment, Model m) {
+    // Here you would perform validation on the appointment object
+    
+    // Assuming appointmentService is a service responsible for saving appointments
+    appointmentService.saveAppointment(appointment);
+    
+    return "bookAppointmentForm"; // Redirecting back to the booking form
+}
+    
 
     // POST mapping for updating an appointment
     @PostMapping("/updateAppointment")

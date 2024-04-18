@@ -15,6 +15,11 @@ public class AppointmentService {
     @Autowired
     private AppointmentRepo appointmentRepo;
 
+    //save appointment
+    public Appointment saveAppointment(Appointment appointment){
+        return appointmentRepo.save(appointment);
+    }
+
     public AppointmentService(AppointmentRepo appointmentRepo) {
         this.appointmentRepo = appointmentRepo;
     }
