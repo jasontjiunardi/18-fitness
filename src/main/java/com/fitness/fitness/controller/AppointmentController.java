@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fitness.fitness.model.Appointment;
 import com.fitness.fitness.model.FitnessClass;
@@ -79,8 +80,47 @@ public String saveAppointment(@ModelAttribute("appointment") Appointment appoint
     // Assuming appointmentService is a service responsible for saving appointments
     appointmentService.saveAppointment(appointment);
     
-    return "bookAppointmentForm"; // Redirecting back to the booking form
+    // Retrieve the list of trainers and classes again
+    List<Trainer> allTrainers = trainerService.getAllTrainers();
+    List<FitnessClass> allClasses = fitnessClassService.getAllClasses();
+    
+    // Set minimum date for the date input field to today
+    LocalDate minDate = LocalDate.now();
+    
+    // Add the necessary attributes to the model
+    m.addAttribute("allTrainers", allTrainers);
+    m.addAttribute("allClasses", allClasses);
+    m.addAttribute("minDate", minDate);
+    
+    return "bookAppointmentForm"; // Redirecting back to the booking form with updated data
 }
+
+
+/*@PostMapping("/deleteAppointment")
+public String deleteAppointment(@RequestParam("appointmentId") Integer appointmentId) {
+    appointmentService.deleteAppointment(appointmentId);
+    return "redirect:/appointments"; // Redirect back to the appointments page
+}*/
+
+@PostMapping("/deleteAppointment")
+public String deleteAppointment(@RequestParam("appointmentId") Integer appointmentId, Model model) {
+    try {
+        // Delegate the deletion logic to the service layer
+        appointmentService.deleteAppointmentIfActive(appointmentId);
+    } catch (IllegalStateException ex) {
+        model.addAttribute("error", ex.getMessage());
+        // Add appointment list to model to refresh the appointments table
+        List<Appointment> appointments = appointmentService.getAllAppointments();
+        model.addAttribute("appointments", appointments);
+        // Return to the appointments page
+        return "appointments";
+    }
+
+    // Redirect back to the appointments page
+    return "redirect:/appointments";
+}
+
+
     
 
     // POST mapping for updating an appointment

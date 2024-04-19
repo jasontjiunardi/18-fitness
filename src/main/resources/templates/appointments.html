@@ -32,15 +32,45 @@
                     <!-- Edit button -->
                     <form method="get" th:action="@{/editAppointment/{id}(id=${appointment.id})}">
                         <button type="submit">Edit</button>
-                    </form>                    
+                    </form>  
+                    
+                     <!-- Delete button -->
+                     <form method="post" th:action="@{/deleteAppointment}">
+                        <input type="hidden" name="appointmentId" th:value="${appointment.id}">
+                        <button type="button" onclick="showConfirmation(this)">Cancel Appointment</button>
+                        <button type="submit" style="display: none;">Confirm Cancellation</button>
+                        <button type="button" onclick="cancelDelete(this)" style="display: none;">Cancel Cancellation</button>
+                    </form>
                 </td>
             </tr>
         </tbody>
     </table>
 
+    <!-- Error message section -->
+<div th:if="${error}" class="error-message">
+    <p th:text="${error}" class="error-text"></p>
+</div>
+
     <!-- Return to Homepage button -->
     <form method="get" action="/">
         <button type="submit">Return to Homepage</button>
     </form>
+    <script>
+        function showConfirmation(button) {
+            button.style.display = 'none';
+            button.nextElementSibling.style.display = 'inline-block';
+            button.nextElementSibling.nextElementSibling.style.display = 'inline-block';
+        }
+    
+        function cancelDelete(button) {
+        // Hide the "Cancel" button
+        button.style.display = 'none';
+        // Show the "Delete" button
+        button.parentNode.querySelector('button[type="button"]').style.display = 'inline-block';
+        // Hide the "Confirm Delete" button
+        button.parentNode.querySelector('button[type="submit"]').style.display = 'none';
+    }
+    </script>
+    
 </body>
 </html>

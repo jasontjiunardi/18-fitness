@@ -37,5 +37,24 @@ public class AppointmentService {
         appointmentRepo.save(appointment);
     }
 
+    //public void deleteAppointment(Integer id) {
+       // appointmentRepo.deleteById(id);
+    //}
+    
+
+    //the function works but the error message wont appear
+    public void deleteAppointmentIfActive(Integer appointmentId) {
+        // Retrieve the appointment from the repository
+        Optional<Appointment> optionalAppointment = appointmentRepo.findById(appointmentId);
+        if (optionalAppointment.isPresent()) {
+            Appointment appointment = optionalAppointment.get();
+            if (!"active".equals(appointment.getStatus())) {
+                throw new IllegalStateException("Only active appointments can be cancelled.");
+            }
+            // Delete the appointment
+            appointmentRepo.delete(appointment);
+        }
+    }
+
     
 }
