@@ -55,22 +55,22 @@
         </div>
       </form>
     </div>
-    <div class="trainer-grid">
-      <h1>Our Trainers</h1>
+    <h1>Our Trainers</h1>
       <br/><br>
       <ul>
-        <li th:each="trainer : ${trainers}" class="trainer-grid">
+        <li th:each="trainer : ${trainers}" >
           <div class="card">
-            <div class="img">
-              <img th:src="@{${trainer.image}}" alt="Trainer image" />
+            <div class="imgbox">
+              <div class="img">
+              <img th:src="@{'images/' + ${trainer.image}}" alt="Trainer image" />
+              </div>
             </div>
             <span th:text="${trainer.name}">Trainer name</span>
-            <div class="stars">
-              <span th:each="starNumber : ${#numbers.sequence(1, trainer.rank)}"
-                >&#9733;
-              </span>
+            <p class="rank">Rank
+              <div class = "stars" >
+              <span th:each="starNumber : ${#numbers.sequence(1, trainer.rank)}">&#9733;</span>
+            </p>  
             </div>
-            <p class="info" th:text="${trainer.rank}">Trainer rank</p>
             <th:block th:if="${trainer.id}">
               <form method="get" action="/trainer_profile">
                 <!-- Hidden input field to store the trainer ID -->
