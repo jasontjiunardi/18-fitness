@@ -21,7 +21,8 @@ public class User {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dob;
     private String phoneNumber;
-    private int status; // 0 - active, 1 - inactive, 2 - deleted
+    private String status = "Inactive"; // Plan type or Paused or Inactive
+    private Date activeDate = null;
     private int recoveryCode;
     private String cardNumber;
 
@@ -29,7 +30,7 @@ public class User {
     }
 
     public User(int id, String name, String username, String password, String email, Date dob, String phoneNumber,
-            int status, int recoveryCode, String cardNumber) {
+            String status, Date activeDate, int recoveryCode, String cardNumber) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -38,6 +39,7 @@ public class User {
         this.dob = dob;
         this.phoneNumber = phoneNumber;
         this.status = status;
+        this.activeDate = activeDate;
         this.recoveryCode = recoveryCode;
         this.cardNumber = cardNumber;
     }
@@ -91,11 +93,17 @@ public class User {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
+    }
+    public Date getActiveDate(){
+        return activeDate;
+    }
+    public void setActiveDate(Date activeDate){
+        this.activeDate = activeDate;
     }
     public String getCardNumber() {
         return cardNumber;

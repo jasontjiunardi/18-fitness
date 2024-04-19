@@ -1,8 +1,9 @@
 package com.fitness.fitness.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,15 +17,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.fitness.fitness.model.Benefit;
 import com.fitness.fitness.model.PaymentTransaction;
 import com.fitness.fitness.model.Plan;
 import com.fitness.fitness.model.PlanDurationPrice;
+import com.fitness.fitness.model.User;
 import com.fitness.fitness.repository.PaymentTransactionRepo;
 import com.fitness.fitness.service.PlanService;
+import com.fitness.fitness.service.UserService;
 
-
+import jakarta.servlet.http.HttpSession;
 
 
 
@@ -32,32 +36,25 @@ import com.fitness.fitness.service.PlanService;
 
 
 @Controller
-public class planController {
+@SessionAttributes("user")
+public class PlanController {
 
     @Autowired
     private PlanService planService;
     @Autowired
+    private UserService userService;
+    @Autowired
     private PaymentTransactionRepo paymentTransactionRepo;
     @GetMapping("/browse_plans")
-    public String browsePlans(Model model) {
-        Map<String, Double> startingPrices = planService.getStartingPricesForAllPlanTypes();
-
-        LinkedHashMap<String, Double> sortedStartingPrices = startingPrices.entrySet().stream()
-            .sorted(Map.Entry.comparingByValue())
-            .collect(Collectors.toMap(
-                Map.Entry::getKey, 
-                Map.Entry::getValue, 
-                (oldValue, newValue) -> oldValue, // This merge function will keep the old value in case of a key collision
-                LinkedHashMap::new));
-                
-
+    public String browsePlans(Model model,  HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        LinkedHashMap<String, Double> sortedStartingPrices = planService.getSortedPrices();
         List<String> sortedPlanTypes = new ArrayList<>(sortedStartingPrices.keySet());
-        Map<String, List<Benefit>> planBenefits = new HashMap<>();
-        sortedPlanTypes.forEach(planType -> {
-            List<Benefit> benefits = planService.findBenefitsByPlanType(planType).get(planType);
-            planBenefits.put(planType, benefits);
-        });
-
+        Map<String, List<Benefit>> planBenefits = planService.sortedBenefits();
+        if(user != null){
+            User existingUser = userService.getUserByEmail(user.getEmail());
+            model.addAttribute("user", existingUser);
+        }
         model.addAttribute("planTypes", sortedPlanTypes);
         model.addAttribute("startingPrices", sortedStartingPrices);
         model.addAttribute("planBenefits", planBenefits);
@@ -67,28 +64,42 @@ public class planController {
     }
 
     @GetMapping("/browsePlan/{planType}")
-    public String browsePlan(@PathVariable("planType") String planType, Model model) {
+    public String browsePlan(@PathVariable("planType") String planType, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
         List<Plan> plans = planService.findByPlanType(planType);
         
         // Assuming each planType only has one set of details but multiple duration prices
         Plan planDetails = plans.stream().findFirst().orElseThrow(() -> new RuntimeException("Plan type not found"));
     
-        List<Benefit> benefits = new ArrayList<>(planDetails.getBenefits()); // Assuming findBenefitsByPlanType method adjustment
+        List<Benefit> sortedBenefits = planDetails.getBenefits().stream()
+                                              .sorted(Comparator.comparing(Benefit::getDescription))
+                                              .collect(Collectors.toList());
+
     
-        // If you want to include various prices for different durations directly:
-        Set<PlanDurationPrice> durationPrices = planDetails.getPlanDurationPrices();
-    
+       
+        Set<PlanDurationPrice> sortedDurationPrices = planDetails.getPlanDurationPrices().stream()
+        .sorted(Comparator.comparing(PlanDurationPrice::getPlanDuration))
+        .collect(Collectors.toCollection(LinkedHashSet::new));
+        if(user != null){
+            User existingUser = userService.getUserByEmail(user.getEmail());
+            model.addAttribute("user", existingUser);
+        }
         model.addAttribute("planType", planType);
         model.addAttribute("planDetails", planDetails.getPlanDetails());
-        model.addAttribute("benefits", benefits);
-        model.addAttribute("durationPrices", durationPrices);
+        model.addAttribute("benefits", sortedBenefits);
+        model.addAttribute("durationPrices", sortedDurationPrices);
         return "planDetails";
     }
 
     @GetMapping("/browsePlan/{planType}/purchaseForm")
     public String showPurchaseForm(@PathVariable("planType") String planType,
                                    @RequestParam("duration") String duration, 
-                                   @RequestParam("price") Double price, Model model) {
+                                   @RequestParam("price") Double price, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if(user != null){
+            User existingUser = userService.getUserByEmail(user.getEmail());
+            model.addAttribute("user", existingUser);
+        }
         model.addAttribute("planType", planType);
         model.addAttribute("selectedDuration", duration);
         model.addAttribute("price", price);

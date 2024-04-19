@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Appointment</title>
+</head>
+<body>
+    <h1>Add Appointment</h1>
+    <form th:action="@{/add}" method="post">
+        <div>
+            <label for="customerEmail">Customer Email:</label>
+            <input type="email" id="customerEmail" name="customerEmail" th:value="${appointment.customerEmail}" required />
+        </div>
+        <div>
+            <label for="preferredTrainer">Preferred Trainer:</label>
+            <select id="preferredTrainer" name="preferredTrainer" th:value="${appointment.preferredTrainer}" required>
+                <!-- Populate options dynamically based on available trainers -->
+                <option value="Trainer1">Trainer1</option>
+                <option value="Trainer2">Trainer2</option>
+                <!-- Add more options as needed -->
+            </select>
+        </div>
+        <div>
+            <label for="className">Class:</label>
+            <select id="className" name="className" th:value="${appointment.className}" required>
+                <!-- Populate options dynamically based on available classes -->
+                <option value="Class1">Class1</option>
+                <option value="Class2">Class2</option>
+                <!-- Add more options as needed -->
+            </select>
+        </div>
+        <div>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" th:value="${appointment.date}" required />
+        </div>
+        <div>
+            <label for="timeSlot">Time Slot:</label>
+            <select id="timeSlot" name="timeSlot" th:value="${appointment.timeSlot}" required>
+                <option value="08:00">8:00 AM - 10:00 AM</option>
+                <option value="10:00">10:00 AM - 12:00 PM</option>
+                <option value="12:00">12:00 PM - 2:00 PM</option>
+                <option value="14:00">2:00 PM - 4:00 PM</option>
+                <option value="16:00">4:00 PM - 6:00 PM</option>
+                <option value="18:00">6:00 PM - 8:00 PM</option>
+                <!-- Add more time slot options as needed -->
+            </select>            
+        </div>
+        <button type="submit">Book Appointment</button>
+        <p th:text="${error}" style="color: red;"></p>
+        <p th:text="${message}" style="color: green;"></p>
+    </form>
+</body>
+</html>
