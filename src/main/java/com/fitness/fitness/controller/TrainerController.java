@@ -7,11 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import com.fitness.fitness.model.Trainer;
-<<<<<<< HEAD
 import com.fitness.fitness.service.TrainerService;
-=======
-import com.fitness.fitness.repository.TrainerRepo;
->>>>>>> 56a0767345033be674f69e8187e16f3e4d3bcebb
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;

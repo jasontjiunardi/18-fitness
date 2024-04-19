@@ -22,6 +22,8 @@ public class FitnessClassService {
     public List<FitnessClass> getAllClasses() {
         return fitnessClassRepository.findAll();
     }
+
+
 }
     // pblic FitnessClass getFitnessClassById(int id) {
     //     return fitnessClassRepository.findById(id).orElse(null);
