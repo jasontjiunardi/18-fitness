@@ -8,6 +8,16 @@
 </head>
 <body>
     <div class="header">Browse Your Plan</div>
+    <div th:if = "${user != null}">
+        <p>Welcome User:  <span th:text="${user.name}">User</span></p>
+        <p>Membership Status:  <span th:text="${user.status}">status</span></p>
+        <p th:if = "${#strings.equals(user.status, 'Inactive')}">Valid Date: -</p>
+        <p th:if = "${#strings.equals(user.status, 'Paused')}">Valid Date: Paused</p>
+        <p th:if = "${!#strings.equals(user.status, 'Inactive') and !#strings.equals(user.status, 'Paused')}">Valid Date:  <span th:text= "${user.activeDate}">date</span></p>
+    </div>
+    <div th:if = "${user == null}">
+        <p>You are not signed in, please <a th:href="@{/user_signin}">sign in</a></p>
+    </div>
     <div class="wrapper">
         <div th:each="planType, iterStat : ${planTypes}">
             <div class="card" th:classappend="${planType} + (iterStat.even ? ' even' : ' odd')">

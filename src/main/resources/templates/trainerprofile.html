@@ -13,7 +13,7 @@
   </head>
   <body>
     <h1>Trainer's profile</h1>
-    <img th:src="${trainer.imageUrl}" alt="Trainer Image" />
+    <img th:src="@{'images/' + ${trainer.image}}" alt="Trainer Image" />
     <br />
     <h2 th:text="${trainer.name}">Trainer Name</h2>
     <h3>Trainer rank:
@@ -26,7 +26,8 @@
     <p th:text="${trainer.email}">trainer@example.com</p>
     <p th:text="${trainer.phone}"> Trainer's phone number:</p>
     </h3>
-    <form method="get" action="/book_appointment">
+    <form method="get" action="/bookAppointment">
+      <input type="hidden" name="trainerId" th:value="${trainer.id}">
       <button type="submit" value="appointment">Book appointment</button>
     </form>
   </body>

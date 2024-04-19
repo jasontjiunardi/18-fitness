@@ -6,19 +6,34 @@
     <script>
         function togglePaymentFields() {
             var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-            document.getElementById('mobilePaymentFields').style.display = paymentMethod == 'Alipay' || paymentMethod == 'WeChat' ? 'block' : 'none';
-            document.getElementById('cardPaymentFields').style.display = paymentMethod == 'Debit' || paymentMethod == 'Credit' ? 'block' : 'none';
+            var cardFields = document.getElementById('cardPaymentFields');
+            var cardNumberFromSession = document.getElementById('sessionCardNumber').value;
+
+            if (paymentMethod === 'Credit' && (cardNumberFromSession === '' || cardNumberFromSession === null)) {
+                cardFields.style.display = 'block'; // Show card input fields
+                document.getElementById('cardNumber').required = true; // Make card number input required
+            } else {
+                cardFields.style.display = 'none'; // Hide card input fields
+                document.getElementById('cardNumber').required = false; // Not required as not visible
+            }
+        }
+
+        function validateForm() {
+            var paymentMethodChecked = document.querySelector('input[name="paymentMethod"]:checked');
+            if (!paymentMethodChecked) {
+                alert('Please select a payment method.');
+                return false;
+            }
+            return validateUserAgreement();
         }
 
         function validateUserAgreement() {
-        // Mengecek apakah checkbox "User Agreement" dicentang
-        var userAgreementChecked = document.getElementById('userAgreement').checked;
-        
-        // Jika checkbox tidak dicentang, tampilkan popup
-        if (!userAgreementChecked) {
-            return false; // Mencegah pengiriman formulir
-        }
-        return true; // Memungkinkan pengiriman formulir
+            var userAgreementChecked = document.getElementById('userAgreement').checked;
+            if (!userAgreementChecked) {
+                alert('Please agree to the terms and conditions to proceed.');
+                return false;
+            }
+            return true;
         }
 
         function showUserAgreement() {
@@ -28,18 +43,18 @@
             By purchasing a membership with us, you agree to the following terms and conditions:\n\
             \n\
             1. Membership Duration: Your membership is valid for the duration specified at the time of purchase.\n\
-            \n\
             2. Payment Terms: You agree to pay all applicable fees and charges associated with your membership on time.\n\
-            \n\
             3. Usage Policies: You agree to abide by the facility rules and regulations as outlined by our fitness center.\n\
-            \n\
             4. Cancellation Policy: Membership cancellations must be made in accordance with the terms specified in our cancellation policy.\n\
-            \n\
             5. Personal Responsibility: You acknowledge that participation in fitness activities carries inherent risks, and you assume full responsibility for any injuries or damages incurred.\n\
             \n\
-            By checking this box, you confirm that you have read, understood, and agree to the terms of this agreement.\n\
-            ";
+            By checking this box, you confirm that you have read, understood, and agree to the terms of this agreement.";
             alert(userAgreementText);
+        }
+
+        function confirmCancel() {
+            var confirmation = confirm('Are you sure you want to cancel your purchase? Your information will not be stored.');
+            return confirmation;
         }
     </script>
 </head>
@@ -52,59 +67,30 @@
     </div>
 
     <h2>Select Payment Method:</h2>
-    <form th:action="@{/finalizePurchase}" method="post" onchange="togglePaymentFields()">
-        <!-- Mobile Payment Options -->
+    <form th:action="@{/finalizePurchase}" method="post" onsubmit="return validateForm()" onchange="togglePaymentFields()">
         <div>
             <input type="radio" id="alipay" name="paymentMethod" value="Alipay">
             <label for="alipay">Alipay</label>
             <input type="radio" id="wechat" name="paymentMethod" value="WeChat">
             <label for="wechat">WeChat</label>
-        </div>
-        
-        <!-- Card Payment Options -->
-        <div>
-            <input type="radio" id="debit" name="paymentMethod" value="Debit">
-            <label for="debit">Debit</label>
             <input type="radio" id="credit" name="paymentMethod" value="Credit">
-            <label for="credit">Credit</label>
+            <label for="credit">Credit Card</label>
         </div>
 
-        <!-- Mobile Payment Fields -->
-        <div id="mobilePaymentFields" style="display:none;">
-            <label for="phoneNumber">Phone Number:</label>
-            <input type="text" id="phoneNumber" name="phoneNumber" pattern="\d{8,12}" placeholder="8-12 digits" title="Phone number must be 8 to 12 digits">
-        </div>
-        
-        <!-- Card Payment Fields -->
         <div id="cardPaymentFields" style="display:none;">
-            <label for="cardholderName">Cardholder Name:</label>
-            <input type="text" id="cardholderName" name="cardholderName">
-            
             <label for="cardNumber">Card Number:</label>
-            <input type="text" id="cardNumber" name="cardNumber" pattern="\d{13,16}" placeholder="13-16 digits" title="Card number must be 13 to 16 digits">
-            
-            <label for="cvv">CVV:</label>
-            <input type="text" id="cvv" name="cvv" pattern="\d{3,4}" placeholder="3-4 digits" title="CVV must be 3 to 4 digits">
-            
-            <label for="expiryDate">Expiry Date:</label>
-            <input type="month" id="expiryDate" name="expiryDate">
+            <input type="text" id="cardNumber" name="cardNumber" pattern="\d{16}" placeholder="16 digits" title="Card number must be 16 digits" maxlength="16">
         </div>
 
-        <!-- Tombol View User Agreement -->
-        <button type="button" onclick="showUserAgreement()">View User Agreement</button>
-
-        <!-- User Agreement Checkbox -->
         <div>
-            <input type="checkbox" id="userAgreement" name="userAgreement" required>
-            <label for="userAgreement">I agree to the terms and conditions</label>
+            <input type="checkbox" id="userAgreement" name="userAgreement">
+            <a href="#" onclick="showUserAgreement()">I agree to the terms and conditions</a>
         </div>
 
-        
-        <!-- Hidden inputs for planType, duration, and price -->
-        <!-- Confirm Purchase Button -->
-        <button type="submit" onclick="redirectToConfirmationPage()">Confirm Purchase</button>
+        <button type="submit">Confirm Purchase</button>
     </form>
 
-    <a href="/browse_plans">Back to Plans</a>
+    <input type="hidden" id="sessionCardNumber" th:value="${user.cardNumber}" />
+    <a href="/browse_plans" onclick="return confirmCancel();">Cancel Purchase</a>
 </body>
 </html>
