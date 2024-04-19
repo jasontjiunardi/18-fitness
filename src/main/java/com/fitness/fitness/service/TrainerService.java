@@ -28,6 +28,16 @@ public class TrainerService {
         // throw new UnsupportedOperationException("Unimplemented method 'getAllTrainers'");
             return trainerRepo.findAll();
         }
+
+    public Trainer getTrainerById(Integer id) {
+        Optional<Trainer> optionalTrainer = trainerRepo.findById(id);
+        return optionalTrainer.orElse(null);
     }
+
+    public Trainer findTrainerByName(String name) {
+        return trainerRepo.findByName(name);
+    }
+
+}
 
     // You can add more methods here depending on your business logic

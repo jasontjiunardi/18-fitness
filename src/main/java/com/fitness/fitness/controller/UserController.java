@@ -25,9 +25,15 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @SessionAttributes("user")
 public class UserController {
+    
     @Autowired
     private UserService userService;
 
+    @GetMapping("/first_page")
+    public String firstPage(Model model){
+
+        return "firstpage";
+    }
     @GetMapping("/register_user")
     public String getNewUserPage(Model model){
         model.addAttribute("user", new User());

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forget Password</title>
+    <title>Login</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,23 +12,31 @@
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
         }
 
+        h1 {
+            font-size: 36px; /* Larger font size for heading */
+            color: #4a154b; /* Purple heading color */
+            text-align: center;
+            margin-bottom: 50px; /* Added margin to bottom */
+        }
+
         form {
-            max-width: 300px;
+            width: 100%;
+            max-width: 400px;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             background-color: #ffffff; /* White background for form */
         }
 
-        input[type="email"],
         input[type="text"],
         input[type="password"],
-        input[type="submit"] {
+        button {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
@@ -37,32 +45,37 @@
             box-sizing: border-box;
         }
 
-        input[type="submit"] {
+        button {
             background-color: #4a154b; /* Purple button background */
             color: #ffffff; /* White text color for button */
             cursor: pointer;
         }
 
-        input[type="submit"]:hover {
+        button:hover {
             background-color: #310b33; /* Darker purple on hover */
         }
 
-        .error-message {
-            color: red; /* Red color for error message */
-            text-align: center;
+        a {
+            display: block;
+            text-align: right;
+            color: #4a154b; /* Purple link color */
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        a:hover {
+            text-decoration: underline; /* Underline on hover */
         }
     </style>
 </head>
 <body>
-    <form method="POST" action="/forget_password">
-        Email: <input type="email" name="email" required><br>
-        Recovery Code: <input type="text" name="recoveryCode" required><br>
-        New Password: <input type="password" name="password" required><br>
-        <input type="submit" value="Reset Password">
+    <h1>Login</h1>
+    <form method="post" action="/manager_signin">
+        Email: <input type="text" name="email" required><br />
+        Password: <input type="password" name="password" required><br />
+        <button type="submit">Login</button>
     </form>
-
-    <div th:if="${error}" class="error-message">
-        <p th:text="${error}"></p>
-    </div>
 </body>
 </html>
+

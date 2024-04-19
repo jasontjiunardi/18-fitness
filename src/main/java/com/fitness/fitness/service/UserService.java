@@ -8,8 +8,13 @@ import com.fitness.fitness.repository.UserRepo;
 
 @Service
 public class UserService {
-    @Autowired
+    
     private UserRepo userRepo;
+    // i use constructor injection instead of field injection to avoid difficulties in testing
+    @Autowired
+    public UserService(UserRepo userRepo){
+        this.userRepo = userRepo;
+    }
 
     public User saveUser(User user){
         return userRepo.save(user);

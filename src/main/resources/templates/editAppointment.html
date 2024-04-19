@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Edit Appointment</h1>
-    <form method="post" action="/updateAppointment">
+    <form method="post" action="/bookAppointment">
         <input type="hidden" name="id" value="${appointment.id}">
         
         <!-- Date input with dd/MM/yyyy format -->
@@ -21,10 +21,10 @@
         </select><br><br>
         
         <!-- Class dropdown box -->
-        <label for="class">Class:</label>
-        <select id="class" name="class" required>
-            <option th:each="class : ${allClasses}" th:value="${class.id}" th:text="${class.name}"></option>
-    </select><br><br>
+        <!-- <label for="class">Class:</label>
+        <select id="classtype" name="classtype" required>
+            <option th:each="class : ${allClassType}" th:value="${classtype.id}" th:text="${classtype.fitnessclassname}"></option>
+    </select><br><br> -->
         
         <button type="submit">Confirm Changes</button>
         <a href="/appointments">Cancel</a>
