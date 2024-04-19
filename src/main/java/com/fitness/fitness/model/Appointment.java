@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+//import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Appointment {
@@ -20,7 +21,17 @@ public class Appointment {
     private String classtype;
     private String status;
 
-    public Appointment() {
+    //connect to fitness class table
+    //@ManyToOne
+    //private FitnessClass fitnessClass;
+
+    //public void setFitnessClass(FitnessClass fitnessClass) {
+        //this.fitnessClass = fitnessClass;
+    //}
+
+     // Default constructor
+     public Appointment() {
+        this.status = "active"; // Set default value for status
     }
 
     public Appointment(int id, Date date, String trainer, String classtype, String status) {

@@ -12,14 +12,22 @@ public class TrainerService {
     @Autowired
     private TrainerRepo trainerRepo;
 
-    public List<Trainer> getAll(){
-        return trainerRepo.findAll();
-    }
     public Optional<Trainer> findById(int id) {
         return trainerRepo.findById(id);
     }
+    
+
+    // You can add methods to perform operations using trainerRepo
+
     public List<Trainer> findAllByRank(int rank) {
-        // TODO Auto-generated method stub
         return trainerRepo.findAllByRank(rank);
     }
-}
+
+    public List<Trainer> getAllTrainers() {
+        // // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'getAllTrainers'");
+            return trainerRepo.findAll();
+        }
+    }
+
+    // You can add more methods here depending on your business logic
