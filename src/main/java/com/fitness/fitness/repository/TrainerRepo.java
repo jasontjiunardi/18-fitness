@@ -10,6 +10,7 @@ import com.fitness.fitness.model.Trainer;
 @Repository
 public interface TrainerRepo extends JpaRepository<Trainer, Integer>{
     public List<Trainer> findAllByRank(int rank);
+    List<Trainer> findAll();
 }
 
     
