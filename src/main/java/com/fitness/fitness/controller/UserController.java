@@ -122,5 +122,6 @@ public class UserController {
         } else {
             return "login";
         }
-}
+    }
+
 }
