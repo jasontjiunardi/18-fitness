@@ -58,17 +58,22 @@ public class AppointmentController {
     }
 
     @GetMapping("/bookAppointment")
-    public String bookAppointmentForm(Model m) {
+    public String bookAppointmentForm(@RequestParam(value = "trainerId", required=false) Integer trainerId,Model m) {
         // Load the list of trainers and classes and add them to the model
         List<Trainer> allTrainers = trainerService.getAllTrainers();
+            m.addAttribute("allTrainers", allTrainers);
         List<FitnessClass> allClasses = fitnessClassService.getAllClasses();
-        m.addAttribute("allTrainers", allTrainers);
+        
         m.addAttribute("allClasses", allClasses);
         // Set minimum date for the date input field to today
         m.addAttribute("minDate", LocalDate.now());
         
         // Add an empty appointment object to bind the form data
         m.addAttribute("appointment", new Appointment());
+        if (trainerId != null) {
+            m.addAttribute("trainerId", trainerId);
+        }
+        
         
         return "bookAppointmentForm"; // Rendering the booking form
     }

@@ -12,10 +12,10 @@ public class TrainerService {
     @Autowired
     private TrainerRepo trainerRepo;
 
-    public Optional<Trainer> findById(int id) {
-        return trainerRepo.findById(id);
+    public Trainer findById(int id) {
+        return trainerRepo.findById(id).orElse(null);
     }
-    
+
 
     // You can add methods to perform operations using trainerRepo
 

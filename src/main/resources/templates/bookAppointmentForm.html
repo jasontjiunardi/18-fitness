@@ -9,10 +9,13 @@
     <h1>Book Appointment</h1>
     <form method="POST" th:action="@{/bookAppointment}" th:object="${appointment}" onsubmit="return validateForm()">
         <label for="trainer">Select Trainer:</label>
-        <select id="trainer" name="trainer" required>
-            <option value="" disabled selected>Select Trainer</option>
-            <option th:each="trainer : ${allTrainers}" th:value="${trainer.name}" th:text="${trainer.name}" th:selected="${trainer.name == appointment.trainer}"></option>
-        </select>
+            <input type="hidden" id="trainerId" name="trainerId" th:value="${trainerId}">
+        
+            <select id="trainer" name="trainer" required>
+                <option value="" disabled>Select Trainer</option>
+                <option th:each="trainer : ${allTrainers}" th:value="${trainer.id}" th:text="${trainer.name}" th:selected="${trainer.id == trainerId}"></option>
+            </select>
+        
         <br><br>
         <label for="class">Select Class:</label>
         <select id="class" name="classtype" required>
