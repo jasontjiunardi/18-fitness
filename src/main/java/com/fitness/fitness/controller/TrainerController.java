@@ -22,14 +22,14 @@ public class TrainerController {
     
     @GetMapping("/trainers/view")
     public ModelAndView view(Model model) {
-        return new ModelAndView("trainers","trainers", trainerService.getAll());
+        return new ModelAndView("trainers","trainers", trainerService.getAllTrainers());
     }
     
     
     @GetMapping("/view_trainers")
     public String viewTrainers(@RequestParam(value ="rank",required=false) Integer rank, Model model) {
         if (rank== null) {
-            List<Trainer> trainers = trainerService.getAll();            model.addAttribute("trainers", trainers);
+            List<Trainer> trainers = trainerService.getAllTrainers();            model.addAttribute("trainers", trainers);
         } else{
             List<Trainer> filteredTrainers = trainerService.findAllByRank(rank.intValue());
             model.addAttribute("trainers", filteredTrainers);
