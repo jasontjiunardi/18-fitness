@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Trainers</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .add-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+        }
+        th {
+            cursor: pointer; /* Indicates that a header is clickable */
+        }
+    </style>
+    <script>
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.querySelector(".table");
+            switching = true;
+            dir = "asc"; 
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    if (dir == "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch= true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch= true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount ++;      
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Trainers List</h1>
+        <a href="/managerAddTrainer" class="btn btn-primary add-btn">Add Trainer</a>
+        <table class="table table-striped table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th onclick="sortTable(0)">ID</th>
+                    <th onclick="sortTable(1)">Name</th>
+                    <th onclick="sortTable(2)">Age</th>
+                    <th onclick="sortTable(3)">Date of Birth</th>
+                    <th onclick="sortTable(4)">Email</th>
+                    <th onclick="sortTable(5)">Phone</th>
+                    <th onclick="sortTable(6)">Rank</th>
+                    <th onclick="sortTable(7)">Since</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="trainer : ${trainers}">
+                    <td th:text="${trainer.id}"></td>
+                    <td th:text="${trainer.name}"></td>
+                    <td th:text="${trainer.age}"></td>
+                    <td th:text="${trainer.dob}"></td>
+                    <td th:text="${trainer.email}"></td>
+                    <td th:text="${trainer.phone}"></td>
+                    <td th:text="${trainer.rank}"></td>
+                    <td th:text="${trainer.trainerSince}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.fitness.fitness.model.Trainer;
 import com.fitness.fitness.repository.TrainerRepo;
+
+import jakarta.transaction.Transactional;
 @Service
 public class TrainerService {
     @Autowired
@@ -36,6 +38,9 @@ public class TrainerService {
 
     public Trainer findTrainerByName(String name) {
         return trainerRepo.findByName(name);
+    }
+    public Trainer saveTrainer(Trainer trainer) {
+        return trainerRepo.save(trainer);
     }
 
 }

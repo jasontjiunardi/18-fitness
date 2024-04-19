@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,8 @@ import com.fitness.fitness.service.AppointmentService;
 import com.fitness.fitness.service.FitnessClassService;
 // import com.fitness.fitness.service.FitnessClassService;
 import com.fitness.fitness.service.TrainerService;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class AppointmentController {
@@ -54,7 +57,7 @@ public class AppointmentController {
         
         return "appointments";
     }
-
+    
     // GET mapping for editing an appointment
     @GetMapping("/editAppointment/{id}")
     public String editAppointment(@PathVariable("id") Integer id, Model m) {
@@ -130,31 +133,35 @@ public String deleteAppointment(@RequestParam("appointmentId") Integer appointme
     return "redirect:/appointments"; // Redirect back to the appointments page
 }*/
 
-@PostMapping("/deleteAppointment")
-public String deleteAppointment(@RequestParam("appointmentId") Integer appointmentId, Model model) {
-    try {
-        // Delegate the deletion logic to the service layer
-        appointmentService.deleteAppointmentIfActive(appointmentId);
-    } catch (IllegalStateException ex) {
-        model.addAttribute("error", ex.getMessage());
-        // Add appointment list to model to refresh the appointments table
-        List<Appointment> appointments = appointmentService.getAllAppointments();
-        model.addAttribute("appointments", appointments);
-        // Return to the appointments page
-        return "appointments";
-    }
+    @PostMapping("/deleteAppointment")
+    public String deleteAppointment(@RequestParam("appointmentId") Integer appointmentId, Model model) {
+        try {
+            // Delegate the deletion logic to the service layer
+            appointmentService.deleteAppointmentIfActive(appointmentId);
+        } catch (IllegalStateException ex) {
+            model.addAttribute("error", ex.getMessage());
+            // Add appointment list to model to refresh the appointments table
+            List<Appointment> appointments = appointmentService.getAllAppointments();
+            model.addAttribute("appointments", appointments);
+            // Return to the appointments page
+            return "appointments";
+        }
 
-    // Redirect back to the appointments page
-    return "redirect:/appointments";
-}
+        // Redirect back to the appointments page
+        return "redirect:/appointments";
+    }
 
     // POST mapping for updating an appointment
     @PostMapping("/updateAppointment")
-    public String updateAppointment(@ModelAttribute("appointment") Appointment appointment) {
+    public String updateAppointment(@ModelAttribute("appointment") @Valid Appointment appointment, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("allTrainers", trainerService.getAllTrainers());
+            model.addAttribute("allClasses", fitnessClassService.getAllClasses());
+            return "editAppointment";
+        }
         appointmentService.updateAppointment(appointment);
-        return "redirect:/viewAppointments"; // Redirect back to the view appointments page
+        return "redirect:/appointments";
     }
-    
     @GetMapping("/applyFilter")
     public String applyFilter(@RequestParam(value = "filter", required = false) String filter,
                               @RequestParam(value = "value", required = false) String value,

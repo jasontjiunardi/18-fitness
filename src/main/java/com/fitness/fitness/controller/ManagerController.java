@@ -16,6 +16,7 @@ import com.fitness.fitness.model.Trainer;
 import com.fitness.fitness.model.User;
 import com.fitness.fitness.repository.TrainerRepo;
 import com.fitness.fitness.service.ManagerService;
+import com.fitness.fitness.service.TrainerService;
 import com.fitness.fitness.service.UserService;
 
 @Controller
@@ -29,6 +30,9 @@ public class ManagerController {
 
     @Autowired
     private TrainerRepo trainerRepo; 
+
+    @Autowired
+    private TrainerService trainerService;
     
     //  cb cek ulang ini
     // @GetMapping("/manager_add_appointment")
@@ -89,6 +93,24 @@ public class ManagerController {
     @PostMapping("/manager_signin")
     public String showMangagerHomePage(){
         return "manager_home";
+    }
+
+    @GetMapping("/managerViewTrainers")
+    public String showTrainers(Model model) {
+        model.addAttribute("trainers", trainerService.getAllTrainers());
+        return "managerViewTrainers";
+    }
+
+    @GetMapping("/managerAddTrainer")
+    public String showAddTrainerForm(Model model) {
+        model.addAttribute("trainer", new Trainer());
+        return "managerAddTrainer";
+    }
+
+    @PostMapping("/managerSaveTrainer")
+    public String saveTrainer(@ModelAttribute("trainer") Trainer trainer, Model model) {
+        trainerService.saveTrainer(trainer);
+        return "redirect:/managerViewTrainers";
     }
     
 
