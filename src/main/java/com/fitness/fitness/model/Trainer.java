@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+
 @Entity
 public class Trainer {
     @Id
@@ -14,26 +15,28 @@ public class Trainer {
     private int age;
     private String dob;
     private String email;
-    private String imageUrl;
+    private String image;
     private String phone;
     private int rank; //3 for 3 star. 4 for 4 star, 5 for 5 star
     private String trainerSince;
-    
+   
     public Trainer() {
     }
     
-    public Trainer(int id, String name, int age, String dob, String email, String phone, String trainerSince, int rank,
-            String imageUrl) {
+    
+    public Trainer(int id, String name, int age, String dob, String email, String image, String phone, int rank,
+            String trainerSince) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.dob = dob;
         this.email = email;
+        this.image = image;
         this.phone = phone;
-        this.trainerSince = trainerSince;
         this.rank = rank;
-        this.imageUrl = imageUrl;
+        this.trainerSince = trainerSince;
     }
+  
     public int getId() {
         return id;
     }
@@ -83,11 +86,13 @@ public class Trainer {
         this.name = name;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImage() {
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(String image) {
+        this.image = image;
     }
+
+
 }
