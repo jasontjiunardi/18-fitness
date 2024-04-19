@@ -1,4 +1,4 @@
-<html>
++<html>
     <head>
         <title>Home</title>
     </head>
@@ -17,6 +17,8 @@
     <form method="get" action="/bookAppointment">
         <input type="hidden" name="email" th:value="${user.email}">
         <button type="submit">I want to Book an Appointment</button>
+    <form action="/view_trainers" method="get">
+        <button type="submit"> View trainers</button>
     </form>
     </body>
 </html>

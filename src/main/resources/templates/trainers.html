@@ -9,24 +9,68 @@
   <body>
     <div>
       <form action="/view_trainers" method="get">
-        <label for="rankFilter">Filter rank:</label>
-        <select id="rankFilter" name="rank">
-          <option value="">view all</option>
-          <option value="3">3-star</option>
-          <option value="4">4-star</option>
-          <option value="5">5-star</option>
-        </select>
-        <button type="submit">View trainers</button>
+        <div class="radio-group">
+          <input
+            type="submit"
+            id="radio"
+            name="rank"
+            class="radio-input"
+            value=""
+          />
+          <label for="radio" class="radio-label">
+            View all
+          </label>
+          <input
+            type="submit"
+            id="radio1"
+            name="rank"
+            class="radio-input"
+            value="3"
+          />
+          <label for="radio1" class="radio-label">
+            3-star
+          </label>
+
+          <input
+            type="submit"
+            id="radio2"
+            name="rank"
+            class="radio-input"
+            value="4"
+          />
+          <label for="radio2" class="radio-label">
+            4-star
+          </label>
+
+          <input
+            type="submit"
+            id="radio3"
+            name="rank"
+            class="radio-input"
+            value="5"
+          />
+          <label for="radio3" class="radio-label">
+            5-star
+          </label>
+        </div>
       </form>
     </div>
-    <div class="trainer-grid">
-      <h1>Our Trainers</h1>
+    <h1>Our Trainers</h1>
+      <br/><br>
       <ul>
-        <li th:each="trainer : ${trainers}" class="trainer-grid">
-          <div class="trainer-info">
-            <img th:src="${trainer.imageUrl}" alt="Trainer image" />
-            <span th:text="${trainer.name}">Trainer name</span><br />
-            <span th:text="${trainer.rank}">Trainer rank</span>
+        <li th:each="trainer : ${trainers}" >
+          <div class="card">
+            <div class="imgbox">
+              <div class="img">
+              <img th:src="@{'images/' + ${trainer.image}}" alt="Trainer image" />
+              </div>
+            </div>
+            <span th:text="${trainer.name}">Trainer name</span>
+            <p class="rank">Rank
+              <div class = "stars" >
+              <span th:each="starNumber : ${#numbers.sequence(1, trainer.rank)}">&#9733;</span>
+            </p>  
+            </div>
             <th:block th:if="${trainer.id}">
               <form method="get" action="/trainer_profile">
                 <!-- Hidden input field to store the trainer ID -->
