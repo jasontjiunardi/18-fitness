@@ -1,11 +1,21 @@
+.card-container {
+  display: flex;
+  flex-wrap: wrap; /* Allow flex items to wrap to the next line */
+  justify-content: space-around; /* Distribute space between items */
+  align-items: flex-start; /* Align items to the top */
+  margin: 0 auto; /* Center the container horizontally */
+  max-width: 1200px; /* Adjust the maximum width as needed */
+}
 .card {
   width: 17em;
   height: 22.5em;
-  background: #171717;
+  background: #5f30e2;
   transition: 1s ease-in-out;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .card span {
@@ -38,6 +48,8 @@
 }
 
 .card .rank {
+  position: relative;
+  top:70px;
   font-weight: normal;
   color: white;
   display: block;
@@ -45,6 +57,8 @@
   font-size: 0.9em;
 }
 .stars {
+  position: relative;
+  top:55px;
     text-align: center;
 }
 .stars span {
@@ -67,7 +81,7 @@
 }
 
 .card button:hover {
-  background: red;
+  background: gold;
   color: white;
   cursor: pointer;
 }
@@ -83,7 +97,7 @@
     align-items: center;
     padding: 0.5em;
     margin-bottom: 0.5em;
-    background-color: rgb(17, 17, 17);
+    background-color: #5f30e2;
     border: 1px solid #ccc;
     border-radius: 4px;
     transition: background-color 0.2s, border-color 0.2s;
@@ -91,29 +105,21 @@
   }
   
   .radio-label:hover {
-    background-color: #000000;
+    background-color: gold;
   }
   
   .radio-input {
     position: absolute;
     opacity: 0;
   }
-  
-  .radio-input:checked + .radio-label {
-    background-color: #b80000;
-    border-color: #ff1111;
-  }
-  
-  .radio-input:focus + .radio-label {
-    outline: 2px solid #ff1111;
-  }
+
 
   .radio-label:hover  {
     border-color: rgb(233, 233, 233);
   }
   
   .radio-input:checked + .radio-label  {
-    border-color: #ff1111;
+    border-color: #5f30e2;
   }
   
   .radio-input:checked + .radio-label  {
@@ -121,7 +127,7 @@
     display: block;
     width: 0.5em;
     height: 0.5em;
-    background-color: #ff1111;
+    background-color: #5f30e2;
     border-radius: 50%;
     position: absolute;
     top: 50%;

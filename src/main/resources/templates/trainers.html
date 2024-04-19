@@ -58,28 +58,31 @@
     <h1>Our Trainers</h1>
       <br/><br>
       <ul>
-        <li th:each="trainer : ${trainers}" >
-          <div class="card">
-            <div class="imgbox">
-              <div class="img">
-              <img th:src="@{'images/' + ${trainer.image}}" alt="Trainer image" />
+        <div th:each="trainer : ${trainers}" >
+          <div class="card-container">
+            <div class="card">
+              <div class="imgbox">
+                <div class="img">
+                <img th:src="@{'images/' + ${trainer.image}}" alt="Trainer image" />
+                </div>
               </div>
+              <span th:text="${trainer.name}">Trainer name</span>
+              <p class="rank">Rank
+                <div class = "stars" >
+                <span th:each="starNumber : ${#numbers.sequence(1, trainer.rank)}">&#9733;</span>
+              </p>  
+              </div>
+              <th:block th:if="${trainer.id}">
+                <form method="get" action="/trainer_profile">
+                  <!-- Hidden input field to store the trainer ID -->
+                  <input type="hidden" name="id" th:value="${trainer.id}" />
+                  <button type="submit">View Trainer profile</button>
+                </form>
+              </th:block>
             </div>
-            <span th:text="${trainer.name}">Trainer name</span>
-            <p class="rank">Rank
-              <div class = "stars" >
-              <span th:each="starNumber : ${#numbers.sequence(1, trainer.rank)}">&#9733;</span>
-            </p>  
-            </div>
-            <th:block th:if="${trainer.id}">
-              <form method="get" action="/trainer_profile">
-                <!-- Hidden input field to store the trainer ID -->
-                <input type="hidden" name="id" th:value="${trainer.id}" />
-                <button type="submit">View Trainer profile</button>
-              </form>
-            </th:block>
           </div>
-        </li>
+          <br>
+        </div>
       </ul>
     </div>
   </body>
