@@ -1,19 +1,75 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register New User</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff; /* White background */
+            color: #4a154b; /* Purple text color */
+        }
+
+        h1 {
+            color: #4a154b; /* Purple heading color */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff; /* White background for form */
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="date"],
+        input[type="email"],
+        input[type="tel"] {
+            width: calc(100% - 22px); /* Adjusted width to accommodate borders and padding */
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #4a154b; /* Purple border */
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background-color: #4a154b; /* Purple button background */
+            color: #ffffff; /* White text color for button */
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #310b33; /* Darker purple on hover */
+        }
+
+        span {
+            color: #888;
+            font-size: 12px;
+        }
+    </style>
 </head>
 <body>
     <h1>Register New User</h1>
     <form method="POST" th:action="@{/register_user}" th:object="${user}">
-        Username: <input type="text" th:field="*{username}" /> <br />
-        Password: <input type="password" th:field="*{password}" /> <br />
-        <span style="color: #888;font-size: 12px;">(Password must include at least one uppercase letter, one number, and be at least 8 characters long)</span><br />
-        Name: <input type="text" th:field="*{name}" /> <br />
-        Email: <input type="text" th:field="*{email}" /> <br />
-        <span style="color: #888;font-size: 12px;">(Email must be in the format example@gmail.com)</span><br />
-        Birth Date: <input type="date" th:field="*{dob}" /> <br />
-        Phone Number: <input type="text" th:field="*{phoneNumber}" /> <br />
+        Username: <input type="text" th:field="*{username}" required> <br />
+        Password: <input type="password" th:field="*{password}" required> <br />
+        <span>(Password must include at least one uppercase letter, one number, and be at least 8 characters long)</span><br />
+        Name: <input type="text" th:field="*{name}" required> <br />
+        Email: <input type="email" th:field="*{email}" required> <br />
+        <span>(Email must be in the format example@gmail.com)</span><br />
+        Birth Date: <input type="date" th:field="*{dob}" required> <br />
+        Phone Number: <input type="tel" th:field="*{phoneNumber}" required> <br />
         <input type="submit" value="Register" />
     </form>
 </body>

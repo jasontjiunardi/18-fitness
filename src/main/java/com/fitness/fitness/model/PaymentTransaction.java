@@ -1,5 +1,7 @@
 package com.fitness.fitness.model;
 
+import java.util.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,13 +13,13 @@ public class PaymentTransaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String paymentMethod; // Metode pembayaran (Alipay, WeChat, Debit, Credit)
-    private String accountNumber; // Nomor akun Alipay atau WeChat
     private String transactionId; // ID transaksi dari Alipay atau WeChat
-    private String cardholderName; // Hanya digunakan untuk metode pembayaran kartu
     private String cardNumber; // Hanya digunakan untuk metode pembayaran kartu
-    private String cvv; // Hanya digunakan untuk metode pembayaran kartu
-    private String expiryDate; // Hanya digunakan untuk metode pembayaran kartu
-    
+    private String userId;
+    private String planType;
+    private String paymentType;
+    private Date purchasedDate;
+
     // Constructor tanpa parameter
     public PaymentTransaction() {
     }
@@ -39,28 +41,12 @@ public class PaymentTransaction {
         this.paymentMethod = paymentMethod;
     }
 
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
     public String getTransactionId() {
         return transactionId;
     }
 
     public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
-    }
-
-    public String getCardholderName() {
-        return cardholderName;
-    }
-
-    public void setCardholderName(String cardholderName) {
-        this.cardholderName = cardholderName;
     }
 
     public String getCardNumber() {
@@ -71,19 +57,36 @@ public class PaymentTransaction {
         this.cardNumber = cardNumber;
     }
 
-    public String getCvv() {
-        return cvv;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getExpiryDate() {
-        return expiryDate;
+    public String getPlanType() {
+        return planType;
     }
 
-    public void setExpiryDate(String expiryDate) {
-        this.expiryDate = expiryDate;
+    public void setPlanType(String planType) {
+        this.planType = planType;
     }
+
+    public String getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    public Date getPurchasedDate() {
+        return purchasedDate;
+    }
+
+    public void setPurchasedDate(Date purchasedDate) {
+        this.purchasedDate = purchasedDate;
+    }
+
 }
