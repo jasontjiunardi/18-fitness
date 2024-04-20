@@ -12,16 +12,25 @@
         <ul>
             <li th:each="fitnessClass : ${allClasses}" class="fitness-class">
                 <div class="fitness-class-details">
-                    
                     <span>Name:</span> <span th:text="${fitnessClass.fitnessclassname}"></span><br>
                     <span>Description:</span> <span th:text="${fitnessClass.classdescription}"></span><br>
-                    <span>Duration:</span> <span th:text="${fitnessClass.classduration}"></span>
+                    <span>Duration:</span> <span th:text="${fitnessClass.classduration}"></span><br>
+                    <!-- Add "Book Appointment" button -->
+                    <!-- Modify the form around the "Book Appointment" button to submit class information -->
+                    <form action="/bookAppointment" method="GET">
+                        <input type="hidden" name="classId" th:value="${fitnessClass.id}" />
+                        <input type="hidden" name="className" th:value="${fitnessClass.fitnessclassname}" />
+                        <!-- Add other hidden fields for class description, duration, etc. if needed -->
+                        <button type="submit">Book Appointment</button>
+                    </form>
                 </div>
             </li>
         </ul>
     </div>
+    <div style="text-align: center;">
+        <form method="GET" action="/home_page">
+            <button type="submit">Go Back to HomePage</button>
+        </form>
+    </div>
 </body>
-<div style="text-align: center;">
-<form method="GET" action="/home_page">
-    <button type="submit">Go Back to HomePage</button>
 </html>
