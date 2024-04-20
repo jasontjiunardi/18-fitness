@@ -23,6 +23,9 @@
         <label for="cardNumber">Credit Card Number:</label>
         <input type="text" id="cardNumber" name="cardNumber" th:value="${user.cardNumber}" required pattern="\d{16}" title="Credit card number must be 16 digits" maxlength="16"><br>
     
+        <label for="profilePicture">Profile Picture:</label>
+        <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
+
         <button type="submit">Save Changes</button>
     </form>
     

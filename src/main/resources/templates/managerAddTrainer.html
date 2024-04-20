@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Trainer</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var today = new Date().toISOString().split('T')[0];
+            document.getElementById("trainerSince").setAttribute('min', today);
+            const emailInput = document.getElementById('email');
+            emailInput.oninput = validateEmail;  // Set up custom email validation
+        });
+
+        function validateForm() {
+            const form = document.getElementById('trainerForm');
+            if (!form.checkValidity()) {
+                document.getElementById('email').checkValidity();  // Explicitly trigger email validation
+                alert('Please fill in all required information.');
+                return false;
+            }
+            // Check confirmation to add trainer
+            if (confirm('Confirm add trainer?')) {
+                alert('Trainer added.');  // Notify user
+                window.location.href = '/managerViewTrainers';  // Redirect
+                return true; // Prevent the default form submission since we handle redirection manually
+            }
+            return false;  // If they do not confirm, do not submit the form
+        }
+
+        function validateEmail() {
+            const emailInput = document.getElementById('email');
+            emailInput.setCustomValidity('');  // Clear any existing messages
+            if (!emailInput.validity.valid && emailInput.value !== '') {
+                emailInput.setCustomValidity('Please input ONLY valid email address');
+            }
+            emailInput.reportValidity();  // Trigger the browser's validation message popup
+        }
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Add New Trainer</h2>
+        <form id="trainerForm" th:action="@{/managerSaveTrainer}" th:object="${trainer}" method="post" onsubmit="return validateForm()">
+            <div class="form-group">
+                <label for="name">Name: <span style="color: red;">*</span></label>
+                <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Enter name" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age: <span style="color: red;">*</span></label>
+                <input type="number" class="form-control" id="age" th:field="*{age}" placeholder="Enter age" required min="1">
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" class="form-control" id="dob" th:field="*{dob}" placeholder="Enter date of birth">
+            </div>
+            <div class="form-group">
+                <label for="email">Email: <span style="color: red;">*</span></label>
+                <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Enter email" required oninput="validateEmail()">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="tel" class="form-control" id="phone" th:field="*{phone}" placeholder="Enter phone number" pattern="[0-9]+" title="Only numeric digits are allowed">
+            </div>
+            <div class="form-group">
+                <label for="rank">Rank: <span style="color: red;">*</span></label>
+                <input type="number" class="form-control" id="rank" th:field="*{rank}" placeholder="Enter rank (3-5)" required min="3" max="5">
+            </div>
+            <div class="form-group">
+                <label for="trainerSince">Trainer Since: <span style="color: red;">*</span></label>
+                <input type="date" class="form-control" id="trainerSince" th:field="*{trainerSince}" placeholder="Enter start date" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="/managerViewTrainers" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

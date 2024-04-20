@@ -4,29 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Appointment</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Set the minimum date to today
+            var today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').setAttribute('min', today);
+
+            var form = document.querySelector('form');
+            document.getElementById('confirmButton').addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent the form from submitting on button click
+                if (confirm('Are you sure you want to modify changes?')) {
+                    form.submit(); // Submit the form if user confirms
+                }
+            });
+        });
+    </script>
 </head>
 <body>
     <h1>Edit Appointment</h1>
     <form method="post" action="/updateAppointment">
         <input type="hidden" name="id" value="${appointment.id}">
         
-        <!-- Date input with dd/MM/yyyy format -->
+        <!-- Date input with dd/MM/yyyy format, modified to allow only today or future dates -->
         <label for="date">Date:</label>
-        <input type="date" name="date" th:value="${#dates.format(appointment.date, 'dd-MM-yyyy')}" required><br><br>
+        <input id="date" type="date" name="date" th:value="${#dates.format(appointment.date, 'dd-MM-yyyy')}" required><br><br>
         
         <!-- Trainer dropdown box -->
         <label for="trainer">Trainer:</label>
         <select id="trainer" name="trainer" required>
-            <option th:each="trainer : ${allTrainers}" th:value="${trainer}" th:text="${trainer.name}" th:selected="${trainer.name == appointment.trainer}"></option>
+            <option th:each="trainer : ${allTrainers}" th:value="${trainer.name}" th:text="${trainer.name}" th:selected="${trainer.name == appointment.trainer}"></option>
         </select><br><br>
         
         <!-- Class dropdown box -->
         <label for="class">Class:</label>
         <select id="class" name="class" required>
-            <option th:each="class : ${allClasses}" th:value="${class.id}" th:text="${class.name}"></option>
-    </select><br><br>
+            <option th:each="class : ${allClasses}" th:value="${class}" th:text="${class.fitnessclassname}" ></option>
+        </select><br><br>
         
-        <button type="submit">Confirm Changes</button>
+        <button type="submit" id="confirmButton">Confirm Changes</button>
         <a href="/appointments">Cancel</a>
     </form>
 </body>

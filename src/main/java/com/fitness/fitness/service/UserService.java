@@ -8,8 +8,13 @@ import com.fitness.fitness.repository.UserRepo;
 
 @Service
 public class UserService {
-    @Autowired
+    
     private UserRepo userRepo;
+    // i use constructor injection instead of field injection to avoid difficulties in testing
+    @Autowired
+    public UserService(UserRepo userRepo){
+        this.userRepo = userRepo;
+    }
 
     public User saveUser(User user){
         return userRepo.save(user);
@@ -86,10 +91,16 @@ public class UserService {
         userRepo.save(user);
     }
 
+    public String setProfilePicture(String email, String profilePictureUrl) {
+        User user = userRepo.findByEmail(email);
+        user.setProfilePictureUrl(profilePictureUrl);
+        userRepo.save(user);
+        return profilePictureUrl;
+    }
+    
+    public String getProfilePicture(String email) {
+        User user = userRepo.findByEmail(email);
+        return user.getProfilePictureUrl();
+    }
+    
 }
-
-
-
-
-
-

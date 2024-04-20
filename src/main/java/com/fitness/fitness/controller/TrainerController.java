@@ -41,7 +41,7 @@ public class TrainerController {
     
     
     @GetMapping("/trainer_profile")
-    public String TrainerProfile(@RequestParam(value ="id",required=false) Integer id, Model model) {
+    public String trainerProfile(@RequestParam(value ="id",required=false) Integer id, Model model) {
         Trainer trainer = trainerService.findById(id);
         model.addAttribute("trainer", trainer);
         return "trainerprofile";

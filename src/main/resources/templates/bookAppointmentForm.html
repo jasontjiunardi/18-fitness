@@ -9,18 +9,18 @@
     <h1>Book Appointment</h1>
     <form method="POST" th:action="@{/bookAppointment}" th:object="${appointment}" onsubmit="return validateForm()">
         <label for="trainer">Select Trainer:</label>
-            <input type="hidden" id="trainerId" name="trainerId" th:value="${trainerId}">
-        
-            <select id="trainer" name="trainer" required>
-                <option value="" disabled>Select Trainer</option>
-                <option th:each="trainer : ${allTrainers}" th:value="${trainer.id}" th:text="${trainer.name}" th:selected="${trainer.id == trainerId}"></option>
-            </select>
-        
+        <input type="hidden" id="trainerId" name="trainerId" th:value="${trainerId}">
+        <select id="trainer" name="trainerName" required>
+            <option value="" disabled>Select Trainer</option>
+            <!-- Iterate over each trainer and populate the dropdown with trainer names -->
+            <option th:each="trainerOption : ${allTrainers}" th:value="${trainerOption.name}" th:text="${trainerOption.name}" th:selected="${trainerOption.id == trainerId}"></option>
+        </select>
         <br><br>
         <label for="class">Select Class:</label>
-        <select id="class" name="classtype" required>
+        <select id="class" name="fitnessclassname" required>
             <option value="" disabled selected>Select Class</option>
-            <option th:each="class : ${allClasses}" th:value="${class.fitnessclassname}" th:text="${class.fitnessclassname}" th:selected="${class.fitnessclassname == appointment.classtype}"></option>
+            <!-- Iterate over each fitness class and populate the dropdown with class names -->
+            <option th:each="class : ${allClasses}" th:value="${class.fitnessclassname}" th:text="${class.fitnessclassname}" th:selected="${class.fitnessclassname == appointment.fitnessclassname}"></option>
         </select>
         <br><br>
         <label for="date">Select Date:</label>
@@ -28,8 +28,6 @@
         <br><br>
         <!-- Add other appointment details fields if needed -->
         <input type="submit" value="Book Appointment">
-
-        
     </form>
 
     <script>
@@ -43,9 +41,9 @@
             return true;
         }
     </script>
-    
 </body>
 <div style="text-align: center;">
     <form method="GET" action="/home_page">
         <button type="submit">Go Back to HomePage</button>
+    </form>
 </html>
