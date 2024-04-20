@@ -1,9 +1,13 @@
 package com.fitness.fitness.model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class PaymentTransaction {
@@ -11,13 +15,19 @@ public class PaymentTransaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String paymentMethod; // Metode pembayaran (Alipay, WeChat, Debit, Credit)
-    private String accountNumber; // Nomor akun Alipay atau WeChat
     private String transactionId; // ID transaksi dari Alipay atau WeChat
-    private String cardholderName; // Hanya digunakan untuk metode pembayaran kartu
-    private String cardNumber; // Hanya digunakan untuk metode pembayaran kartu
-    private String cvv; // Hanya digunakan untuk metode pembayaran kartu
-    private String expiryDate; // Hanya digunakan untuk metode pembayaran kartu
+    private String userId;
+    @ManyToOne
+    @JoinColumn(name = "plan_id", nullable = false)
+    private Plan plan;
+    private String planType;
+    private Double price; 
+    private Double duration;
+    private String paymentType;
+    private LocalDate purchasedDate;
+    private LocalDate activeDate;
     
+
     // Constructor tanpa parameter
     public PaymentTransaction() {
     }
@@ -39,14 +49,6 @@ public class PaymentTransaction {
         this.paymentMethod = paymentMethod;
     }
 
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
     public String getTransactionId() {
         return transactionId;
     }
@@ -55,35 +57,69 @@ public class PaymentTransaction {
         this.transactionId = transactionId;
     }
 
-    public String getCardholderName() {
-        return cardholderName;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setCardholderName(String cardholderName) {
-        this.cardholderName = cardholderName;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getCardNumber() {
-        return cardNumber;
+    public String getPlanType() {
+        return planType;
     }
 
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
+    public void setPlanType(String planType) {
+        this.planType = planType;
     }
 
-    public String getCvv() {
-        return cvv;
+    public String getPaymentType() {
+        return paymentType;
     }
 
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
     }
 
-    public String getExpiryDate() {
-        return expiryDate;
+    public LocalDate getPurchasedDate() {
+        return purchasedDate;
     }
 
-    public void setExpiryDate(String expiryDate) {
-        this.expiryDate = expiryDate;
+    public void setPurchasedDate(LocalDate today) {
+        this.purchasedDate = today;
     }
+
+    public Plan getPlan() {
+        return plan;
+    }
+
+    public void setPlan(Plan plan) {
+        this.plan = plan;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+    public Double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Double duration) {
+        this.duration = duration;
+    }
+
+    public LocalDate getActiveDate() {
+        return activeDate;
+    }
+
+    public void setActiveDate(LocalDate activeDate) {
+        this.activeDate = activeDate;
+    }
+
 }
+
+ 

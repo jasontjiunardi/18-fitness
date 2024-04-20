@@ -68,14 +68,29 @@
 
     <h2>Select Payment Method:</h2>
     <form th:action="@{/finalizePurchase}" method="post" onsubmit="return validateForm()" onchange="togglePaymentFields()">
+        <input type="hidden" name="planType" th:value="${planType}">
+        <input type="hidden" name="price" th:value="${price}">
+        <input type="hidden" name="duration" th:value="${selectedDuration}">
         <div>
             <input type="radio" id="alipay" name="paymentMethod" value="Alipay">
-            <label for="alipay">Alipay</label>
+            <label for="alipay">
+                Alipay
+                <img th:src="@{/images/alipay_icon.png}" alt="Alipay" style="vertical-align: middle; width: 58px; height: 58px;">
+            </label>
+    
             <input type="radio" id="wechat" name="paymentMethod" value="WeChat">
-            <label for="wechat">WeChat</label>
+            <label for="wechat">
+                WeChat
+                <img th:src="@{/images/wechat_icon.png}" alt="WeChat" style="vertical-align: middle; width: 58px; height: 58px;">
+            </label>
+    
             <input type="radio" id="credit" name="paymentMethod" value="Credit">
-            <label for="credit">Credit Card</label>
+            <label for="credit">
+                Credit Card
+                <img th:src="@{/images/credit_card_icon.png}" alt="Credit Card" style="vertical-align: middle; width: 58px; height: 58;">
+            </label>
         </div>
+    
 
         <div id="cardPaymentFields" style="display:none;">
             <label for="cardNumber">Card Number:</label>

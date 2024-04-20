@@ -1,5 +1,7 @@
 package com.fitness.fitness.controller;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -67,16 +69,14 @@ public class planController {
     @GetMapping("/browsePlan/{planType}")
     public String browsePlan(@PathVariable("planType") String planType, Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
-        List<Plan> plans = planService.findByPlanType(planType);
-        
-        // Assuming each planType only has one set of details but multiple duration prices
-        Plan planDetails = plans.stream().findFirst().orElseThrow(() -> new RuntimeException("Plan type not found"));
+        Plan planDetails = planService.findByPlanType(planType);
     
+        if (planDetails == null) {
+            throw new RuntimeException("Plan type not found");
+        }
         List<Benefit> sortedBenefits = planDetails.getBenefits().stream()
                                               .sorted(Comparator.comparing(Benefit::getDescription))
                                               .collect(Collectors.toList());
-
-    
        
         Set<PlanDurationPrice> sortedDurationPrices = planDetails.getPlanDurationPrices().stream()
         .sorted(Comparator.comparing(PlanDurationPrice::getPlanDuration))
@@ -115,25 +115,62 @@ public class planController {
     @PostMapping("/finalizePurchase")
     public String finalizePurchase(@RequestParam("userAgreement") boolean userAgreement, 
                                     @RequestParam("paymentMethod") String paymentMethod,
-                                    @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
-                                    @RequestParam(value = "cardholderName", required = false) String cardholderName,
                                     @RequestParam(value = "cardNumber", required = false) String cardNumber,
-                                    @RequestParam(value = "cvv", required = false) String cvv,
-                                    @RequestParam(value = "expiryDate", required = false) String expiryDate,
-                                    Model model) {
+                                    @RequestParam("planType") String planType,
+                                    @RequestParam("duration") String duration,
+                                    @RequestParam("price") Double price, 
+                                    Model model,
+                                    HttpSession session) {
         if (userAgreement) {
             String transactionId = UUID.randomUUID().toString();
-
+    
+            // Retrieve logged-in user from session
+            User loggedInUser = (User) session.getAttribute("user");
+            if (loggedInUser == null) {
+                // Handle the case where user is not logged in
+                return "redirect:/login"; 
+            }
+    
+            // Get user ID from logged-in user
+            int userIdInt = loggedInUser.getId();
+            String userId = String.valueOf(userIdInt);
             PaymentTransaction paymentTransaction = new PaymentTransaction();
-            paymentTransaction.setTransactionId(transactionId);
-            paymentTransaction.setPaymentMethod(paymentMethod);
-            paymentTransaction.setAccountNumber(phoneNumber);
-            paymentTransaction.setCardholderName(cardholderName);
-            paymentTransaction.setCardNumber(cardNumber);
-            paymentTransaction.setCvv(cvv);
-            paymentTransaction.setExpiryDate(expiryDate);
-        
+            if(loggedInUser.getStatus().equals(planType)){
+                long durationChosen = Integer.parseInt(duration.split(" ")[0]);
+                LocalDate newActiveDate = loggedInUser.getActiveDate().plusMonths(durationChosen);
+                loggedInUser.setActiveDate(newActiveDate);
+                paymentTransaction.setDuration((double) durationChosen);
+                paymentTransaction.setActiveDate(newActiveDate);
+                if(loggedInUser.getCardNumber()==null && cardNumber != null){
+                    loggedInUser.setCardNumber(cardNumber);
+                }
+            }
+            else{
+                loggedInUser.setStatus(planType);
+                long durationChosen = Integer.parseInt(duration.split(" ")[0]);
+                LocalDate now = LocalDate.now().plusMonths(durationChosen);
+                loggedInUser.setActiveDate(now);
+                paymentTransaction.setDuration((double) durationChosen);
+                paymentTransaction.setActiveDate(now);
+                if(loggedInUser.getCardNumber()==null && cardNumber != null){
+                    loggedInUser.setCardNumber(cardNumber);
+                }
+            }
             
+            userService.saveUser(loggedInUser);
+
+
+            paymentTransaction.setTransactionId(transactionId);
+            paymentTransaction.setUserId(userId); // Set user ID
+            paymentTransaction.setPlanType(planType); // Set plan type
+            paymentTransaction.setPaymentMethod(paymentMethod);
+            paymentTransaction.setPaymentType("Buy"); // Set payment type
+            paymentTransaction.setPrice(price);
+            paymentTransaction.setPlan(planService.findByPlanType(planType));
+            // Set purchased date
+            LocalDate today = LocalDate.now(); // Get current date
+            paymentTransaction.setPurchasedDate(today);
+
             // Save the payment transaction to the database
             paymentTransactionRepo.save(paymentTransaction);
             
@@ -143,6 +180,7 @@ public class planController {
             return "purchaseForm"; 
         }
     }
+
     @GetMapping("/browseChangeSubscription")
     public String changeSubscription(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -161,8 +199,11 @@ public class planController {
     @GetMapping("/changeSubscription/{planType}")
     public String changeUserPlanType(@PathVariable("planType") String planType, Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
-        List<Plan> plans = planService.findByPlanType(planType);
-        Plan planDetails = plans.stream().findFirst().orElseThrow(() -> new RuntimeException("Plan type not found"));
+        Plan planDetails = planService.findByPlanType(planType);
+    
+        if (planDetails == null) {
+            throw new RuntimeException("Plan type not found");
+        }
     
         List<Benefit> sortedBenefits = planDetails.getBenefits().stream()
                                               .sorted(Comparator.comparing(Benefit::getDescription))
@@ -180,13 +221,45 @@ public class planController {
 
     }
     @PostMapping("/changeSubscription/{planType}")
-    public String updateSubscription(@PathVariable("planType") String planType, Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if(user != null){
-            userService.setStatus(user.getEmail(), planType);
-            model.addAttribute("userStatus",user.getStatus());
+    public String updateSubscription(@PathVariable("planType") String planType, Model model, HttpSession session,
+                                    @RequestParam("paymentMethod") String paymentMethod,
+                                    @RequestParam(value = "cardNumber", required = false) String cardNumber,
+                                    @RequestParam("price") Double price) {
+        User loggedInUser = (User) session.getAttribute("user");
+        if(loggedInUser != null){
+            int userIdInt = loggedInUser.getId();
+            String userId = String.valueOf(userIdInt);
+            PaymentTransaction paymentTransaction = new PaymentTransaction();
+            loggedInUser.setStatus(planType);
+            paymentTransaction.setActiveDate(loggedInUser.getActiveDate());
+            if(loggedInUser.getCardNumber()==null && cardNumber != null){
+                loggedInUser.setCardNumber(cardNumber);
+            }
+            userService.saveUser(loggedInUser);
+            LocalDate today = LocalDate.now();
+            LocalDate activeDate = loggedInUser.getActiveDate();
+            Double remainingMonths = (double) ChronoUnit.MONTHS.between(today, activeDate);
+            String transactionId = UUID.randomUUID().toString();
+            paymentTransaction.setTransactionId(transactionId);
+            paymentTransaction.setUserId(userId); 
+            paymentTransaction.setPlanType(planType); 
+            paymentTransaction.setPaymentMethod(paymentMethod);
+            paymentTransaction.setPrice(price);
+            paymentTransaction.setDuration(remainingMonths);
+            paymentTransaction.setPlan(planService.findByPlanType(planType));
+            if(price>0.0){
+                paymentTransaction.setPaymentType("Upgrade");
+            }
+            else{           
+                paymentTransaction.setPaymentType("Downgrade");}
+            paymentTransaction.setPurchasedDate(today);
+
+            // Save the payment transaction to the database
+            paymentTransactionRepo.save(paymentTransaction);
+            
+            return "changeSubscriptionConfirmation"; 
         }
-        return "changeSubscriptionConfirmation";
+        return "changeSubscriptionForm";
     }
     
     

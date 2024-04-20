@@ -22,14 +22,16 @@
         <div th:if="${#strings.equals(user.status, 'Paused')}">
             <p>Sorry, your plan is currently on pause. Please go back to <a th:href="@{/home_page}">home page</a> or contact our lovely staff.</p>
         </div>
+        <div th:if="!${#strings.equals(user.status, 'Inactive')} and !${#strings.equals(user.status, 'Paused')}">
         <h2>Available Plans For You</h2>
-        <div th:each="planType : ${planTypes}">
-            <div th:if="${!#strings.equals(user.status, planType)}">
-                <h3 th:text="${planType}">Plan Type</h3>
-                <ul>
-                    <li th:each="benefit : ${planBenefits[__${planType}__]}" th:text="${benefit.description}">Benefit Description</li>
-                </ul>
-                <a th:href="@{/changeSubscription/{planType}(planType=${planType})}">Details</a>
+            <div th:each="planType : ${planTypes}">
+                <div th:if="${!#strings.equals(user.status, planType)}">
+                    <h3 th:text="${planType}">Plan Type</h3>
+                    <ul>
+                        <li th:each="benefit : ${planBenefits[__${planType}__]}" th:text="${benefit.description}">Benefit Description</li>
+                    </ul>
+                    <a th:href="@{/changeSubscription/{planType}(planType=${planType})}">Details</a>
+                </div>
             </div>
         </div>
     </div>

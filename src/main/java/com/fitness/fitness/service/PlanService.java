@@ -3,7 +3,6 @@ package com.fitness.fitness.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.fitness.fitness.model.Benefit;
 import com.fitness.fitness.model.Plan;
@@ -28,13 +27,9 @@ public class PlanService {
     private PlanRepo planRepo;
     @Autowired
     private PlanDurationPriceRepo planDurationPriceRepo;
-    @Autowired
-    private UserService userService;
-    public List<Plan> findByPlanType(String planType) {
+
+    public Plan findByPlanType(String planType) {
         return planRepo.findByPlanType(planType);
-    }
-    public List<Plan> findByPlanTypeNot(String planType){
-        return planRepo.findByPlanTypeNot(planType);
     }
 
     public Map<String, Double> getStartingPricesForAllPlanTypes() {
@@ -65,12 +60,13 @@ public class PlanService {
     public Map<String, List<Benefit>> findBenefitsByPlanType(String planType) {
         Map<String, List<Benefit>> planBenefits = new HashMap<>();
         
-        List<Benefit> benefits = planRepo.findByPlanType(planType).stream()
-                                          .flatMap(plan -> plan.getBenefits().stream())
-                                          .sorted(Comparator.comparing(Benefit::getDescription)) // Assuming you want to sort by description
-                                          .collect(Collectors.toList());
-        
-        planBenefits.put(planType, benefits);
+        Plan plan = planRepo.findByPlanType(planType);
+        if (plan != null) {
+            List<Benefit> benefits = plan.getBenefits().stream()
+                .sorted(Comparator.comparing(Benefit::getDescription))
+                .collect(Collectors.toList());
+            planBenefits.put(planType, benefits);
+        }
         
         return planBenefits;
     }
