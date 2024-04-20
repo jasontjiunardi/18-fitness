@@ -1,34 +1,56 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale = 1.0" />
-    <link rel="stylesheet" href="trainerprofile.css" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="trainerprofile.css"/>
     <title>Trainer's profile</title>
     <style>
-      .stars {
-    color: gold;
-}
+        .stars {
+            color: gold;
+        }
     </style>
-  </head>
-  <body>
-    <h1>Trainer's profile</h1>
-    <img th:src="@{'images/' + ${trainer.image}}" alt="Trainer Image" />
-    <br />
-    <h2 th:text="${trainer.name}">Trainer Name</h2>
-    <h3>Trainer rank:
-      <div class="stars">
-        <span
-          th:each="starNumber : ${#numbers.sequence(1, trainer.rank)}">&#9733;
-        </span>
-      </div>
-      <h3>Contact at:</h3>
+</head>
+<body>
+<h1>Trainer's profile</h1>
+<img th:src="@{'images/' + ${trainer.image}}" alt="Trainer Image"/>
+<br/>
+<h2 th:text="${trainer.name}">Trainer Name</h2>
+<h3>Trainer rank:
+    <div class="stars">
+        <span th:each="starNumber : ${#numbers.sequence(1, trainer.rank)}">&#9733;</span>
+    </div>
+    <h3>Contact at:</h3>
     <p th:text="${trainer.email}">trainer@example.com</p>
     <p th:text="${trainer.phone}"> Trainer's phone number:</p>
-    </h3>
-    <form method="get" action="/bookAppointment">
-      <input type="hidden" name="trainerId" th:value="${trainer.id}">
-      <button type="submit" value="appointment">Book appointment</button>
-    </form>
-  </body>
+</h3>
+<form method="get" action="/bookAppointment">
+    <input type="hidden" name="trainerId" th:value="${trainer.id}">
+    <button type="submit" value="appointment">Book appointment</button>
+</form>
+
+<!-- Display Reviews -->
+<div>
+    <h2>Reviews</h2>
+    <div th:if="${reviews}">
+        <div th:each="review : ${reviews}">
+            <div>
+                <p>Username: <span th:text="${review.username}"></span></p>
+                <p>Rating:
+                    <span class="stars">
+                        <span th:each="starNumber : ${#numbers.sequence(1, review.rating)}">&#9733;</span>
+                    </span>
+                </p>
+                <p>Content: <span th:text="${review.content}"></span></p>
+                <p>Date Added: <span th:text="${#dates.format(review.dateAdded, 'dd-MM-yyyy HH:mm')}"></span></p>
+            </div>
+        </div>
+    </div>
+    <div th:unless="${reviews}">
+        <p>No reviews available for this trainer.</p>
+    </div>
+</div>
+
+
+</body>
 </html>

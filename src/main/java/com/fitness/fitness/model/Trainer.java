@@ -1,10 +1,14 @@
 package com.fitness.fitness.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 
 @Entity
@@ -25,6 +29,9 @@ public class Trainer {
     public Trainer() {
     }
     
+    // Relationship with reviews
+    @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL)
+    private List<Review> reviews;
     
     public Trainer(int id, String name, int age, String dob, String email, String image, String phone, int rank,
             String trainerSince) {
@@ -94,6 +101,14 @@ public class Trainer {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
 
