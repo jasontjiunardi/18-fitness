@@ -2,6 +2,7 @@ package com.fitness.fitness.controller;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -88,6 +89,7 @@ public class planController {
         model.addAttribute("planDetails", planDetails.getPlanDetails());
         model.addAttribute("benefits", sortedBenefits);
         model.addAttribute("durationPrices", sortedDurationPrices);
+        session.setAttribute("selectedPlanType", planType);
         return "planDetails";
     }
 
@@ -114,25 +116,61 @@ public class planController {
     @PostMapping("/finalizePurchase")
     public String finalizePurchase(@RequestParam("userAgreement") boolean userAgreement, 
                                     @RequestParam("paymentMethod") String paymentMethod,
-                                    @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
-                                    @RequestParam(value = "cardholderName", required = false) String cardholderName,
                                     @RequestParam(value = "cardNumber", required = false) String cardNumber,
-                                    @RequestParam(value = "cvv", required = false) String cvv,
-                                    @RequestParam(value = "expiryDate", required = false) String expiryDate,
-                                    Model model) {
+                                    Model model,
+                                    HttpSession session) {
         if (userAgreement) {
             String transactionId = UUID.randomUUID().toString();
+    
+            // Retrieve logged-in user from session
+            User loggedInUser = (User) session.getAttribute("user");
+            if (loggedInUser == null) {
+                // Handle the case where user is not logged in
+                return "redirect:/login"; 
+            }
+            if ("active".equals(loggedInUser.getStatus())) {
+                // If the user is already active, don't allow them to purchase again
+                model.addAttribute("error", "You already have an active plan");
+                return "purchaseForm";
+            }
+    
+            // Get user ID from logged-in user
+            int userIdInt = loggedInUser.getId();
+            String userId = String.valueOf(userIdInt);
+
+            // Get the selected plan type from the session
+            String planType = (String) session.getAttribute("selectedPlanType");
+            
+            // Set the user status to active
+            loggedInUser.setStatus("active");
+
+            // Update the user status in the database
+            userService.saveUser(loggedInUser);
+
 
             PaymentTransaction paymentTransaction = new PaymentTransaction();
             paymentTransaction.setTransactionId(transactionId);
+            paymentTransaction.setUserId(userId); // Set user ID
+            paymentTransaction.setPlanType(planType); // Set plan type
             paymentTransaction.setPaymentMethod(paymentMethod);
-            paymentTransaction.setAccountNumber(phoneNumber);
-            paymentTransaction.setCardholderName(cardholderName);
-            paymentTransaction.setCardNumber(cardNumber);
-            paymentTransaction.setCvv(cvv);
-            paymentTransaction.setExpiryDate(expiryDate);
-        
+            paymentTransaction.setPaymentType("buy"); // Set payment type
             
+            // Set purchased date
+            Date today = new Date(); // Get current date
+            paymentTransaction.setPurchasedDate(today);
+
+            // Set card number if payment method is credit card
+            if ("Credit".equals(paymentMethod)) {
+                loggedInUser.setCardNumber(cardNumber);
+                paymentTransaction.setCardNumber(cardNumber);
+                userService.saveUser(loggedInUser); // Save user with card number
+            }else {
+                paymentTransaction.setCardNumber("");
+            }
+
+             // Set user session attribute to prevent purchasing again
+            session.setAttribute("purchased", true);
+
             // Save the payment transaction to the database
             paymentTransactionRepo.save(paymentTransaction);
             
@@ -142,6 +180,6 @@ public class planController {
             return "purchaseForm"; 
         }
     }
-
+    
        
 }
