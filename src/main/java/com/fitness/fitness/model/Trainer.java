@@ -1,10 +1,15 @@
 package com.fitness.fitness.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
 
 @Entity
 public class Trainer {
@@ -15,27 +20,32 @@ public class Trainer {
     private int age;
     private String dob;
     private String email;
-    private String imageUrl;
+    private String image;
     private String phone;
     @Column(name = "`rank`") // Enclosing rank in backticks to avoid SQL syntax error
     private int rank; //3 for 3 star. 4 for 4 star, 5 for 5 star
     private String trainerSince;
-    
+   
     public Trainer() {
     }
     
-    public Trainer(int id, String name, int age, String dob, String email, String phone, String trainerSince, int rank,
-            String imageUrl) {
+    // Relationship with reviews
+    @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL)
+    private List<Review> reviews;
+    
+    public Trainer(int id, String name, int age, String dob, String email, String image, String phone, int rank,
+            String trainerSince) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.dob = dob;
         this.email = email;
+        this.image = image;
         this.phone = phone;
-        this.trainerSince = trainerSince;
         this.rank = rank;
-        this.imageUrl = imageUrl;
+        this.trainerSince = trainerSince;
     }
+  
     public int getId() {
         return id;
     }
@@ -85,11 +95,21 @@ public class Trainer {
         this.name = name;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImage() {
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(String image) {
+        this.image = image;
     }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+
 }

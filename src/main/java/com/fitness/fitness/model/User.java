@@ -26,6 +26,7 @@ public class User {
     private LocalDate activeDate = null;
     private int recoveryCode;
     private String cardNumber;
+    private String profilePictureUrl;
 
     public User() {
     }
@@ -43,6 +44,7 @@ public class User {
         this.activeDate = activeDate;
         this.recoveryCode = recoveryCode;
         this.cardNumber = cardNumber;
+        this.profilePictureUrl = profilePictureUrl;
     }
     public int getRecoveryCode() {
         return recoveryCode;
@@ -114,6 +116,12 @@ public class User {
         this.cardNumber = cardNumber;
     }
 
-
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+    
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
+    }
     
 }

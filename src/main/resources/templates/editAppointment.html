@@ -4,41 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Appointment</title>
-    <!-- Add any CSS stylesheets or scripts here -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Set the minimum date to today
+            var today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').setAttribute('min', today);
+
+            var form = document.querySelector('form');
+            document.getElementById('confirmButton').addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent the form from submitting on button click
+                if (confirm('Are you sure you want to modify changes?')) {
+                    form.submit(); // Submit the form if user confirms
+                }
+            });
+        });
+    </script>
 </head>
 <body>
     <h1>Edit Appointment</h1>
-    
-    <!-- Form for editing appointment details -->
-    <form method="post" action="/editAppointment">
-        <!-- Display current appointment details -->
-        <p>Date: <span>{{ appointment.date }}</span></p>
-        <p>Trainer: <span>{{ appointment.trainer }}</span></p>
-        <p>Class: <span>{{ appointment.class }}</span></p>
-        <p>Status: <span>{{ appointment.status }}</span></p>
+    <form method="post" action="/updateAppointment">
+        <input type="hidden" name="id" value="${appointment.id}">
         
-        <!-- Fields to edit appointment details -->
-        <label for="newDate">New Date:</label>
-        <input type="date" id="newDate" name="newDate" required><br>
+        <!-- Date input with dd/MM/yyyy format, modified to allow only today or future dates -->
+        <label for="date">Date:</label>
+        <input id="date" type="date" name="date" th:value="${#dates.format(appointment.date, 'dd-MM-yyyy')}" required><br><br>
         
-        <label for="newTrainer">New Trainer:</label>
-        <input type="text" id="newTrainer" name="newTrainer"><br>
+        <!-- Trainer dropdown box -->
+        <label for="trainer">Trainer:</label>
+        <select id="trainer" name="trainer" required>
+            <option th:each="trainer : ${allTrainers}" th:value="${trainer.name}" th:text="${trainer.name}" th:selected="${trainer.name == appointment.trainer}"></option>
+        </select><br><br>
         
-        <label for="newClass">New Class:</label>
-        <input type="text" id="newClass" name="newClass"><br>
+        <!-- Class dropdown box -->
+        <label for="class">Class:</label>
+        <select id="class" name="class" required>
+            <option th:each="class : ${allClasses}" th:value="${class}" th:text="${class.fitnessclassname}" ></option>
+        </select><br><br>
         
-        <label for="newStatus">New Status:</label>
-        <select id="newStatus" name="newStatus">
-            <option value="Scheduled">Scheduled</option>
-            <option value="Cancelled">Cancelled</option>
-            <option value="Completed">Completed</option>
-        </select><br>
-        
-        <!-- Hidden field to store appointment ID -->
-        <input type="hidden" id="appointmentId" name="appointmentId" value="{{ appointment.id }}">
-        
-        <!-- Submit button to save changes -->
-        <button type="submit">Save Changes</button>
+        <button type="submit" id="confirmButton">Confirm Changes</button>
+        <a href="/appointments">Cancel</a>
     </form>
 </body>
 </html>

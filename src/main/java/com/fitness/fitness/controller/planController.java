@@ -89,6 +89,7 @@ public class planController {
         model.addAttribute("planDetails", planDetails.getPlanDetails());
         model.addAttribute("benefits", sortedBenefits);
         model.addAttribute("durationPrices", sortedDurationPrices);
+        session.setAttribute("selectedPlanType", planType);
         return "planDetails";
     }
 

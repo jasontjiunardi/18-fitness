@@ -16,69 +16,45 @@ public class Manager {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
+    private String email;
+    private String password;
 
-    @Column(nullable = false)
-    private String customerEmail;
-
-    @Column(nullable = false)
-    private String preferredTrainer;
-
-    @Column(nullable = false)
-    private String className;
-
-    @Column(nullable = false)
-    private LocalDate date;
-
-    @Column(nullable = false)
-    private LocalTime timeSlot;
-
-    public Long getId() {
-        return id;
+    public Manager() {
     }
 
-    public void setId(Long id) {
+    public Manager(int id, String email, String password) {
         this.id = id;
+        this.email = email;
+        this.password = password;
     }
 
-    public String getCustomerEmail() {
-        return customerEmail;
+    /**
+     * @return String return the name
+     */
+    public String getEmail() {
+        return email;
     }
 
-    public void setCustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
+    /**
+     * @param name the name to set
+     */
+    public void setEmail(String email) {
+        this.email= email;
     }
 
-    public String getPreferredTrainer() {
-        return preferredTrainer;
+    /**
+     * @return String return the password
+     */
+    public String getPassword() {
+        return password;
     }
 
-    public void setPreferredTrainer(String preferredTrainer) {
-        this.preferredTrainer = preferredTrainer;
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public LocalTime getTimeSlot() {
-        return timeSlot;
-    }
-
-    public void setTimeSlot(LocalTime timeSlot) {
-        this.timeSlot = timeSlot;
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }

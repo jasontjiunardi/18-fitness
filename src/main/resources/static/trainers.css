@@ -1,27 +1,137 @@
-.trainer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
+.card-container {
+  display: flex;
+  flex-wrap: wrap; /* Allow flex items to wrap to the next line */
+  justify-content: space-around; /* Distribute space between items */
+  align-items: flex-start; /* Align items to the top */
+  margin: 0 auto; /* Center the container horizontally */
+  max-width: 1200px; /* Adjust the maximum width as needed */
+}
+.card {
+  width: 17em;
+  height: 22.5em;
+  background: #5f30e2;
+  transition: 1s ease-in-out;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-/* .trainer-card {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.card span {
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  display: block;
+  font-size: 1em;
+}
+
+
+.card .imgbox {
+  width: 4.8em;
+  height: 4.8em;
+  background: white;
+  border-radius: 15px;
+  margin: auto;
+  object-fit: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card .imgbox img {
+  margin-top: 0.3em;
+  width: 4.8em;
+  height: 4.8em;
+  border-radius: 15px;
+  object-fit: cover;
+}
+
+.card .rank {
+  position: relative;
+  top:70px;
+  font-weight: normal;
+  color: white;
+  display: block;
+  text-align: center;
+  font-size: 0.9em;
+}
+.stars {
+  position: relative;
+  top:55px;
     text-align: center;
-} */
+}
+.stars span {
+  display: inline-block; /* Change display property to inline-block */
+  margin-right: 5px; /* Add some margin between the stars */
+  text-align: center;
+  color: gold;
+}
 
-.trainer-card img {
-    max-width: 100%;
-    height: auto;
+.card button {
+  padding: 0.8em 1.7em;
+  display: center;
+  margin: 50px;
+  border-radius: 25px;
+  border: none;
+  font-weight: bold;
+  background: #ffffff;
+  color: rgb(0, 0, 0);
+  transition: .4s ease-in-out;
 }
-.img {
-    width: 400px;
-    height: 500px;
-    border-radius: 50px;
-    margin-right: 10px;
+
+.card button:hover {
+  background: gold;
+  color: white;
+  cursor: pointer;
+}
+  
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
   }
-.rankFilter {
-    text-align: end;
-}
+  
+  .radio-label {
+    display: flex;
+    align-items: center;
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+    background-color: #5f30e2;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: background-color 0.2s, border-color 0.2s;
+    color: #fff;
+  }
+  
+  .radio-label:hover {
+    background-color: gold;
+  }
+  
+  .radio-input {
+    position: absolute;
+    opacity: 0;
+  }
+
+
+  .radio-label:hover  {
+    border-color: rgb(233, 233, 233);
+  }
+  
+  .radio-input:checked + .radio-label  {
+    border-color: #5f30e2;
+  }
+  
+  .radio-input:checked + .radio-label  {
+    content: '';
+    display: block;
+    width: 0.5em;
+    height: 0.5em;
+    background-color: #5f30e2;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+      
