@@ -35,6 +35,7 @@ import jakarta.servlet.http.HttpSession;
 
 
 
+
 @Controller
 @SessionAttributes("user")
 public class PlanController {
@@ -142,6 +143,54 @@ public class PlanController {
             return "purchaseForm"; 
         }
     }
+    @GetMapping("/browseChangeSubscription")
+    public String changeSubscription(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if(user != null){
+            User existingUser = userService.getUserByEmail(user.getEmail());
+            LinkedHashMap<String, Double> sortedStartingPrices = planService.getSortedPrices();
+            List<String> sortedPlanTypes = new ArrayList<>(sortedStartingPrices.keySet());
+            Map<String, List<Benefit>> planBenefits = planService.sortedBenefits();
+            model.addAttribute("user", existingUser);
+            model.addAttribute("planTypes", sortedPlanTypes);
+            model.addAttribute("planBenefits", planBenefits);
+        }
+        
+        return "changeSubscription";
+    }
+    @GetMapping("/changeSubscription/{planType}")
+    public String changeUserPlanType(@PathVariable("planType") String planType, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        List<Plan> plans = planService.findByPlanType(planType);
+        Plan planDetails = plans.stream().findFirst().orElseThrow(() -> new RuntimeException("Plan type not found"));
+    
+        List<Benefit> sortedBenefits = planDetails.getBenefits().stream()
+                                              .sorted(Comparator.comparing(Benefit::getDescription))
+                                              .collect(Collectors.toList());
+        if(user != null){
+            User existingUser = userService.getUserByEmail(user.getEmail());
+            Double price = planService.specificPlanStartDurationStartPrice(planType, existingUser);
+            model.addAttribute("price",price);
+            model.addAttribute("user", existingUser);
+            model.addAttribute("planType", planType);
+            model.addAttribute("planDetails", planDetails.getPlanDetails());
+            model.addAttribute("benefits", sortedBenefits);
+        }
+        return "changeSubscriptionForm";
+
+    }
+    @PostMapping("/changeSubscription/{planType}")
+    public String updateSubscription(@PathVariable("planType") String planType, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if(user != null){
+            userService.setStatus(user.getEmail(), planType);
+            model.addAttribute("userStatus",user.getStatus());
+        }
+        return "changeSubscriptionConfirmation";
+    }
+    
+    
 
        
 }
+

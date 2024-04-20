@@ -85,6 +85,11 @@ public class UserService {
         user.setCardNumber(cardNumber);
         userRepo.save(user);
     }
+    public void setStatus(String email, String status){
+        User user = userRepo.findByEmail(email);
+        user.setStatus(status);
+        userRepo.save(user);
+    }
 
 }
 

@@ -1,5 +1,6 @@
 package com.fitness.fitness.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,7 +23,7 @@ public class User {
     private Date dob;
     private String phoneNumber;
     private String status = "Inactive"; // Plan type or Paused or Inactive
-    private Date activeDate = null;
+    private LocalDate activeDate = null;
     private int recoveryCode;
     private String cardNumber;
 
@@ -30,7 +31,7 @@ public class User {
     }
 
     public User(int id, String name, String username, String password, String email, Date dob, String phoneNumber,
-            String status, Date activeDate, int recoveryCode, String cardNumber) {
+            String status, LocalDate activeDate, int recoveryCode, String cardNumber) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -99,10 +100,10 @@ public class User {
     public void setStatus(String status) {
         this.status = status;
     }
-    public Date getActiveDate(){
+    public LocalDate getActiveDate(){
         return activeDate;
     }
-    public void setActiveDate(Date activeDate){
+    public void setActiveDate(LocalDate activeDate){
         this.activeDate = activeDate;
     }
     public String getCardNumber() {
