@@ -26,7 +26,7 @@ public class Plan {
     private Set<PlanDurationPrice> planDurationPrices = new HashSet<>();
 
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<PlanDurationPrice> PaymentTransaction = new HashSet<>();
+    private Set<PaymentTransaction> PaymentTransaction = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(

@@ -16,7 +16,9 @@ public class PaymentTransaction {
     private Long id;
     private String paymentMethod; // Metode pembayaran (Alipay, WeChat, Debit, Credit)
     private String transactionId; // ID transaksi dari Alipay atau WeChat
-    private String userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
     @ManyToOne
     @JoinColumn(name = "plan_id", nullable = false)
     private Plan plan;
@@ -57,12 +59,12 @@ public class PaymentTransaction {
         this.transactionId = transactionId;
     }
 
-    public String getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getPlanType() {

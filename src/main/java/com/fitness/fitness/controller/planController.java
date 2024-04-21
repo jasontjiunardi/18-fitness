@@ -132,9 +132,7 @@ public class planController {
                 return "redirect:/login"; 
             }
     
-            // Get user ID from logged-in user
-            int userIdInt = loggedInUser.getId();
-            String userId = String.valueOf(userIdInt);
+            
             PaymentTransaction paymentTransaction = new PaymentTransaction();
             if(loggedInUser.getStatus().equals(planType)){
                 long durationChosen = Integer.parseInt(duration.split(" ")[0]);
@@ -162,7 +160,7 @@ public class planController {
 
 
             paymentTransaction.setTransactionId(transactionId);
-            paymentTransaction.setUserId(userId); // Set user ID
+            paymentTransaction.setUser(loggedInUser);
             paymentTransaction.setPlanType(planType); // Set plan type
             paymentTransaction.setPaymentMethod(paymentMethod);
             paymentTransaction.setPaymentType("Buy"); // Set payment type
@@ -228,8 +226,6 @@ public class planController {
                                     @RequestParam("price") Double price) {
         User loggedInUser = (User) session.getAttribute("user");
         if(loggedInUser != null){
-            int userIdInt = loggedInUser.getId();
-            String userId = String.valueOf(userIdInt);
             PaymentTransaction paymentTransaction = new PaymentTransaction();
             loggedInUser.setStatus(planType);
             paymentTransaction.setActiveDate(loggedInUser.getActiveDate());
@@ -242,7 +238,7 @@ public class planController {
             Double remainingMonths = (double) ChronoUnit.MONTHS.between(today, activeDate);
             String transactionId = UUID.randomUUID().toString();
             paymentTransaction.setTransactionId(transactionId);
-            paymentTransaction.setUserId(userId); 
+            paymentTransaction.setUser(loggedInUser); 
             paymentTransaction.setPlanType(planType); 
             paymentTransaction.setPaymentMethod(paymentMethod);
             paymentTransaction.setPrice(price);
