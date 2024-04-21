@@ -1,0 +1,66 @@
+<!-- Form for updating trainer information -->
+<form id="updateTrainerForm" th:action="@{/updateTrainer}" method="post" onsubmit="return validateUpdate()">
+    <!-- Hidden field for trainer ID -->
+    <input type="hidden" name="id" th:value="${trainer.id}" />
+
+    <!-- Trainer information fields -->
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" class="form-control" id="name" name="name" th:value="${trainer.name}" />
+    </div>
+    <div class="form-group">
+        <label for="age">Age:</label>
+        <input type="number" class="form-control" id="age" name="age" th:value="${trainer.age}" />
+    </div>
+    <div class="form-group">
+        <label for="dob">Date of Birth:</label>
+        <input type="date" class="form-control" id="dob" name="dob" th:value="${trainer.dob}" />
+    </div>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" name="email" th:value="${trainer.email}" />
+    </div>
+    <div class="form-group">
+        <label for="phone">Phone:</label>
+        <input type="text" class="form-control" id="phone" name="phone" th:value="${trainer.phone}" />
+    </div>
+    <div class="form-group">
+        <label for="rank">Rank (3-5):</label>
+        <input type="number" class="form-control" id="rank" name="rank" th:value="${trainer.rank}" min="3" max="5" />
+    </div>
+    <div class="form-group">
+        <label for="trainerSince">Trainer Since:</label>
+        <input type="date" class="form-control" id="trainerSince" name="trainerSince" th:value="${trainer.trainerSince}" />
+    </div>
+    
+    <!-- Confirm changes button -->
+    <button type="submit" class="btn btn-primary">Confirm Changes</button>
+    
+    <!-- Back button -->
+    <a href="/managerViewTrainers" class="btn btn-secondary">Back</a>
+</form>
+
+<!-- Form for removing trainer -->
+<form id="removeTrainerForm" th:action="@{/removeTrainer/{id}(id=${trainer.id})}" method="post">
+    <!-- Remove trainer button -->
+    <button type="button" class="btn btn-danger" onclick="confirmRemove()">Remove Trainer</button>
+</form>
+
+<script>
+    function validateUpdate() {
+        // Validate rank input
+        var rank = document.getElementById("rank").value;
+        if (rank < 3 || rank > 5) {
+            alert("Rank must be between 3 and 5.");
+            return false;
+        }
+        
+        return confirm("Are you sure you want to update this trainer's information?");
+    }
+
+    function confirmRemove() {
+        if (confirm("Are you sure you want to remove this trainer?")) {
+            document.getElementById("removeTrainerForm").submit();
+        }
+    }
+</script>
