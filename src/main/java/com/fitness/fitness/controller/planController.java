@@ -180,6 +180,22 @@ public class planController {
             return "purchaseForm"; 
         }
     }
+
+    @GetMapping("/plan_purchase_history")
+    public String viewPlanPurchaseHistory(Model model, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("user");
+        if (loggedInUser != null) {
+            int userIdInt = loggedInUser.getId();
+            String userId = String.valueOf(userIdInt);
+            List<PaymentTransaction> purchaseHistory = paymentTransactionRepo.findByUserId(userId);
+            model.addAttribute("purchaseHistory", purchaseHistory);
+        } else {
+            // Handle case when user is not logged in
+        }
+        return "planPurchaseHistory";
+    }
+
+
     
        
 }
