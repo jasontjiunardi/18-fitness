@@ -135,7 +135,7 @@ public class planController {
             }
     
             // Get user ID from logged-in user
-            int userIdInt = loggedInUser.getId();
+            int userIdInt = loggedInUser.getUserId();
             String userId = String.valueOf(userIdInt);
 
             // Get the selected plan type from the session

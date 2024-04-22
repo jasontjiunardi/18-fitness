@@ -18,6 +18,7 @@ public class Trainer {
     private int id;
     private String name;
     private int age;
+    private String gender;
     private String dob;
     private String email;
     private String image;
@@ -33,11 +34,12 @@ public class Trainer {
     @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL)
     private List<Review> reviews;
     
-    public Trainer(int id, String name, int age, String dob, String email, String image, String phone, int rank,
+    public Trainer(int id, String name, int age, String gender, String dob, String email, String image, String phone, int rank,
             String trainerSince) {
         this.id = id;
         this.name = name;
         this.age = age;
+        this.gender = gender;
         this.dob = dob;
         this.email = email;
         this.image = image;
@@ -54,6 +56,12 @@ public class Trainer {
     }
     public void setAge(int age) {
         this.age = age;
+    }
+    public String getGender() {
+        return gender;
+    }
+    public void setGender(String gender) {
+        this.gender = gender;
     }
     public String getDob() {
         return dob;

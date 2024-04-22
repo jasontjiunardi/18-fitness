@@ -3,76 +3,160 @@
 <head>
     <title>Add Trainer</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff; /* White background */
+            color: #4a154b; /* Purple text color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h2 {
+            font-size: 36px; /* Larger font size for heading */
+            color: #4a154b; /* Purple heading color */
+            text-align: center;
+            margin-bottom: 50px; /* Added margin to bottom */
+        }
+
+        form {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff; /* White background for form */
+        }
+
+        input[type="text"],
+        input[type="password"],
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #4a154b; /* Purple border */
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4a154b; /* Purple button background */
+            color: #ffffff; /* White text color for button */
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #310b33; /* Darker purple on hover */
+        }
+
+        a {
+            display: block;
+            text-align: center; /* Centered link */
+            color: #4a154b; /* Purple link color */
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+
+        .btn-cancel {
+            display: block;
+            width: 100%; /* Full width */
+            text-align: center; /* Centered cancel button */
+        }
+
+        /* Make the submit button purple */
+        button[type="submit"] {
+            background-color: #4a154b;
+            border-color: #4a154b;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #310b33;
+            border-color: #310b33;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Add New Trainer</h2>
+    <form id="trainerForm" th:action="@{/managerSaveTrainer}" th:object="${trainer}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <div class="form-group">
+            <label for="name">Name: <span style="color: red;">*</span></label>
+            <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Enter name" required pattern="[A-Za-z ]+" title="Only alphabetic characters are allowed">
+        </div>        
+        <div class="form-group">
+            <label for="age">Age: <span style="color: red;">*</span></label>
+            <input type="number" class="form-control" id="age" th:field="*{age}" placeholder="Enter age" required min="1" max="99">
+        </div>
+        <div class="form-group">
+            <label for="gender">Gender: <span style="color: red;">*</span></label>
+            <select id="gender" class="form-control" th:field="*{gender}" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="dob">Date of Birth:</label>
+            <input type="date" class="form-control" id="dob" th:field="*{dob}" placeholder="Enter date of birth">
+        </div>
+        <div class="form-group">
+            <label for="email">Email: <span style="color: red;">*</span></label>
+            <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Enter email" required oninput="validateEmail()">
+            <span id="email-error" class="error-message" style="display: none;">Please input ONLY valid email address.</span>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone:</label>
+            <input type="tel" class="form-control" id="phone" th:field="*{phone}" placeholder="Enter phone number" pattern="[0-9]{7,15}" title="Phone number must be between 7 and 15 digits">
+        </div>        
+        <div class="form-group">
+            <label for="rank">Rank (_ stars): <span style="color: red;">*</span></label>
+            <input type="number" class="form-control" id="rank" th:field="*{rank}" placeholder="Enter rank (3-5)" required min="3" max="5">
+        </div>
+        <div class="form-group">
+            <label for="trainerSince">Trainer Since: <span style="color: red;">*</span></label>
+            <input type="date" class="form-control" id="trainerSince" th:field="*{trainerSince}" placeholder="Enter start date" required>
+        </div>
+        <!-- <div class="form-group">
+            <label for="image">Trainer Image: <span style="color: red;">(only .jpg and .jpeg images are allowed)</span></label>
+            <input type="file" class="form-control-file" id="image" name="image" accept=".jpg, .jpeg">
+        </div> -->
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a href="/managerViewTrainers" class="btn btn-secondary btn-cancel">Cancel</a>
+    </form>
+
+    <!-- JavaScript to set min date for Trainer Since input -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var today = new Date().toISOString().split('T')[0];
-            document.getElementById("trainerSince").setAttribute('min', today);
-            const emailInput = document.getElementById('email');
-            emailInput.oninput = validateEmail;  // Set up custom email validation
+            document.getElementById("trainerSince").setAttribute('max', today);
         });
 
-        function validateForm() {
-            const form = document.getElementById('trainerForm');
-            if (!form.checkValidity()) {
-                document.getElementById('email').checkValidity();  // Explicitly trigger email validation
-                alert('Please fill in all required information.');
-                return false;
-            }
-            // Check confirmation to add trainer
-            if (confirm('Confirm add trainer?')) {
-                alert('Trainer added.');  // Notify user
-                window.location.href = '/managerViewTrainers';  // Redirect
-                return true; // Prevent the default form submission since we handle redirection manually
-            }
-            return false;  // If they do not confirm, do not submit the form
-        }
-
         function validateEmail() {
-            const emailInput = document.getElementById('email');
-            emailInput.setCustomValidity('');  // Clear any existing messages
-            if (!emailInput.validity.valid && emailInput.value !== '') {
-                emailInput.setCustomValidity('Please input ONLY valid email address');
+            var emailInput = document.getElementById('email');
+            var errorMessage = document.getElementById('email-error');
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailPattern.test(emailInput.value)) {
+                errorMessage.style.display = 'block';
+            } else {
+                errorMessage.style.display = 'none';
             }
-            emailInput.reportValidity();  // Trigger the browser's validation message popup
         }
     </script>
-</head>
-<body>
-    <div class="container mt-5">
-        <h2>Add New Trainer</h2>
-        <form id="trainerForm" th:action="@{/managerSaveTrainer}" th:object="${trainer}" method="post" onsubmit="return validateForm()">
-            <div class="form-group">
-                <label for="name">Name: <span style="color: red;">*</span></label>
-                <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Enter name" required>
-            </div>
-            <div class="form-group">
-                <label for="age">Age: <span style="color: red;">*</span></label>
-                <input type="number" class="form-control" id="age" th:field="*{age}" placeholder="Enter age" required min="1">
-            </div>
-            <div class="form-group">
-                <label for="dob">Date of Birth:</label>
-                <input type="date" class="form-control" id="dob" th:field="*{dob}" placeholder="Enter date of birth">
-            </div>
-            <div class="form-group">
-                <label for="email">Email: <span style="color: red;">*</span></label>
-                <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Enter email" required oninput="validateEmail()">
-            </div>
-            <div class="form-group">
-                <label for="phone">Phone:</label>
-                <input type="tel" class="form-control" id="phone" th:field="*{phone}" placeholder="Enter phone number" pattern="[0-9]+" title="Only numeric digits are allowed">
-            </div>
-            <div class="form-group">
-                <label for="rank">Rank: <span style="color: red;">*</span></label>
-                <input type="number" class="form-control" id="rank" th:field="*{rank}" placeholder="Enter rank (3-5)" required min="3" max="5">
-            </div>
-            <div class="form-group">
-                <label for="trainerSince">Trainer Since: <span style="color: red;">*</span></label>
-                <input type="date" class="form-control" id="trainerSince" th:field="*{trainerSince}" placeholder="Enter start date" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <a href="/managerViewTrainers" class="btn btn-secondary">Cancel</a>
-        </form>
-    </div>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

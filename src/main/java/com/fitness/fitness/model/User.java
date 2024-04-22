@@ -1,19 +1,24 @@
 package com.fitness.fitness.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int userId;
     private String name;
     private String username;
     private String password;
@@ -26,13 +31,16 @@ public class User {
     private int recoveryCode;
     private String cardNumber;
     private String profilePictureUrl;
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Appointment> appointments;
 
     public User() {
     }
 
-    public User(int id, String name, String username, String password, String email, Date dob, String phoneNumber,
+    public User(int userId, String name, String username, String password, String email, Date dob, String phoneNumber,
             String status, Date activeDate, int recoveryCode, String cardNumber) {
-        this.id = id;
+        this.userId = userId;
         this.name = name;
         this.username = username;
         this.password = password;
@@ -45,6 +53,7 @@ public class User {
         this.cardNumber = cardNumber;
         this.profilePictureUrl = profilePictureUrl;
     }
+    
     public int getRecoveryCode() {
         return recoveryCode;
     }
@@ -53,11 +62,11 @@ public class User {
         this.recoveryCode = recoveryCode;
     }
 
-    public int getId() {
-        return id;
+    public int getUserId() {
+        return userId;
     }
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
     public String getName() {
         return name;
@@ -121,6 +130,14 @@ public class User {
     
     public void setProfilePictureUrl(String profilePictureUrl) {
         this.profilePictureUrl = profilePictureUrl;
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
     }
     
 }
