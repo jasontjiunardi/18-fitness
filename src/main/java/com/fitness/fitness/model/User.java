@@ -2,9 +2,7 @@ package com.fitness.fitness.model;
 
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -133,45 +131,5 @@ public class User {
     public void setProfilePictureUrl(String profilePictureUrl) {
         this.profilePictureUrl = profilePictureUrl;
     }
-
-// <<<<<<< HEAD
-//     public List<Appointment> getAppointments() {
-//         return appointments;
-//     }
-
-//     public void setAppointments(List<Appointment> appointments) {
-//         this.appointments = appointments;
-// =======
-//     public LocalDate getPauseStartDate() {
-//         return pauseStartDate;
-//     }
-
-//     public void setPauseStartDate(LocalDate pauseStartDate) {
-//         this.pauseStartDate = pauseStartDate;
-//     }
-
-//     public LocalDate getPauseEndDate() {
-//         return pauseEndDate;
-//     }
-
-//     public void setPauseEndDate(LocalDate pauseEndDate) {
-//         this.pauseEndDate = pauseEndDate;
-//     }
-
-//     public long getDaysPaused() {
-//         return daysPaused;
-//     }
-
-//     public void setDaysPaused(long daysPaused) {
-//         this.daysPaused = daysPaused;
-//     }
-
-//     public int getPauseCount() {
-//         return pauseCount;
-//     }
-
-//     public void setPauseCount(int pauseCount) {
-//         this.pauseCount = pauseCount;
-// >>>>>>> ff6ac5996f7f8676ffcd1909e01b8a56553ed345
-    }
     
+}
