@@ -26,9 +26,7 @@ public class Appointment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     //connect to fitness class table
-    @ManyToOne
-    @JoinColumn(name = "fitnessClass_id", nullable = false)
-    private FitnessClass fitnessClass;
+
 
     // Default constructor
      public Appointment() {
@@ -79,13 +77,6 @@ public class Appointment {
 
     public void setUser(User user) {
         this.user = user;
-    }
-    public FitnessClass getFitnessClass() {
-        return fitnessClass;
-    }
-
-    public void setFitnessClass(FitnessClass fitnessClass) {
-        this.fitnessClass = fitnessClass;
     }
     
 }
