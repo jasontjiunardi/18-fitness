@@ -18,6 +18,8 @@ import com.fitness.fitness.repository.TrainerRepo;
 import com.fitness.fitness.service.ManagerService;
 import com.fitness.fitness.service.UserService;
 
+
+
 @Controller
 public class ManagerController {
 
@@ -76,5 +78,7 @@ public class ManagerController {
         
         return "manager-add-appointment";
     }
+  
+    
 
 }

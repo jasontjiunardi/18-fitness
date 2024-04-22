@@ -60,8 +60,9 @@ public class AppointmentController {
     @GetMapping("/bookAppointment")
     public String bookAppointmentForm(@RequestParam(value = "trainerId", required=false) Integer trainerId,Model m) {
         // Load the list of trainers and classes and add them to the model
+        m.addAttribute("trainerId", trainerId);
         List<Trainer> allTrainers = trainerService.getAllTrainers();
-            m.addAttribute("allTrainers", allTrainers);
+        m.addAttribute("allTrainers", allTrainers);
         List<FitnessClass> allClasses = fitnessClassService.getAllClasses();
         
         m.addAttribute("allClasses", allClasses);
@@ -70,9 +71,7 @@ public class AppointmentController {
         
         // Add an empty appointment object to bind the form data
         m.addAttribute("appointment", new Appointment());
-        if (trainerId != null) {
-            m.addAttribute("trainerId", trainerId);
-        }
+        
         
         
         return "bookAppointmentForm"; // Rendering the booking form
