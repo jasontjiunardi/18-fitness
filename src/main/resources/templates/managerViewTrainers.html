@@ -3,21 +3,124 @@
 <head>
     <title>View Trainers</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
         body {
-            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #ffffff; /* White background */
+            color: #4a154b; /* Purple text color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
         }
-        .add-btn {
-            position: absolute;
-            right: 20px;
-            top: 20px;
+
+        h1 {
+            font-size: 36px; /* Larger font size for heading */
+            color: #4a154b; /* Purple heading color */
+            text-align: center;
+            margin-bottom: 20px; /* Reduced margin */
         }
-        th {
-            cursor: pointer; /* Indicates that a header is clickable */
+
+        .btn-primary.add-btn {
+            background-color: #4a154b; /* Purple button background */
+            border-color: #4a154b; /* Purple border color */
+            color: #ffffff; /* White text color */
+            position: absolute; /* Positioning absolute */
+            top: 20px; /* 20px from top */
+            right: 20px; /* 20px from right */
+        }
+
+        .btn-primary.add-btn:hover {
+            background-color: #310b33; /* Darker purple on hover */
+            border-color: #310b33; /* Darker purple border color */
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px; /* Increased margin */
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #4a154b; /* Purple border */
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #4a154b; /* Purple header background */
+            color: #ffffff; /* White text color */
+            cursor: pointer;
+        }
+
+        .table th:hover {
+            background-color: #310b33; /* Darker purple on hover */
+        }
+
+        .rank-stars {
+            display: flex;
+        }
+
+        .rank-stars i {
+            color: gold; /* Gold star color */
+            margin-right: 2px;
+        }
+
+        .trainer-img {
+            width: 100px; /* Fixed width */
+            height: 100px; /* Fixed height */
+            border-radius: 50%; /* Circular border radius */
+            border: 2px solid #4a154b; /* Purple border */
+            padding: 2px; /* Added padding for better appearance */
+            object-fit: cover; /* Maintain aspect ratio and cover container */
         }
     </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Trainers List</h1>
+        <a href="/managerAddTrainer" class="btn btn-primary add-btn">Add Trainer</a>
+        <table class="table table-striped table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th onclick="sortTable(0, 'number')">ID</th>
+                    <th onclick="sortTable(1, 'string')">Name</th>
+                    <th onclick="sortTable(2, 'number')">Age</th>
+                    <th onclick="sortTable(3, 'string')">Gender</th>
+                    <th onclick="sortTable(4, 'string')">Date of Birth</th>
+                    <th onclick="sortTable(5, 'string')">Email</th>
+                    <th onclick="sortTable(6, 'string')">Phone</th>
+                    <th onclick="sortTable(7, 'number')">Rank</th>
+                    <th onclick="sortTable(8, 'string')">Since</th>
+                    <th>Profile Picture</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="trainer : ${trainers}">
+                    <td th:text="${trainer.id}"></td>
+                    <td th:text="${trainer.name}"></td>
+                    <td th:text="${trainer.age}"></td>
+                    <td th:text="${trainer.gender}"></td>
+                    <td th:text="${trainer.dob}"></td>
+                    <td th:text="${trainer.email}"></td>
+                    <td th:text="${trainer.phone}"></td>
+                    <td class="rank-stars" th:text="${trainer.rank}"></td>
+                    <td th:text="${trainer.trainerSince}"></td>
+                    <td> <img th:src="@{'images/' + ${trainer.image}}" alt="Trainer image" class="trainer-img"/></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        function sortTable(n) {
+        function sortTable(n, type) {
             var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
             table = document.querySelector(".table");
             switching = true;
@@ -29,13 +132,23 @@
                     shouldSwitch = false;
                     x = rows[i].getElementsByTagName("TD")[n];
                     y = rows[i + 1].getElementsByTagName("TD")[n];
+                    
+                    if (type === 'number') {
+                        // Parse integers for comparison
+                        x = parseInt(x.textContent.trim());
+                        y = parseInt(y.textContent.trim());
+                    } else {
+                        x = x.textContent.toLowerCase();
+                        y = y.textContent.toLowerCase();
+                    }
+                    
                     if (dir == "asc") {
-                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        if (x > y) {
                             shouldSwitch= true;
                             break;
                         }
                     } else if (dir == "desc") {
-                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        if (x < y) {
                             shouldSwitch= true;
                             break;
                         }
@@ -52,42 +165,30 @@
                     }
                 }
             }
+            // Update stars after sorting
+            updateStars();
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Convert rank numbers to stars
+            updateStars();
+        });
+
+        function updateStars() {
+            var ranks = document.querySelectorAll('.rank-stars');
+            ranks.forEach(function(rank) {
+                var rankValue = parseInt(rank.textContent, 10);
+                rank.innerHTML = getStars(rankValue);
+            });
+        }
+
+        function getStars(rank) {
+            let stars = '';
+            for(let i = 0; i < rank; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            return stars;
         }
     </script>
-</head>
-<body>
-    <div class="container">
-        <h1>Trainers List</h1>
-        <a href="/managerAddTrainer" class="btn btn-primary add-btn">Add Trainer</a>
-        <table class="table table-striped table-bordered table-hover">
-            <thead class="thead-dark">
-                <tr>
-                    <th onclick="sortTable(0)">ID</th>
-                    <th onclick="sortTable(1)">Name</th>
-                    <th onclick="sortTable(2)">Age</th>
-                    <th onclick="sortTable(3)">Date of Birth</th>
-                    <th onclick="sortTable(4)">Email</th>
-                    <th onclick="sortTable(5)">Phone</th>
-                    <th onclick="sortTable(6)">Rank</th>
-                    <th onclick="sortTable(7)">Since</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="trainer : ${trainers}">
-                    <td th:text="${trainer.id}"></td>
-                    <td th:text="${trainer.name}"></td>
-                    <td th:text="${trainer.age}"></td>
-                    <td th:text="${trainer.dob}"></td>
-                    <td th:text="${trainer.email}"></td>
-                    <td th:text="${trainer.phone}"></td>
-                    <td th:text="${trainer.rank}"></td>
-                    <td th:text="${trainer.trainerSince}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

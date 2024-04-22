@@ -26,9 +26,13 @@ import org.springframework.web.multipart.MultipartFile;
 @SessionAttributes("user")
 public class UserController {
     
-    @Autowired
+    
     private UserService userService;
-
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+    
     @GetMapping("/first_page")
     public String firstPage(Model model){
 
@@ -69,26 +73,42 @@ public class UserController {
     }
 
     @GetMapping("/forget_password")
-    public String userForgetPassword(Model model){
-        User existingUser = new User();
-        model.addAttribute("user", existingUser);
+    public String userForgetPassword(Model model, User user){ // existinguser masuk ke model dgn nama "user"
         return "forgetPassword";
     }
     
  
     @PostMapping("/forget_password")
-    public String userEnterCode(@ModelAttribute User user, Model model){
-        if (userService.userRecoveryCode(user) && userService.newPassword(user)) {
-            userService.saveUser(user);
-            return "sign";
+    public String processPasswordReset(Model model, @ModelAttribute User user) {
+        User retrievedUser = userService.getUserByEmail(user.getEmail());
+        if (retrievedUser == null) {
+            model.addAttribute("error", "No user found with the provided email");
+            return "forgetPassword";
         }
         
-        model.addAttribute("error", "Invalid recovery code or password");
-        return "forgetpassword";
-    }
+        if (!userService.userRecoveryCode(retrievedUser)) {
+            model.addAttribute("error", "Invalid recovery code");
+            return "forgetPassword";
+        }
     
+        if (userService.isNewPasswordDifferent(user, retrievedUser)) {
+            model.addAttribute("error", "The new password must be different from the current password");
+            return "forgetPassword";
+        }
+
+        if (!userService.passwordValid(user.getPassword())) {
+            model.addAttribute("error", "The new password must be at least 8 characters long and include at least one uppercase letter and one number");
+            return "forgetPassword";
+        }
+    
+        // Update password and clear recovery code
+        retrievedUser.setPassword(user.getPassword());
+        userService.saveUser(retrievedUser);
+    
+        return "sign"; // Redirect to the login page or confirmation page
+    }
     @GetMapping("/profile")
-    public String userProfile(Model model, @SessionAttribute("user") User user) {
+    public String userProfile(Model model, @SessionAttribute("user") User user) { // user in User user hold attribute from session attribute "user" atau itu masuk ke User user
         User retrievedUser = userService.getUserByEmail(user.getEmail());
         if (retrievedUser != null) {
             model.addAttribute("user", retrievedUser);
@@ -101,8 +121,7 @@ public class UserController {
 
     @GetMapping("/edit_profile")
     public String userEditInformation(Model model, @SessionAttribute("user") User user) {
-        String userEmail = user.getEmail();
-        User existingUser = userService.getUserByEmail(userEmail);
+        User existingUser = userService.getUserByEmail(user.getEmail());
         model.addAttribute("user", existingUser);
         return "editProfile";
     }
