@@ -1,7 +1,9 @@
 package com.fitness.fitness.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
+import org.springframework.cglib.core.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
@@ -20,7 +22,7 @@ public class Appointment {
     @Column(name = "appointment_id") 
     private int appointmentId;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "class_Id", nullable = false )  // Assuming the column name in Appointment table
@@ -34,19 +36,32 @@ public class Appointment {
     @JoinColumn(name="user_Id" ,nullable = false )
     private User user;
 
+    private String status;
 
-    public Appointment(int appointmentId, Date date) {
+
+    public Appointment(int appointmentId, LocalDate date, String status) {
         this.appointmentId = appointmentId;
         this.date = date;
+        this.status = status;
 
     }
 
 
-    public Date getDate() {
+    public String getStatus() {
+        return status;
+    }
+
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
