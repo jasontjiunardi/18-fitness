@@ -21,8 +21,6 @@ public class FitnessClass {
     private String fitnessclassname;
     private String classdescription;
     private String classduration;
-    @OneToMany(mappedBy = "fitnessClass", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<PaymentTransaction> PaymentTransaction = new HashSet<>();
 
     public FitnessClass(){
         

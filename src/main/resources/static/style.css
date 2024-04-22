@@ -1,18 +1,4 @@
-.header {
-    width: 100%;
-    height: 20vh; /* 1/5 of the screen size */
-    background-color: #5f30e2; /* Matching the "Explore Plans" button color */
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2em;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: fixed; /* Keep the header at the top */
-    top: 0;
-    left: 0;
-}
-
+/* Base settings */
 * {
     padding: 0;
     margin: 0;
@@ -21,12 +7,76 @@
 }
 
 body {
-    background-color: #ebeef1;
+    background-color: #ebeef1; /* Greyish background */
     display: flex;
     flex-direction: column; /* Align items vertically */
     align-items: center; /* Center items horizontally */
     min-height: 100vh;
     padding-top: 20vh; /* Make space for the header */
+}
+
+.header {
+    width: 100%;
+    height: 16vh;
+    background-color: #4a154b;
+    color: white;
+    display: flex;
+    align-items: center;
+    font-size: 1.5em;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 0 30px;
+}
+
+.header-center {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    left: 0;
+}
+
+.header-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4a154b;
+    color: white;
+    text-decoration: none;
+    border: 2px solid white;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    padding: 5px 10px; /* Provides padding for better click area */
+    border-radius: 2px; /* Slightly rounded corners */
+}
+.header-button.home-button {
+    width: 50px; /* Fixed width for the home button */
+    height: 50px; /* Fixed height for the home button */
+    position: absolute;
+    left: 30px; /* Adjust as needed */
+}
+
+.header-button.home-button:hover, .header-button.sign-in-button:hover, .header-button.sign-up-button:hover {
+    background-color: white; /* White background on hover */
+    color: #4a154b; /* Purple text on hover */
+    border-color: #4a154b; /* Border color change on hover */
+}
+
+.header-button i {
+    font-size: 1.2em; /* Size of the icon */
+    pointer-events: none; /* Ensures that the icon does not interfere with click events */
+}
+
+.auth-buttons {
+    position: absolute;
+    right: 30px; /* Adjust as needed */
+    display: flex;
+    gap: 5px;
+}
+
+.auth-buttons a {
+    padding: 5px 10px;
+    border-radius: 2px;
 }
 
 .wrapper {
@@ -35,132 +85,114 @@ body {
     justify-content: center; /* Center the cards within the wrapper */
     gap: 30px; /* Provides space between the cards */
     width: 100%; /* Ensures the wrapper takes the full width */
+    margin-top: 65px;
 }
 
 .wrapper .card {
-    flex: 1 0 300px; /* flex-grow, flex-shrink, and flex-basis */
+    flex: 1 0 300px;
     display: flex;
     flex-direction: column;
-    max-width: 350px; /* Maximum width of each card */
-    min-height: 100%; /* Adjust if necessary to ensure cards take up full height */
+    max-width: 350px;
+    min-height: 400px; /* Ensures a minimum consistent height for shorter cards */
     background-color: white;
     padding: 40px;
+    padding-bottom: 60px; /* Provides extra space at the bottom for the button */
     border-radius: 10px;
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px; /* Margin to separate rows of cards */
+    margin-bottom: 30px;
+    position: relative; /* Essential for positioning the button */
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
-/* General hover effect for cards */
 .wrapper .card:hover {
     transform: scale(1.05);
+    background-color: #4a154b; /* Dark purple background */
+    color: white;
 }
 
-.wrapper .card h3, .wrapper .card h1, .wrapper .card p, .wrapper .card ul li {
-    transition: color 0.3s ease;
+.wrapper .card:hover h3,
+.wrapper .card:hover h1,
+.wrapper .card:hover p,
+.wrapper .card:hover ul li,
+.wrapper .card:hover a {
+    color: white; /* Ensures all text including links turns white on hover */
 }
 
-.wrapper .card h3 {
-    margin-bottom: 0%;
+.wrapper .card a {
+    position: absolute;
+    bottom: 20px; /* Positions the button 20px from the bottom of the card */
+    left: 20px;
+    right: 20px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid #4a154b; /* Matching the "Explore Plans" button color */
+    color: #4a154b;
+    padding: 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
-.wrapper .card h1 {
-    margin-bottom: 10px;
-    color: rgba(0, 0, 0, 0.8);
+.wrapper .card:hover a {
+    border-color: white; /* Button border turns white on card hover */
 }
 
-.wrapper .card h1 span {
-    font-size: 12px;
-    color: rgba(0, 0, 0, 0.6);
+.wrapper .card a:hover {
+    background-color: white; /* Button background turns white on button hover */
+    color: #4a154b; /* Button text turns purple on button hover */
 }
 
-.wrapper .card p {
-    margin: 20px 0;
-    color: rgba(0, 0, 0, 0.6);
-    font-size: 18px;
-    line-height: 1.5;
+.currency-symbol {
+    font-weight: bold;
+    font-size: 1.7em; /* Adjust the size as needed */
+}
+
+.card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: auto; /* Pushes everything else upwards, keeping the button at the bottom */
+}
+/* Adjusted settings for card content and text colors */
+.wrapper .card {
+    color: #4a154b; /* Default text color set to purple */
+}
+
+.wrapper .card h3, .wrapper .card p, .wrapper .card ul li {
+    color: inherit; /* Inherits the purple color unless hovered */
 }
 
 .wrapper .card ul {
     list-style: none;
     padding-left: 0;
+    margin-top : 5px;
+    margin-bottom: 20px; /* Adds space above the list for clarity */
 }
 
 .wrapper .card ul li {
     position: relative;
-    line-height: 3;
-    padding-left: 25px;
-    color: rgba(0, 0, 0, 0.9);
+    padding-left: 30px; /* Provides space for the check icon */
+    margin-bottom: 10px; /* Adds space between list items */
+    line-height: 1.5; /* Increases line height for better readability */
 }
+
 .wrapper .card ul li::before {
-    content: "\f00c"; /* FontAwesome check icon */
-    font-family: 'Font Awesome 5 Free'; /* Specify the font-family for FontAwesome */
-    font-weight: 900; /* FontAwesome 5 requires font-weight 900 for solid icons */
-    color: #5f30e2; /* Match the "Explore Plans" button color or choose another */
+    content: "\2713"; /* Unicode character for a check mark */
     position: absolute;
-    left: 0; /* Aligns icon to the left of the list item content */
-    top: 0; /* Adjusts vertical alignment of the icon */
+    left: 0; /* Position the check mark at the start of the item */
+    top: 0; /* Aligns at the top of the line */
+    color: #4a154b; /* Keeps the check mark purple */
+    font-weight: bold; /* Makes the check mark bold */
 }
 
-.wrapper .card ul li i {
-    color: rgba(0, 0, 0, 0.4);
-    margin-right: 10px;
+/* Specific hover effects to turn text white */
+.wrapper .card:hover h3,
+.wrapper .card:hover p,
+.wrapper .card:hover ul li {
+    color: white; /* Text turns white on hover */
 }
 
-.wrapper .card a {
-    margin: 20px 0;
-    display: block;
-    text-align: center;
-    text-decoration: none;
-    border: 1px solid #5f30e2;
-    color: #5f30e2;
-    padding: 15px;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.wrapper .card a:hover {
-    background-color: #5f30e2;
-    color: white;
-}
-
-/* Specific Active Card Styles */
-.wrapper .card.diamondActive,
-.wrapper .card.goldActive,
-.wrapper .card.silverActive {
-    color: white;
-}
-
-.wrapper .card.diamondActive {
-    background-color: #b0c4de; /* Light Steel Blue for a glossy diamond look */
-}
-
-.wrapper .card.goldActive {
-    background-color: #ffd700; /* Gold */
-}
-
-.wrapper .card.silverActive {
-    background-color: #c0c0c0; /* Silver */
-}
-
-/* Hover styles for specific active cards */
-.wrapper .card.diamondActive:hover {
-    background-color: #8abbd0; /* Glossy Diamond Hover */
-}
-
-.wrapper .card.goldActive:hover {
-    background-color: #ffdf00; /* Glossy Gold Hover */
-}
-
-.wrapper .card.silverActive:hover {
-    background-color: #dcdcdc; /* Glossy Silver Hover */
-}
-.currency-symbol {
-    font-weight: bold;
-    font-size: 1.7em; /* Adjust the size as needed */
-}
-.card-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+.wrapper .card:hover ul li::before {
+    color: white; /* Check mark turns white on hover */
 }
