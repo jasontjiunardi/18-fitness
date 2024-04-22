@@ -1,14 +1,17 @@
-+<html>
-    <head>
-        <title>Home</title>
-    </head>
-    <body>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
     <form method="get" action="/profile">
         <input type="hidden" name="email" th:value="${user.email}">
         <button type="submit">View Profile</button>
     </form>
-    <form method="get" action= "/browse_plans">
-        <button type="submit">Browse Plan</button>
+    <form method="get" action="/browse_plans">
+        <button type="submit">Browse Plans</button>
     </form>
     <form method="get" action="/showFitnessClasses">
         <input type="hidden" name="email" th:value="${user.email}">
@@ -16,12 +19,14 @@
     </form>
     <form method="get" action="/bookAppointment">
         <input type="hidden" name="email" th:value="${user.email}">
-        <button type="submit">I want to Book an Appointment</button>
-    <form action="/view_trainers" method="get">
-        <button type="submit"> View trainers</button>
+        <button type="submit">Book an Appointment</button>
     </form>
-    <form method="get" action="/appointments">
+    <form method="get" action="/view_trainers">
+        <button type="submit">View Trainers</button>
+    </form>
+    <form method="get" action="/userAppointment">
         <input type="hidden" name="email" th:value="${user.email}">
-        <button type="submit">View Appointment</button>
-        </form>
+        <button type="submit">View Appointments</button>
+    </form>
+</body>
 </html>

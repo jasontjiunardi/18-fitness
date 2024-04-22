@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.fitness.fitness.model.Appointment;
@@ -12,18 +13,16 @@ import com.fitness.fitness.model.Appointment;
 
 @Repository
 public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
-    List<Appointment> findByDateBetween(Date startDate, Date endDate);
-    List<Appointment> findByTrainer(String trainer);
-    List<Appointment> findByFitnessclassname(String fitnessclassname);
-    List<Appointment> findByTrainerAndFitnessclassname(String trainer, String fitnessclassname);
-    List<Appointment> findByTrainerAndStatus(String trainer, String status);
-    List<Appointment> findByStatusAndDateBetween(String status, Date startDate, Date endDate);
-    List<Appointment> findByStatusAndDateBetweenAndTrainer(String status, Date startDate, Date endDate, String trainer);
-    List<Appointment> findByFitnessclassnameAndStatus(String className, String status);
-    List<Appointment> findByFitnessclassnameAndDateBetween(String className, Date startDate, Date endDate);
-    List<Appointment> findByFitnessclassnameAndTrainer(String className, String trainer);
-    List<Appointment> findByStatusAndTrainer(String status, String trainer);
-    List<Appointment> findByStatusAndFitnessclassnameAndTrainer(String status, String className, String trainer);
-    List<Appointment> findByStatusAndFitnessclassnameAndDateBetween(String status, String className, Date startDate, Date endDate);
-    List<Appointment> findByStatus(String status);
+    Appointment getAppointmentByAppointmentId(int appointmentId);
+    @Query("SELECT a.appointmentId FROM Appointment a WHERE a.user.id = :userId")
+    List<Integer> findAppointmentIdsByUserId(@Param("userId") int userId);
+    @Query("SELECT t.name FROM Trainer t WHERE t.id = (SELECT a.trainer.id FROM Appointment a WHERE a.appointmentId = :appointmentId)")
+    String findTrainerNameByAppointmentId(@Param("appointmentId") int appointmentId);
+    // @Query("SELECT a.trainer.id FROM Appointment a WHERE a.appointmentId = :appointmentId")
+    // int findTrainerIdByAppointmentId(@Param("appointmentId") int appointmentId);
+    @Query("SELECT f.className FROM Appointment a JOIN a.fitnessClass f WHERE a.appointmentId = :appointmentId")
+    String findClassNameByAppointmentId(@Param("appointmentId") int appointmentId);
+    @Query("SELECT a.date FROM Appointment a WHERE a.appointmentId = :appointmentId")
+    Date findDateByAppointmentId(@Param("appointmentId") int appointmentId);
 }
+

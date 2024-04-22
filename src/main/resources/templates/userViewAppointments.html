@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Appointments</title>
+</head>
+<body>
+    <h1>User Appointments</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Appointment ID</th>
+                <th>Trainer Name</th>
+                <th>Class Name</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="appointmentId, stat : ${appointmentIds}">
+                <td th:text="${appointmentId}">-</td>
+                <td th:text="${@appointmentController.getTrainerNameByAppointmentId(appointmentId)}">-</td>
+                <td th:text="${@appointmentController.getClassNameByAppointmentId(appointmentId)}">-</td>
+                <td th:text="${@appointmentController.getDateByAppointmentId(appointmentId)}">-</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
+
