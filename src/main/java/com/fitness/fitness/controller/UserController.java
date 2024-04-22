@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Duration;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -161,5 +163,84 @@ public class UserController {
         return "profile";
     }
 
+    @PostMapping("/pause_account")
+    public String pauseAccount(Model model, @SessionAttribute("user") User user) {
+        // Retrieve user from database to ensure the data is up-to-date
+        User existingUser = userService.getUserByEmail(user.getEmail());
+        
+        // Check if user status is active
+        if ("active".equals(existingUser.getStatus())) {
+            // Set pause start date
+            existingUser.setPauseStartDate(LocalDate.now());
+            
+            // Set pause end date (30 days from now)
+            LocalDate pauseEndDate = LocalDate.now().plusDays(30); // 30 days from now
+            existingUser.setPauseEndDate(pauseEndDate);
+            
+            // Update user status to paused
+            existingUser.setStatus("paused");
 
+            // Save updated user data to database
+            userService.saveUser(existingUser);
+            
+            // Redirect to profile page
+            return "redirect:/profile";
+        } else if ("paused".equals(existingUser.getStatus())) {
+            // Check if pause end date has passed
+            LocalDate currentDate = LocalDate.now();
+            LocalDate pauseEndDate = existingUser.getPauseEndDate();
+            if (currentDate.isAfter(pauseEndDate)) {
+                // Update user status to active
+                existingUser.setStatus("active");
+                
+                // Save updated user data to database
+                userService.saveUser(existingUser);
+                
+                // Redirect to profile page with notification
+                return "redirect:/profile?notification=Your account has been reactivated.";
+            } else {
+                // User is already paused, redirect to profile with a notification
+                return "redirect:/profile?notification=Your account is already paused.";
+            }
+        } else {
+            // User is inactive, redirect to profile with a notification
+            return "redirect:/profile?notification=You must have an active plan to pause your account.";
+        }
     }
+
+
+    @PostMapping("/unpause_account")
+    public String unpauseAccount(Model model, @SessionAttribute("user") User user) {
+        // Retrieve user from database to ensure the data is up-to-date
+        User existingUser = userService.getUserByEmail(user.getEmail());
+
+        // Check if the user status is "paused"
+        if ("paused".equals(existingUser.getStatus())) {
+            // Hitung durasi pembekuan
+            LocalDate pauseStartDate = existingUser.getPauseStartDate();
+            LocalDate today = LocalDate.now();
+            Duration duration = Duration.between(pauseStartDate.atStartOfDay(), today.atStartOfDay());
+            long daysPaused = duration.toDays();
+
+            // Simpan jumlah hari pembekuan dalam variabel atau di objek User
+            existingUser.setDaysPaused(daysPaused);
+
+            // Set pause start date to null
+            existingUser.setPauseStartDate(null);
+            
+            // Set pause end date to null
+            existingUser.setPauseEndDate(null);
+            
+            // Update user status to "active"
+            existingUser.setStatus("active");
+            
+            // Save updated user data to database
+            userService.saveUser(existingUser);
+        }
+        
+        // Redirect to profile page
+        return "redirect:/profile";
+    }
+
+
+  }

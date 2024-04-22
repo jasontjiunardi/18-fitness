@@ -1,5 +1,6 @@
 package com.fitness.fitness.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,6 +27,10 @@ public class User {
     private int recoveryCode;
     private String cardNumber;
     private String profilePictureUrl;
+    private LocalDate pauseStartDate;
+    private LocalDate pauseEndDate;
+    private long daysPaused;
+    private int pauseCount;
 
     public User() {
     }
@@ -121,6 +126,38 @@ public class User {
     
     public void setProfilePictureUrl(String profilePictureUrl) {
         this.profilePictureUrl = profilePictureUrl;
+    }
+
+    public LocalDate getPauseStartDate() {
+        return pauseStartDate;
+    }
+
+    public void setPauseStartDate(LocalDate pauseStartDate) {
+        this.pauseStartDate = pauseStartDate;
+    }
+
+    public LocalDate getPauseEndDate() {
+        return pauseEndDate;
+    }
+
+    public void setPauseEndDate(LocalDate pauseEndDate) {
+        this.pauseEndDate = pauseEndDate;
+    }
+
+    public long getDaysPaused() {
+        return daysPaused;
+    }
+
+    public void setDaysPaused(long daysPaused) {
+        this.daysPaused = daysPaused;
+    }
+
+    public int getPauseCount() {
+        return pauseCount;
+    }
+
+    public void setPauseCount(int pauseCount) {
+        this.pauseCount = pauseCount;
     }
     
 }
