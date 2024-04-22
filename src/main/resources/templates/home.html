@@ -17,6 +17,9 @@
         <input type="hidden" name="email" th:value="${user.email}">
         <button type="submit">View Fitness Classes</button>
     </form>
+    <form method="get" action= "/browseChangeSubscription">
+        <button type="submit">Change Your Plan</button>
+    </form>
     <form method="get" action="/bookAppointment">
         <input type="hidden" name="email" th:value="${user.email}">
         <button type="submit">Book an Appointment</button>

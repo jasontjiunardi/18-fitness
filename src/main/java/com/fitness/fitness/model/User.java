@@ -1,8 +1,10 @@
 package com.fitness.fitness.model;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,7 +29,7 @@ public class User {
     private Date dob;
     private String phoneNumber;
     private String status = "Inactive"; // Plan type or Paused or Inactive
-    private Date activeDate = null;
+    private LocalDate activeDate = null;
     private int recoveryCode;
     private String cardNumber;
     private String profilePictureUrl;
@@ -39,7 +41,7 @@ public class User {
     }
 
     public User(int userId, String name, String username, String password, String email, Date dob, String phoneNumber,
-            String status, Date activeDate, int recoveryCode, String cardNumber) {
+            String status, LocalDate activeDate, int recoveryCode, String cardNumber) {
         this.userId = userId;
         this.name = name;
         this.username = username;
@@ -110,10 +112,10 @@ public class User {
     public void setStatus(String status) {
         this.status = status;
     }
-    public Date getActiveDate(){
+    public LocalDate getActiveDate(){
         return activeDate;
     }
-    public void setActiveDate(Date activeDate){
+    public void setActiveDate(LocalDate activeDate){
         this.activeDate = activeDate;
     }
     public String getCardNumber() {
@@ -132,12 +134,44 @@ public class User {
         this.profilePictureUrl = profilePictureUrl;
     }
 
-    public List<Appointment> getAppointments() {
-        return appointments;
-    }
+// <<<<<<< HEAD
+//     public List<Appointment> getAppointments() {
+//         return appointments;
+//     }
 
-    public void setAppointments(List<Appointment> appointments) {
-        this.appointments = appointments;
+//     public void setAppointments(List<Appointment> appointments) {
+//         this.appointments = appointments;
+// =======
+//     public LocalDate getPauseStartDate() {
+//         return pauseStartDate;
+//     }
+
+//     public void setPauseStartDate(LocalDate pauseStartDate) {
+//         this.pauseStartDate = pauseStartDate;
+//     }
+
+//     public LocalDate getPauseEndDate() {
+//         return pauseEndDate;
+//     }
+
+//     public void setPauseEndDate(LocalDate pauseEndDate) {
+//         this.pauseEndDate = pauseEndDate;
+//     }
+
+//     public long getDaysPaused() {
+//         return daysPaused;
+//     }
+
+//     public void setDaysPaused(long daysPaused) {
+//         this.daysPaused = daysPaused;
+//     }
+
+//     public int getPauseCount() {
+//         return pauseCount;
+//     }
+
+//     public void setPauseCount(int pauseCount) {
+//         this.pauseCount = pauseCount;
+// >>>>>>> ff6ac5996f7f8676ffcd1909e01b8a56553ed345
     }
     
-}

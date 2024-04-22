@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Purchase Form</title>
+    <title>Change Subscription</title>
     <script>
         function togglePaymentFields() {
             var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
@@ -40,37 +40,36 @@
             var userAgreementText = "\
             FITNESS MEMBERSHIP AGREEMENT\n\
             ------------------------------\n\
-            By purchasing a membership with us, you agree to the following terms and conditions:\n\
+            By changing your subscription type, you agree to the following terms and conditions:\n\
             \n\
-            1. Membership Duration: Your membership is valid for the duration specified at the time of purchase.\n\
-            2. Payment Terms: You agree to pay all applicable fees and charges associated with your membership on time.\n\
+            1. Membership Duration: Your membership duration remains the same as your previously subscribed plan.\n\
+            2. Payment Terms: You agree to pay all applicable fees and charges associated with your subscription changes.\n\
             3. Usage Policies: You agree to abide by the facility rules and regulations as outlined by our fitness center.\n\
-            4. Cancellation Policy: Membership cancellations must be made in accordance with the terms specified in our cancellation policy.\n\
+            4. Cancellation Policy: No refunds.\n\
             5. Personal Responsibility: You acknowledge that participation in fitness activities carries inherent risks, and you assume full responsibility for any injuries or damages incurred.\n\
             \n\
             By checking this box, you confirm that you have read, understood, and agree to the terms of this agreement.";
             alert(userAgreementText);
         }
-
-        function confirmCancel() {
-            var confirmation = confirm('Are you sure you want to cancel your purchase? Your information will not be stored.');
-            return confirmation;
-        }
     </script>
 </head>
 <body>
-    <h1>Purchase Form</h1>
+    <h1>Change Subscription</h1>
     <div>
-        <p>Plan Type: <span th:text="${planType}"></span></p>
-        <p>Selected Duration: <span th:text="${selectedDuration} + ' months'"></span></p>
-        <p>Price: ¥<span th:text="${price}"></span></p>
+        <p>Welcome User: <span th:text="${user.name}">User</span></p>
+        <p>Your Current Plan Type: <span th:text="${user.status}">status</span></p>
+        <p>Valid Date: <span th:text="${user.activeDate}">date</span></p>
     </div>
-
-    <h2>Select Payment Method:</h2>
-    <form th:action="@{/finalizePurchase}" method="post" onsubmit="return validateForm()" onchange="togglePaymentFields()">
-        <input type="hidden" name="planType" th:value="${planType}">
-        <input type="hidden" name="price" th:value="${price}">
-        <input type="hidden" name="duration" th:value="${selectedDuration}">
+    <h2 th:text="${planType} + ' Plan Details'">Plan Type Details</h2>
+    <p th:text="${planDetails}">Plan Description</p>
+    <h2>Benefits</h2>
+    <ul>
+        <li th:each="benefit : ${benefits}" th:text="${benefit.description}"></li>
+    </ul>
+    <form th:action = "@{/changeSubscription/{planType}(planType=${planType})}" method="post" onsubmit="return validateForm()" onchange="togglePaymentFields()">
+        <p>Chosen Plan: <span th:text ="${planType}"></span></p>
+        <p>Price: ¥<span th:text = "*{price}"></span></p>
+        <p>Select Payment Method: </p>
         <div>
             <input type="radio" id="alipay" name="paymentMethod" value="Alipay">
             <label for="alipay">
@@ -90,8 +89,6 @@
                 <img th:src="@{/images/credit_card_icon.png}" alt="Credit Card" style="vertical-align: middle; width: 58px; height: 58;">
             </label>
         </div>
-    
-
         <div id="cardPaymentFields" style="display:none;">
             <label for="cardNumber">Card Number:</label>
             <input type="text" id="cardNumber" name="cardNumber" pattern="\d{16}" placeholder="16 digits" title="Card number must be 16 digits" maxlength="16">
@@ -101,11 +98,11 @@
             <input type="checkbox" id="userAgreement" name="userAgreement">
             <a href="#" onclick="showUserAgreement()">I agree to the terms and conditions</a>
         </div>
+        <input type="hidden" name="price" th:value="${price}">
 
         <button type="submit">Confirm Purchase</button>
+        <input type="hidden" id="sessionCardNumber" th:value="${user.cardNumber}" />
+        <a href = "/browseChangeSubscription">Back to previous page</a>
     </form>
-
-    <input type="hidden" id="sessionCardNumber" th:value="${user.cardNumber}" />
-    <a href="/browse_plans" onclick="return confirmCancel();">Cancel Purchase</a>
 </body>
 </html>
