@@ -1,13 +1,19 @@
 package com.fitness.fitness.model;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class User {
@@ -22,15 +28,22 @@ public class User {
     private Date dob;
     private String phoneNumber;
     private String status = "Inactive"; // Plan type or Paused or Inactive
-    private Date activeDate = null;
+    private LocalDate activeDate = null;
     private int recoveryCode;
     private String cardNumber;
+    private String profilePictureUrl;
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<PaymentTransaction> PaymentTransaction = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Appointment> Appointment = new HashSet<>();
 
     public User() {
     }
 
     public User(int id, String name, String username, String password, String email, Date dob, String phoneNumber,
-            String status, Date activeDate, int recoveryCode, String cardNumber) {
+            String status, LocalDate activeDate, int recoveryCode, String cardNumber) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -42,6 +55,7 @@ public class User {
         this.activeDate = activeDate;
         this.recoveryCode = recoveryCode;
         this.cardNumber = cardNumber;
+        this.profilePictureUrl = profilePictureUrl;
     }
     public int getRecoveryCode() {
         return recoveryCode;
@@ -99,10 +113,10 @@ public class User {
     public void setStatus(String status) {
         this.status = status;
     }
-    public Date getActiveDate(){
+    public LocalDate getActiveDate(){
         return activeDate;
     }
-    public void setActiveDate(Date activeDate){
+    public void setActiveDate(LocalDate activeDate){
         this.activeDate = activeDate;
     }
     public String getCardNumber() {
@@ -113,6 +127,12 @@ public class User {
         this.cardNumber = cardNumber;
     }
 
-
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+    
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
+    }
     
 }

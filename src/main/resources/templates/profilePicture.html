@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Profile Picture</title>
+</head>
+<body>
+    <h1>Upload Profile Picture</h1>
+    <form method="POST" action="/upload_profile_picture" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required>
+        <button type="submit">Upload</button>
+    </form>
+    
+    <form method="GET" action="/profile">
+        <a th:href="@{/profile}"><button>Go Back</button></a>
+    </form>
+</body>
+</html>

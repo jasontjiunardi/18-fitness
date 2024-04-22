@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Change Subscription</title>
+    <script>
+        function togglePaymentFields() {
+            var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            var cardFields = document.getElementById('cardPaymentFields');
+            var cardNumberFromSession = document.getElementById('sessionCardNumber').value;
+
+            if (paymentMethod === 'Credit' && (cardNumberFromSession === '' || cardNumberFromSession === null)) {
+                cardFields.style.display = 'block'; // Show card input fields
+                document.getElementById('cardNumber').required = true; // Make card number input required
+            } else {
+                cardFields.style.display = 'none'; // Hide card input fields
+                document.getElementById('cardNumber').required = false; // Not required as not visible
+            }
+        }
+
+        function validateForm() {
+            var paymentMethodChecked = document.querySelector('input[name="paymentMethod"]:checked');
+            if (!paymentMethodChecked) {
+                alert('Please select a payment method.');
+                return false;
+            }
+            return validateUserAgreement();
+        }
+
+        function validateUserAgreement() {
+            var userAgreementChecked = document.getElementById('userAgreement').checked;
+            if (!userAgreementChecked) {
+                alert('Please agree to the terms and conditions to proceed.');
+                return false;
+            }
+            return true;
+        }
+
+        function showUserAgreement() {
+            var userAgreementText = "\
+            FITNESS MEMBERSHIP AGREEMENT\n\
+            ------------------------------\n\
+            By changing your subscription type, you agree to the following terms and conditions:\n\
+            \n\
+            1. Membership Duration: Your membership duration remains the same as your previously subscribed plan.\n\
+            2. Payment Terms: You agree to pay all applicable fees and charges associated with your subscription changes.\n\
+            3. Usage Policies: You agree to abide by the facility rules and regulations as outlined by our fitness center.\n\
+            4. Cancellation Policy: No refunds.\n\
+            5. Personal Responsibility: You acknowledge that participation in fitness activities carries inherent risks, and you assume full responsibility for any injuries or damages incurred.\n\
+            \n\
+            By checking this box, you confirm that you have read, understood, and agree to the terms of this agreement.";
+            alert(userAgreementText);
+        }
+    </script>
+</head>
+<body>
+    <h1>Change Subscription</h1>
+    <div>
+        <p>Welcome User: <span th:text="${user.name}">User</span></p>
+        <p>Your Current Plan Type: <span th:text="${user.status}">status</span></p>
+        <p>Valid Date: <span th:text="${user.activeDate}">date</span></p>
+    </div>
+    <h2 th:text="${planType} + ' Plan Details'">Plan Type Details</h2>
+    <p th:text="${planDetails}">Plan Description</p>
+    <h2>Benefits</h2>
+    <ul>
+        <li th:each="benefit : ${benefits}" th:text="${benefit.description}"></li>
+    </ul>
+    <form th:action = "@{/changeSubscription/{planType}(planType=${planType})}" method="post" onsubmit="return validateForm()" onchange="togglePaymentFields()">
+        <p>Chosen Plan: <span th:text ="${planType}"></span></p>
+        <p>Price: ¥<span th:text = "*{price}"></span></p>
+        <p>Select Payment Method: </p>
+        <div>
+            <input type="radio" id="alipay" name="paymentMethod" value="Alipay">
+            <label for="alipay">
+                Alipay
+                <img th:src="@{/images/alipay_icon.png}" alt="Alipay" style="vertical-align: middle; width: 58px; height: 58px;">
+            </label>
+    
+            <input type="radio" id="wechat" name="paymentMethod" value="WeChat">
+            <label for="wechat">
+                WeChat
+                <img th:src="@{/images/wechat_icon.png}" alt="WeChat" style="vertical-align: middle; width: 58px; height: 58px;">
+            </label>
+    
+            <input type="radio" id="credit" name="paymentMethod" value="Credit">
+            <label for="credit">
+                Credit Card
+                <img th:src="@{/images/credit_card_icon.png}" alt="Credit Card" style="vertical-align: middle; width: 58px; height: 58;">
+            </label>
+        </div>
+        <div id="cardPaymentFields" style="display:none;">
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" id="cardNumber" name="cardNumber" pattern="\d{16}" placeholder="16 digits" title="Card number must be 16 digits" maxlength="16">
+        </div>
+
+        <div>
+            <input type="checkbox" id="userAgreement" name="userAgreement">
+            <a href="#" onclick="showUserAgreement()">I agree to the terms and conditions</a>
+        </div>
+        <input type="hidden" name="price" th:value="${price}">
+
+        <button type="submit">Confirm Purchase</button>
+        <input type="hidden" id="sessionCardNumber" th:value="${user.cardNumber}" />
+        <a href = "/browseChangeSubscription">Back to previous page</a>
+    </form>
+</body>
+</html>

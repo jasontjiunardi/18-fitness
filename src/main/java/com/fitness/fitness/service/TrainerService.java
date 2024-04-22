@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.fitness.fitness.model.Trainer;
 import com.fitness.fitness.repository.TrainerRepo;
+
+import jakarta.transaction.Transactional;
 @Service
 public class TrainerService {
     @Autowired
@@ -28,6 +30,26 @@ public class TrainerService {
         // throw new UnsupportedOperationException("Unimplemented method 'getAllTrainers'");
             return trainerRepo.findAll();
         }
+
+    public Trainer getTrainerById(Integer id) {
+        Optional<Trainer> optionalTrainer = trainerRepo.findById(id);
+        return optionalTrainer.orElse(null);
     }
+
+    public Trainer findTrainerByName(String name) {
+        return trainerRepo.findByName(name);
+    }
+    public Trainer saveTrainer(Trainer trainer) {
+        return trainerRepo.save(trainer);
+    }
+
+    public void updateTrainer(Trainer trainer) {
+        trainerRepo.save(trainer);
+    }
+
+    public void removeTrainer(int id) {
+        trainerRepo.deleteById(id);
+    }
+}
 
     // You can add more methods here depending on your business logic

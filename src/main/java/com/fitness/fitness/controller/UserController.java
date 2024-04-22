@@ -1,11 +1,17 @@
 package com.fitness.fitness.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fitness.fitness.model.User;
 import com.fitness.fitness.service.UserService;
@@ -14,13 +20,20 @@ import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @SessionAttributes("user")
 public class UserController {
+    
     @Autowired
     private UserService userService;
 
+    @GetMapping("/first_page")
+    public String firstPage(Model model){
+
+        return "firstpage";
+    }
     @GetMapping("/register_user")
     public String getNewUserPage(Model model){
         model.addAttribute("user", new User());
@@ -76,24 +89,23 @@ public class UserController {
     
     @GetMapping("/profile")
     public String userProfile(Model model, @SessionAttribute("user") User user) {
-    User retrievedUser = userService.getUserByEmail(user.getEmail());
-
-    if (retrievedUser != null) {
-        model.addAttribute("user", retrievedUser);
+        User retrievedUser = userService.getUserByEmail(user.getEmail());
+        if (retrievedUser != null) {
+            model.addAttribute("user", retrievedUser);
         return "profile";
-    } else {
-        model.addAttribute("error", "User not found");
+            } else {
+            model.addAttribute("error", "User not found");
         return "profile";
-    }
+        }
     }
 
     @GetMapping("/edit_profile")
     public String userEditInformation(Model model, @SessionAttribute("user") User user) {
-    String userEmail = user.getEmail();
-    User existingUser = userService.getUserByEmail(userEmail);
-    model.addAttribute("user", existingUser);
+        String userEmail = user.getEmail();
+        User existingUser = userService.getUserByEmail(userEmail);
+        model.addAttribute("user", existingUser);
         return "editProfile";
-}
+    }
 
     @PostMapping("/edit_profile")
     public String userEditInformation(@ModelAttribute User user, Model model) {
@@ -123,4 +135,31 @@ public class UserController {
             return "login";
         }
 }
+    @GetMapping("/upload_profile_picture")
+    public String showProfilePictureUploadForm(Model model, @SessionAttribute("user") User user) {
+    model.addAttribute("user", user);
+    return "profilePicture";
 }
+
+    @PostMapping("/upload_profile_picture")
+    public String uploadProfilePicture(@RequestParam("file") MultipartFile file, @SessionAttribute("user") User user) {
+        if (!file.isEmpty()) {
+            try {
+                String fileName = file.getOriginalFilename();
+                String filePath = Paths.get("uploads", fileName).toString();
+                Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+                
+                String profilePictureUrl = "/uploads/" + fileName; // Adjust this URL as needed
+                
+                userService.setProfilePicture(user.getEmail(), profilePictureUrl);
+                
+                return "redirect:/profile";
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return "profile";
+    }
+
+
+    }
