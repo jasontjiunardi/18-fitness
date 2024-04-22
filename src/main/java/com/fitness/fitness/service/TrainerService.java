@@ -43,6 +43,13 @@ public class TrainerService {
         return trainerRepo.save(trainer);
     }
 
+    public void updateTrainer(Trainer trainer) {
+        trainerRepo.save(trainer);
+    }
+
+    public void removeTrainer(int id) {
+        trainerRepo.deleteById(id);
+    }
 }
 
     // You can add more methods here depending on your business logic

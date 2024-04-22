@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.fitness.fitness.model.Manager;
@@ -18,6 +19,8 @@ import com.fitness.fitness.repository.TrainerRepo;
 import com.fitness.fitness.service.ManagerService;
 import com.fitness.fitness.service.TrainerService;
 import com.fitness.fitness.service.UserService;
+
+
 
 @Controller
 public class ManagerController {
@@ -100,6 +103,8 @@ public class ManagerController {
         model.addAttribute("trainers", trainerService.getAllTrainers());
         return "managerViewTrainers";
     }
+  
+    
 
     @GetMapping("/managerAddTrainer")
     public String showAddTrainerForm(Model model) {
@@ -113,5 +118,25 @@ public class ManagerController {
         return "redirect:/managerViewTrainers";
     }
     
+    @GetMapping("/editTrainer/{id}")
+    public String editTrainer(@PathVariable("id") int id, Model model) {
+        // Fetch the trainer from the database by id
+        Trainer trainer = trainerService.getTrainerById(id);
+        model.addAttribute("trainer", trainer);
+        return "editTrainer";
+    }
 
+    @PostMapping("/updateTrainer")
+    public String updateTrainer(@ModelAttribute("trainer") Trainer trainer, Model model) {
+        // Update the trainer information in the database
+        trainerService.updateTrainer(trainer);
+        return "redirect:/managerViewTrainers";
+    }
+
+    @PostMapping("/removeTrainer/{id}")
+    public String removeTrainer(@PathVariable("id") int id) {
+        // Remove the trainer from the database
+        trainerService.removeTrainer(id);
+        return "redirect:/managerViewTrainers";
+    }
 }
