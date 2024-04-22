@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Change Subscription</title>
+</head>
+<body>
+    <h1>Change Subscription</h1>
+    <div th:if="${user == null}">
+        <p>You are not signed in, please <a th:href="@{/user_signin}">sign in</a> to continue.</p>
+    </div>
+    <div th:if="${user != null}">
+        <p>Welcome User: <span th:text="${user.name}">User</span></p>
+        <p>Your Current Plan Type: <span th:text="${user.status}">status</span></p>
+        <p th:if="${#strings.equals(user.status, 'Inactive')}">Valid Date: -</p>
+        <p th:if="${#strings.equals(user.status, 'Paused')}">Valid Date: Paused</p>
+        <p th:if="${!#strings.equals(user.status, 'Inactive') and !#strings.equals(user.status, 'Paused')}">Valid Date: <span th:text="${user.activeDate}">date</span></p>
+
+        <div th:if="${#strings.equals(user.status, 'Inactive')}">
+            <p>You are currently not subscribed to any plans. Please go to <a th:href="@{/browse_plans}">browse plans</a> to subscribe.</p>
+        </div>
+        <div th:if="${#strings.equals(user.status, 'Paused')}">
+            <p>Sorry, your plan is currently on pause. Please go back to <a th:href="@{/home_page}">home page</a> or contact our lovely staff.</p>
+        </div>
+        <div th:if="!${#strings.equals(user.status, 'Inactive')} and !${#strings.equals(user.status, 'Paused')}">
+        <h2>Available Plans For You</h2>
+            <div th:each="planType : ${planTypes}">
+                <div th:if="${!#strings.equals(user.status, planType)}">
+                    <h3 th:text="${planType}">Plan Type</h3>
+                    <ul>
+                        <li th:each="benefit : ${planBenefits[__${planType}__]}" th:text="${benefit.description}">Benefit Description</li>
+                    </ul>
+                    <a th:href="@{/changeSubscription/{planType}(planType=${planType})}">Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a th:if = "${user != null}" th:href = "@{/home_page}">Back to home</a>
+</body>
+</html>
