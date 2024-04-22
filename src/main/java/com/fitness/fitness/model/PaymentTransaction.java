@@ -1,11 +1,13 @@
 package com.fitness.fitness.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class PaymentTransaction {
@@ -14,11 +16,19 @@ public class PaymentTransaction {
     private Long id;
     private String paymentMethod; // Metode pembayaran (Alipay, WeChat, Debit, Credit)
     private String transactionId; // ID transaksi dari Alipay atau WeChat
-    private String cardNumber; // Hanya digunakan untuk metode pembayaran kartu
-    private String userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "plan_id", nullable = false)
+    private Plan plan;
     private String planType;
+    private Double price; 
+    private Double duration;
     private String paymentType;
-    private Date purchasedDate;
+    private LocalDate purchasedDate;
+    private LocalDate activeDate;
+    
 
     // Constructor tanpa parameter
     public PaymentTransaction() {
@@ -49,20 +59,12 @@ public class PaymentTransaction {
         this.transactionId = transactionId;
     }
 
-    public String getCardNumber() {
-        return cardNumber;
+    public User getUser() {
+        return user;
     }
 
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getPlanType() {
@@ -81,12 +83,45 @@ public class PaymentTransaction {
         this.paymentType = paymentType;
     }
 
-    public Date getPurchasedDate() {
+    public LocalDate getPurchasedDate() {
         return purchasedDate;
     }
 
-    public void setPurchasedDate(Date purchasedDate) {
-        this.purchasedDate = purchasedDate;
+    public void setPurchasedDate(LocalDate today) {
+        this.purchasedDate = today;
+    }
+
+    public Plan getPlan() {
+        return plan;
+    }
+
+    public void setPlan(Plan plan) {
+        this.plan = plan;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+    public Double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Double duration) {
+        this.duration = duration;
+    }
+
+    public LocalDate getActiveDate() {
+        return activeDate;
+    }
+
+    public void setActiveDate(LocalDate activeDate) {
+        this.activeDate = activeDate;
     }
 
 }
+
+ 

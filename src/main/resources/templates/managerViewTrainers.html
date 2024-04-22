@@ -70,6 +70,7 @@
                     <th onclick="sortTable(5)">Phone</th>
                     <th onclick="sortTable(6)">Rank</th>
                     <th onclick="sortTable(7)">Since</th>
+                    <th>Edit</th> <!-- New column for the Edit button -->
                 </tr>
             </thead>
             <tbody>
@@ -82,6 +83,9 @@
                     <td th:text="${trainer.phone}"></td>
                     <td th:text="${trainer.rank}"></td>
                     <td th:text="${trainer.trainerSince}"></td>
+                    <td>
+                        <a th:href="@{'/editTrainer/' + ${trainer.id}}" class="btn btn-primary">Edit</a>
+                    </td>
                 </tr>
             </tbody>
         </table>

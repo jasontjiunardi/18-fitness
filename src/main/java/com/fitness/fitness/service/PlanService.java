@@ -7,9 +7,12 @@ import org.springframework.stereotype.Service;
 import com.fitness.fitness.model.Benefit;
 import com.fitness.fitness.model.Plan;
 import com.fitness.fitness.model.PlanDurationPrice;
+import com.fitness.fitness.model.User;
 import com.fitness.fitness.repository.PlanDurationPriceRepo;
 import com.fitness.fitness.repository.PlanRepo;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -24,7 +27,8 @@ public class PlanService {
     private PlanRepo planRepo;
     @Autowired
     private PlanDurationPriceRepo planDurationPriceRepo;
-    public List<Plan> findByPlanType(String planType) {
+
+    public Plan findByPlanType(String planType) {
         return planRepo.findByPlanType(planType);
     }
 
@@ -56,12 +60,13 @@ public class PlanService {
     public Map<String, List<Benefit>> findBenefitsByPlanType(String planType) {
         Map<String, List<Benefit>> planBenefits = new HashMap<>();
         
-        List<Benefit> benefits = planRepo.findByPlanType(planType).stream()
-                                          .flatMap(plan -> plan.getBenefits().stream())
-                                          .sorted(Comparator.comparing(Benefit::getDescription)) // Assuming you want to sort by description
-                                          .collect(Collectors.toList());
-        
-        planBenefits.put(planType, benefits);
+        Plan plan = planRepo.findByPlanType(planType);
+        if (plan != null) {
+            List<Benefit> benefits = plan.getBenefits().stream()
+                .sorted(Comparator.comparing(Benefit::getDescription))
+                .collect(Collectors.toList());
+            planBenefits.put(planType, benefits);
+        }
         
         return planBenefits;
     }
@@ -73,6 +78,71 @@ public class PlanService {
             planBenefits.put(planType, benefits);
         });
         return planBenefits;
+    }
+    public Map<String, Map<Integer,Double>> getStartingPricesAndDurationForAllPlanTypes() {
+        List<PlanDurationPrice> plans = planDurationPriceRepo.findAll();
+        Map<String, List<PlanDurationPrice>> plansByType = plans.stream()
+                .collect(Collectors.groupingBy(plan -> plan.getPlan().getPlanType()));
+
+        Map<String, Map<Integer,Double>> startingDurationPrices = new HashMap<>();
+        
+        plansByType.forEach((planType, planList) -> {
+            Map<Integer,Double> durationPrice = new HashMap<>();
+            double startingPrice = planList.stream()
+                    .mapToDouble(PlanDurationPrice::getPlanPrice)
+                    .min()
+                    .orElse(0.0);
+            Integer startingDuration = planList.stream().mapToInt(PlanDurationPrice::getPlanDuration).min().orElse(0);
+            durationPrice.put(startingDuration, startingPrice);
+            startingDurationPrices.put(planType, durationPrice);
+        });
+        return startingDurationPrices;
+    }
+    public Double specificPlanStartDurationStartPrice(String planType, User user) {
+        Map<String, Map<Integer, Double>> startingPrice = getStartingPricesAndDurationForAllPlanTypes();
+        Double price = 0.0;
+        Double priceComparator = 0.0;
+        if(startingPrice.containsKey(user.getStatus())){
+            Map<Integer, Double> startingDurationPrices = startingPrice.get(user.getStatus());
+            if (user != null && user.getActiveDate() != null) {
+                LocalDate activeDate = user.getActiveDate();
+                LocalDate today = LocalDate.now();
+                if (!activeDate.isBefore(today)) {
+                    Double remainingMonths = (double) ChronoUnit.MONTHS.between(today, activeDate);
+                    if (!startingDurationPrices.isEmpty()) {
+                        Integer duration = startingDurationPrices.keySet().iterator().next();
+                        if (duration > 0) { 
+                            double durationPrice = startingDurationPrices.get(duration);
+                            priceComparator = remainingMonths / duration * durationPrice;
+                            priceComparator = (double) (Math.round(priceComparator));
+                        }
+                    }
+                }
+            } 
+        }
+        if (startingPrice.containsKey(planType)) {
+            Map<Integer, Double> startingDurationPrices = startingPrice.get(planType);
+            if (user != null && user.getActiveDate() != null) {
+                LocalDate activeDate = user.getActiveDate();
+                LocalDate today = LocalDate.now();
+                if (!activeDate.isBefore(today)) {
+                    Double remainingMonths = (double) ChronoUnit.MONTHS.between(today, activeDate);
+                    if (!startingDurationPrices.isEmpty()) {
+                        Integer duration = startingDurationPrices.keySet().iterator().next();
+                        if (duration > 0) { 
+                            double durationPrice = startingDurationPrices.get(duration);
+                            price = remainingMonths / duration * durationPrice;
+                            price = (double) (Math.round(price));
+                            if(price<priceComparator){
+                                price = 0.0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    
+        return price;
     }
 }
     
