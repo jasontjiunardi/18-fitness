@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.fitness.fitness.model.User;
+import com.fitness.fitness.repository.UserRepo;
 import com.fitness.fitness.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -31,7 +32,6 @@ public class UserController {
     
     @GetMapping("/first_page")
     public String firstPage(Model model){
-
         return "firstpage";
     }
     @GetMapping("/register_user")
@@ -40,22 +40,44 @@ public class UserController {
         return "registeruserform";
     }
 
+    // @PostMapping("/register_user")
+    // public String registerUser(@ModelAttribute User user, HttpSession session) {
+    //     if (userService.verifyUser(user)) {
+    //         if(userService.emailValid(user.getEmail()) && userService.passwordValid(user.getPassword())){
+    //             userService.saveUser(user); 
+    //             session.setAttribute("user", user);
+    //             return "home";
+    //         }
+    //     }
+    //     return "registeruserform";
+    // }
+
     @PostMapping("/register_user")
     public String registerUser(@ModelAttribute User user, HttpSession session) {
         if (userService.verifyUser(user)) {
-            if(userService.emailValid(user.getEmail()) && userService.passwordValid(user.getPassword())){
-                userService.saveUser(user); 
+            if (userService.emailValid(user.getEmail()) && userService.passwordValid(user.getPassword())) {
+                // Generate a random 4-digit recovery code
+                int recoveryCode = 1000 + (int) (Math.random() * 9000);
+                
+                // Set the recovery code to the user object
+                user.setRecoveryCode(recoveryCode);
+                
+                // Save the user to the database
+                userService.saveUser(user);
+                
+                // Set the user object in session (if needed)
                 session.setAttribute("user", user);
+                
                 return "home";
             }
         }
         return "registeruserform";
     }
-    
+
     @GetMapping("/user_signin")
     public String showLoginForm(Model model) {
         User existingUser = new User();
-        model.addAttribute("user", existingUser ) ;
+        model.addAttribute("user", existingUser) ;
         return "sign";
     }
 

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.fitness.fitness.model.User;
 import com.fitness.fitness.repository.UserRepo;
 
-import jakarta.transaction.Transactional;
 
 @Service
 public class UserService {
