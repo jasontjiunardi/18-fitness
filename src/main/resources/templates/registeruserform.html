@@ -57,58 +57,6 @@
             color: #888;
             font-size: 12px;
         }
-
-        /* CSS styles for the pop-up message */
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 9999;
-            text-align: center;
-        }
-
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 9998;
-        }
-
-        #recoveryCode {
-            font-size: 28px;
-            font-weight: bold;
-            color: #4a154b;
-        }
-
-        .recovery-sentence {
-            color: red;
-            font-size: 12px;
-            margin-top: 10px;
-        }
-
-        button {
-            background-color: #4a154b; /* Purple button background */
-            color: #ffffff; /* White text color for button */
-            border: none;
-            padding: 10px 20px; /* Add padding */
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px; /* Add margin-top */
-        }
-
-        button:hover {
-            background-color: #310b33; /* Darker purple on hover */
-        }
     </style>
 </head>
 <body>
@@ -122,42 +70,7 @@
         <span>(Email must be in the format example@gmail.com)</span><br />
         Birth Date: <input type="date" th:field="*{dob}" required> <br />
         Phone Number: <input type="tel" th:field="*{phoneNumber}" required> <br />
-        <input type="submit" value="Register" onclick="showRecoveryCodePopup(event)" />
+        <input type="submit" value="Register" />
     </form>
-
-    <!-- Pop-up message container and overlay -->
-    <div class="popup" id="recoveryCodePopup">
-        <h2>Your Recovery Code</h2>
-        <p id="recoveryCode"></p>
-        <p class="recovery-sentence">Please keep this code somewhere safe as it will be used in the event that you forget your password.</p>
-        <button onclick="closeRecoveryCodePopup()">Close</button>
-    </div>
-    <div class="overlay" id="overlay"></div>
-
-    <!-- JavaScript to generate recovery code and display pop-up -->
-    <script>
-        function showRecoveryCodePopup(event) {
-            event.preventDefault(); // Prevent form submission
-            
-            // Generate a random 4-digit recovery code
-            var recoveryCode = Math.floor(1000 + Math.random() * 9000);
-            
-            // Display the recovery code in the pop-up message
-            document.getElementById("recoveryCode").innerText = recoveryCode;
-            
-            // Show the pop-up message and overlay
-            document.getElementById("recoveryCodePopup").style.display = "block";
-            document.getElementById("overlay").style.display = "block";
-        }
-
-        function closeRecoveryCodePopup() {
-            // Hide the pop-up message and overlay
-            document.getElementById("recoveryCodePopup").style.display = "none";
-            document.getElementById("overlay").style.display = "none";
-
-            // Redirect to the home page
-            window.location.href = "/home_page";
-        }
-    </script>
 </body>
 </html>
