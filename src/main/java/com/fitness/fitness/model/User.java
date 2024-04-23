@@ -2,8 +2,7 @@ package com.fitness.fitness.model;
 
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,13 +12,16 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int userId;
     private String name;
     private String username;
     private String password;
@@ -34,17 +36,15 @@ public class User {
     private String profilePictureUrl;
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<PaymentTransaction> PaymentTransaction = new HashSet<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Appointment> Appointment = new HashSet<>();
+    private List<Appointment> appointments;
 
     public User() {
     }
 
-    public User(int id, String name, String username, String password, String email, Date dob, String phoneNumber,
+
+    public User(int userId, String name, String username, String password, String email, Date dob, String phoneNumber,
             String status, LocalDate activeDate, int recoveryCode, String cardNumber) {
-        this.id = id;
+        this.userId = userId;
         this.name = name;
         this.username = username;
         this.password = password;
@@ -57,6 +57,7 @@ public class User {
         this.cardNumber = cardNumber;
         this.profilePictureUrl = profilePictureUrl;
     }
+    
     public int getRecoveryCode() {
         return recoveryCode;
     }
@@ -65,11 +66,11 @@ public class User {
         this.recoveryCode = recoveryCode;
     }
 
-    public int getId() {
-        return id;
+    public int getUserId() {
+        return userId;
     }
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
     public String getName() {
         return name;
