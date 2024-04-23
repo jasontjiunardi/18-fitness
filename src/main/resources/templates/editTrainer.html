@@ -1,10 +1,16 @@
-<!-- Form for updating trainer information -->
-<form id="updateTrainerForm" th:action="@{/updateTrainer}" method="post" onsubmit="return validateUpdate()">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit trainert</title>
+</head>
+<body>
+    <!-- Form for updating trainer information -->
+    <form method="POST" action="/updateTrainer" th:object="${trainer}" enctype="multipart/form-data">
     <!-- Hidden field for trainer ID -->
     <input type="hidden" name="id" th:value="${trainer.id}" />
 
-    <!-- Hidden field for trainer image -->
-    <input type="hidden" name="image" th:value="${trainer.image}" />
 
     <!-- Trainer information fields -->
     <div class="form-group">
@@ -34,6 +40,11 @@
     <div class="form-group">
         <label for="trainerSince">Trainer Since:</label>
         <input type="date" class="form-control" id="trainerSince" name="trainerSince" th:value="${trainer.trainerSince}" />
+    </div>
+    <div class="form-group">
+        <input type="hidden" th:field="${trainer.image}"/>
+        <label for="image">Profile Picture:</label>
+        <input type="file" id="image" name="image" accept="image/png, image/jpg"> 
     </div>
     
     <!-- Confirm changes button -->
@@ -67,3 +78,6 @@
         }
     }
 </script>
+
+</body>
+</html>

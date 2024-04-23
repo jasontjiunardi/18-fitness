@@ -132,5 +132,12 @@ public class Trainer {
         this.reviews = reviews;
     }
 
+    @Override
+    public String toString() {
+        return "Trainer [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender + ", dob=" + dob
+                + ", email=" + email + ", image=" + image + ", phone=" + phone + ", rank=" + rank + ", trainerSince="
+                + trainerSince + ", plans=" + plans + "]";
+    }
+
 
 }

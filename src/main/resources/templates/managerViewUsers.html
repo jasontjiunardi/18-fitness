@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Users</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff; /* White background */
+            color: #4a154b; /* Purple text color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 36px; /* Larger font size for heading */
+            color: #4a154b; /* Purple heading color */
+            text-align: center;
+            margin-bottom: 20px; /* Reduced margin */
+        }
+
+        .btn-primary.add-btn {
+            background-color: #4a154b; /* Purple button background */
+            border-color: #4a154b; /* Purple border color */
+            color: #ffffff; /* White text color */
+            position: absolute; /* Positioning absolute */
+            top: 20px; /* 20px from top */
+            right: 20px; /* 20px from right */
+        }
+
+        .btn-primary.add-btn:hover {
+            background-color: #310b33; /* Darker purple on hover */
+            border-color: #310b33; /* Darker purple border color */
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px; /* Increased margin */
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #4a154b; /* Purple border */
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #4a154b; /* Purple header background */
+            color: #ffffff; /* White text color */
+            cursor: pointer;
+        }
+
+        .table th:hover {
+            background-color: #310b33; /* Darker purple on hover */
+        }
+
+        .rank-stars {
+            display: flex;
+        }
+
+        .rank-stars i {
+            color: gold; /* Gold star color */
+            margin-right: 2px;
+        }
+
+        .User-img {
+            width: 100px; /* Fixed width */
+            height: 100px; /* Fixed height */
+            border-radius: 50%; /* Circular border radius */
+            border: 2px solid #4a154b; /* Purple border */
+            padding: 2px; /* Added padding for better appearance */
+            object-fit: cover; /* Maintain aspect ratio and cover container */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Users List</h1>
+        <table class="table table-striped table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th onclick="sortTable(0, 'number')">ID</th>
+                    <th onclick="sortTable(1, 'string')">Name</th>
+                    <th onclick="sortTable(2, 'string')">Username</th>
+                    <th onclick="sortTable(3, 'string')">Gender</th>
+                    <th onclick="sortTable(4, 'string')">Date of Birth</th>
+                    <th onclick="sortTable(5, 'string')">Email</th>
+                    <th onclick="sortTable(6, 'string')">Phone</th>
+                    <th onclick="sortTable(7, 'number')">Status</th>
+                    <th onclick="sortTable(8, 'string')">active Date</th>
+                    <th>Profile Picture</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="User : ${Users}">
+                    <td th:text="${User.id}"></td>
+                    <td th:text="${User.name}"></td>
+                    <td th:text="${User.username}"></td>
+                    <td th:text="${User.gender}"></td>
+                    <td th:text="${User.dob}"></td>
+                    <td th:text="${User.email}"></td>
+                    <td th:text="${User.phoneNumber}"></td>
+                    <td th:text="${User.status}"></td>
+                    <td th:text="${User.activeDate}"></td>
+                    <td> <img th:src="@{'images/' + ${User.profilePictureUrl}}" alt="User image" class="User-img"/></td>
+                    <td><button onclick="sendNotification('${User.email}')">Send Marketing Notification</button></td>
+                </tr>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function sortTable(n, type) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.querySelector(".table");
+            switching = true;
+            dir = "asc"; 
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    
+                    if (type === 'number') {
+                        // Parse integers for comparison
+                        x = parseInt(x.textContent.trim());
+                        y = parseInt(y.textContent.trim());
+                    } else {
+                        x = x.textContent.toLowerCase();
+                        y = y.textContent.toLowerCase();
+                    }
+                    
+                    if (dir == "asc") {
+                        if (x > y) {
+                            shouldSwitch= true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x < y) {
+                            shouldSwitch= true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount ++;      
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Convert rank numbers to stars
+            updateStars();
+        });
+
+        
+    </script>
+</body>
+</html>

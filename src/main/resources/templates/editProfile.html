@@ -7,7 +7,8 @@
 </head>
 <body>
     <h1>Edit Profile</h1>
-    <form method="POST" action="/edit_profile" th:object="${user}">
+    <form method="POST" action="/edit_profile" th:object="${user}" enctype="multipart/form-data">
+
         <!-- Hidden field to send user's email for identification -->
         <input type="hidden" name="email" th:value="${user.email}">
         
@@ -23,9 +24,10 @@
         <label for="cardNumber">Credit Card Number:</label>
         <input type="text" id="cardNumber" name="cardNumber" th:value="${user.cardNumber}" required pattern="\d{16}" title="Credit card number must be 16 digits" maxlength="16"><br>
     
-        <label for="profilePicture">Profile Picture:</label>
-        <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
-
+        <input type="hidden" th:field="*{image}"/>
+        <label for="image">Profile Picture:</label>
+        <input type="file" id="image" name="image" accept="image/png, image/jpg"> 
+        
         <button type="submit">Save Changes</button>
     </form>
     
