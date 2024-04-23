@@ -10,8 +10,21 @@ import com.fitness.fitness.repository.ManagerRepo;
 public class ManagerService {
 
     @Autowired
-    private ManagerRepo ManagerRepo;
+    private ManagerRepo managerRepo;
+
+    public ManagerService(ManagerRepo managerRepo){
+        this.managerRepo = managerRepo;
+    }
+
+    public boolean managerLogin(Manager manager) {
+        Manager m = managerRepo.findByEmail(manager.getEmail());
+        if (m != null && m.getPassword().equals(manager.getPassword())) {
+            return true;
+        }
+        return false;
+    }
+
     public Manager manageraddAppointment(Manager manager) {
-        return ManagerRepo.save(manager);
+        return managerRepo.save(manager);
     }
 }
