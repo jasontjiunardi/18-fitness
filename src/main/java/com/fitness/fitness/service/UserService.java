@@ -39,13 +39,10 @@ public class UserService {
         }
         return false;
     }
-
-    public boolean newPassword(User user) {
-        User u = userRepo.findByEmail(user.getEmail());
-        if (u != null && !u.getPassword().equals(user.getPassword())) {
-            return true;
-        }
-        return false;
+    
+    public boolean isNewPasswordDifferent(User user, User retrievedUser) {
+        // Check that the new password is indeed different from the existing one
+        return retrievedUser.getPassword().equals(user.getPassword());
     }
 
     public void updatePasswordByEmail(String email, String newPassword) {

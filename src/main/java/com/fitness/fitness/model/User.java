@@ -2,8 +2,7 @@ package com.fitness.fitness.model;
 
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,12 +13,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int userId;
     private String name;
     private String username;
     private String password;
@@ -32,23 +32,21 @@ public class User {
     private int recoveryCode;
     private String cardNumber;
     private String profilePictureUrl;
-    private LocalDate pauseStartDate;
-    private LocalDate pauseEndDate;
-    private long daysPaused;
-    private int pauseCount;
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<PaymentTransaction> PaymentTransaction = new HashSet<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Appointment> Appointment = new HashSet<>();
+    private List<Appointment> appointments;
 
     public User() {
     }
 
-    public User(int id, String name, String username, String password, String email, Date dob, String phoneNumber,
+    
+    // Define one-to-one relationship with Plan
+    @OneToOne(mappedBy = "user")
+    private Plan plan;
+
+    public User(int userId, String name, String username, String password, String email, Date dob, String phoneNumber,
             String status, LocalDate activeDate, int recoveryCode, String cardNumber) {
-        this.id = id;
+        this.userId = userId;
         this.name = name;
         this.username = username;
         this.password = password;
@@ -61,6 +59,7 @@ public class User {
         this.cardNumber = cardNumber;
         this.profilePictureUrl = profilePictureUrl;
     }
+    
     public int getRecoveryCode() {
         return recoveryCode;
     }
@@ -69,11 +68,11 @@ public class User {
         this.recoveryCode = recoveryCode;
     }
 
-    public int getId() {
-        return id;
+    public int getUserId() {
+        return userId;
     }
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
     public String getName() {
         return name;
@@ -137,38 +136,6 @@ public class User {
     
     public void setProfilePictureUrl(String profilePictureUrl) {
         this.profilePictureUrl = profilePictureUrl;
-    }
-
-    public LocalDate getPauseStartDate() {
-        return pauseStartDate;
-    }
-
-    public void setPauseStartDate(LocalDate pauseStartDate) {
-        this.pauseStartDate = pauseStartDate;
-    }
-
-    public LocalDate getPauseEndDate() {
-        return pauseEndDate;
-    }
-
-    public void setPauseEndDate(LocalDate pauseEndDate) {
-        this.pauseEndDate = pauseEndDate;
-    }
-
-    public long getDaysPaused() {
-        return daysPaused;
-    }
-
-    public void setDaysPaused(long daysPaused) {
-        this.daysPaused = daysPaused;
-    }
-
-    public int getPauseCount() {
-        return pauseCount;
-    }
-
-    public void setPauseCount(int pauseCount) {
-        this.pauseCount = pauseCount;
     }
     
 }

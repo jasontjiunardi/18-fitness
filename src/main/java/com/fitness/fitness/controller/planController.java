@@ -131,8 +131,7 @@ public class planController {
                 // Handle the case where user is not logged in
                 return "redirect:/login"; 
             }
-    
-            
+                
             PaymentTransaction paymentTransaction = new PaymentTransaction();
             if(loggedInUser.getStatus().equals(planType)){
                 long durationChosen = Integer.parseInt(duration.split(" ")[0]);

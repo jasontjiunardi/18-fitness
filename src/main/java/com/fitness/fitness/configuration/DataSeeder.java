@@ -3,9 +3,12 @@ package com.fitness.fitness.configuration;
 import com.fitness.fitness.model.Benefit;
 import com.fitness.fitness.model.Plan;
 import com.fitness.fitness.model.PlanDurationPrice;
+import com.fitness.fitness.model.Trainer;
 import com.fitness.fitness.repository.BenefitRepo;
 import com.fitness.fitness.repository.PlanDurationPriceRepo;
 import com.fitness.fitness.repository.PlanRepo;
+import com.fitness.fitness.repository.TrainerRepo;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,9 +20,16 @@ import java.util.Set;
 @Configuration
 public class DataSeeder {
 
+    /**
+     * @param planRepo
+     * @param benefitRepo
+     * @param planDurationPriceRepo
+     * @param trainerRepo
+     * @return
+     */
     @Bean
     @Transactional
-    CommandLineRunner initDatabase(PlanRepo planRepo, BenefitRepo benefitRepo, PlanDurationPriceRepo planDurationPriceRepo) {
+    CommandLineRunner initDatabase(PlanRepo planRepo, BenefitRepo benefitRepo, PlanDurationPriceRepo planDurationPriceRepo, TrainerRepo trainerRepo) {
         return args -> {
             // Only seed data if no benefits exist
             if (planRepo.count() == 0) {
@@ -76,7 +86,36 @@ public class DataSeeder {
                     plan.setBenefits(benefits);
                     planRepo.save(plan);
                 });
-            }
+
+                Trainer trainerRank3 = new Trainer( "Chris Bumstead", 27, "Male", "1997-01-01", "cbum@gmail.com", "trainer1.jpg", "188-888-888", 5, "2024-01-01");
+                Trainer trainerRank4 = new Trainer( "Noel Deyzel", 27, "Male", "1997-01-01", "cbum@gmail.com", "trainer2.jpg", "188-888-888", 4, "2024-01-01");
+                Trainer trainerRank5 = new Trainer( "Sam Sulek", 27, "Male", "1997-01-01", "cbum@gmail.com", "trainer3.jpg", "188-888-888", 3, "2024-01-01");
+    
+                trainerRepo.save(trainerRank3);
+                trainerRepo.save(trainerRank4);
+                trainerRepo.save(trainerRank5);
+
+
+                planRepo.findAll().forEach(plan -> {
+                    Set<Trainer> trainers = new HashSet<>();
+                    switch (plan.getPlanType()) {
+                        case "Silver":
+                            trainers.add(trainerRank3);
+                            break;
+                        case "Gold":
+                            trainers.add(trainerRank3);
+                            trainers.add(trainerRank4);
+                            break;
+                        case "Diamond":
+                            trainers.add(trainerRank3);
+                            trainers.add(trainerRank4);
+                            trainers.add(trainerRank5);
+                            break;
+                    }
+                    plan.setTrainers(trainers);
+                    planRepo.save(plan);
+            });
         };
-    }
+    };
+}
 }
