@@ -1,8 +1,5 @@
 package com.fitness.fitness.controller;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,8 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import com.fitness.fitness.model.Manager;
 import com.fitness.fitness.model.Trainer;
 import com.fitness.fitness.model.User;
 import com.fitness.fitness.repository.TrainerRepo;

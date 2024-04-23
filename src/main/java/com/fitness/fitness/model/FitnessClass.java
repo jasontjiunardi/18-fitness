@@ -2,6 +2,8 @@ package com.fitness.fitness.model;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,64 +19,55 @@ import jakarta.persistence.OneToMany;
 public class FitnessClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String fitnessclassname;
-    private String classdescription;
-    private String classduration;
+    private int classId;
+    private String className;
+    private String classDescription;
+    private String classDuration;
+    
+    @OneToMany(mappedBy = "fitnessClass", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Appointment> appointments;
+
+    public FitnessClass(String className, String classDescription, String classDuration) {
+        this.className = className;
+        this.classDescription = classDescription;
+        this.classDuration = classDuration;
+
+    }
 
     public FitnessClass(){
         
     }
-    
-    
-    public FitnessClass(int id, String fitnessclassname, String classdescription, String classduration) {
-        this.id = id;
-        this.fitnessclassname = fitnessclassname;
-        this.classdescription = classdescription;
-        this.classduration = classduration;
+
+    public int getClassId() {
+        return classId;
     }
 
-
-    public int getId() {
-        return id;
+    public void setClassId(int classId) {
+        this.classId = classId;
     }
 
-
-    public void setId(int id) {
-        this.id = id;
+    public String getClassName() {
+        return className;
     }
 
-
-    public String getFitnessclassname() {
-        return fitnessclassname;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
-
-    public void setFitnessclassname(String fitnessclassname) {
-        this.fitnessclassname = fitnessclassname;
+    public String getClassDescription() {
+        return classDescription;
     }
 
-
-    public String getClassdescription() {
-        return classdescription;
+    public void setClassDescription(String classDescription) {
+        this.classDescription = classDescription;
     }
 
-
-    public void setClassdescription(String classdescription) {
-        this.classdescription = classdescription;
+    public String getClassDuration() {
+        return classDuration;
     }
 
-
-    public String getClassduration() {
-        return classduration;
+    public void setClassDuration(String classDuration) {
+        this.classDuration = classDuration;
     }
-
-
-    public void setClassduration(String classduration) {
-        this.classduration = classduration;
-    }
-
-
-    
 }
 
