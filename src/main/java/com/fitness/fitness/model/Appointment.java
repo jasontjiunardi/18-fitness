@@ -21,6 +21,9 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "appointment_id") 
     private int appointmentId;
+    public Appointment() {
+    }
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 

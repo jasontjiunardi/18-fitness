@@ -25,6 +25,9 @@ public class Plan {
     private String planType;
     private String planDetails; 
 
+    public Plan() {
+    }
+
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<PlanDurationPrice> planDurationPrices = new HashSet<>();
 
@@ -56,13 +59,6 @@ public class Plan {
     public void setTrainers(Set<Trainer> trainers) {
         this.trainers = trainers;
     }
-
-    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
-    private List<User> users = new ArrayList<>();
-
-    public Plan() {
-    }
-
 
     public Plan(String planType, String planDetails) {
         this.planType = planType;
