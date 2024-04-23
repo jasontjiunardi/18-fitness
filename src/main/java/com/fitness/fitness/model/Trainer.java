@@ -1,6 +1,8 @@
 package com.fitness.fitness.model;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -8,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
 
@@ -30,13 +33,23 @@ public class Trainer {
     public Trainer() {
     }
     
+    @ManyToMany(mappedBy = "trainers")
+    private Set<Plan> plans = new HashSet<>();
+
+    // Getter and setter for plans
+    public Set<Plan> getPlans() {
+        return plans;
+    }
+
+    public void setPlans(Set<Plan> plans) {
+        this.plans = plans;
+    }
     // Relationship with reviews
     @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL)
     private List<Review> reviews;
     
-    public Trainer(int id, String name, int age, String gender, String dob, String email, String image, String phone, int rank,
+    public Trainer(String name, int age, String gender, String dob, String email, String image, String phone, int rank,
             String trainerSince) {
-        this.id = id;
         this.name = name;
         this.age = age;
         this.gender = gender;

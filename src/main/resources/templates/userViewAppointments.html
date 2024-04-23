@@ -14,6 +14,7 @@
                 <th>Trainer Name</th>
                 <th>Class Name</th>
                 <th>Date</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -22,9 +23,20 @@
                 <td th:text="${@appointmentController.getTrainerNameByAppointmentId(appointmentId)}">-</td>
                 <td th:text="${@appointmentController.getClassNameByAppointmentId(appointmentId)}">-</td>
                 <td th:text="${@appointmentController.getDateByAppointmentId(appointmentId)}">-</td>
+                <td th:text="${@appointmentController.getStatusByAppointmentId(appointmentId)}">-</td>
+                <!-- Conditionally render the Edit button with form -->
+                <td th:if="${@appointmentController.getStatusByAppointmentId(appointmentId) != 'inactive'}">
+                    <form th:action="@{/edit_appointment_page(appointmentId=${appointmentId})}" method="get">
+                        <button type="submit" class="btn btn-primary">Edit</button>
+                    </form>
+                </td>
             </tr>
         </tbody>
     </table>
+
+    <form method="GET" action="/home_page">
+        <a th:href="@{/home_page}"><button>Home Page</button></a>
+    </form>
+
 </body>
 </html>
-

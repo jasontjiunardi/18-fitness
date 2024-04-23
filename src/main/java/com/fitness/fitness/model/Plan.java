@@ -10,8 +10,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -21,6 +24,9 @@ public class Plan {
     private int id;
     private String planType;
     private String planDetails; 
+
+    public Plan() {
+    }
 
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<PlanDurationPrice> planDurationPrices = new HashSet<>();
@@ -35,10 +41,24 @@ public class Plan {
         inverseJoinColumns = @JoinColumn(name = "benefit_id")
     )
     private Set<Benefit> benefits = new HashSet<>();
+    
 
-    public Plan() {
+    @ManyToMany
+    @JoinTable(
+        name = "plan_trainer",
+        joinColumns = @JoinColumn(name = "plan_id"),
+        inverseJoinColumns = @JoinColumn(name = "trainer_id")
+    )
+    private Set<Trainer> trainers = new HashSet<>();
+
+    // Getter and setter for trainers
+    public Set<Trainer> getTrainers() {
+        return trainers;
     }
 
+    public void setTrainers(Set<Trainer> trainers) {
+        this.trainers = trainers;
+    }
 
     public Plan(String planType, String planDetails) {
         this.planType = planType;

@@ -1,29 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Fitness Classes</title>
-    <link rel="stylesheet" type="text/css" href="fitnessClassstyle.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff; /* White background */
+            color: #4a154b; /* Purple text color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 36px; /* Larger font size for heading */
+            color: #4a154b; /* Purple heading color */
+            text-align: center;
+            margin-bottom: 50px; /* Added margin to bottom */
+        }
+
+        ul {
+            list-style-type: none; /* No bullets */
+            padding: 0;
+        }
+
+        .fitness-class {
+            background-color: #ffffff; /* White background for each class */
+            border: 1px solid #4a154b; /* Purple border */
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 10px; /* Space between class entries */
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .fitness-class-details span {
+            font-weight: bold; /* Make labels bold */
+            color: #4a154b; /* Purple text color */
+        }
+
+        button {
+            background-color: #4a154b; /* Purple button background */
+            color: #ffffff; /* White text color for button */
+            padding: 10px 20px;
+            border: none; /* No border */
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px; /* Larger font size for readability */
+        }
+
+        button:hover {
+            background-color: #310b33; /* Darker purple on hover */
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>All Fitness Classes</h1>
         <ul>
-            <li th:each="fitnessClass : ${allClasses}" class="fitness-class">
+            <!-- Check if the list of classes is not empty -->
+            <li th:unless="${allClasses.isEmpty()}" th:each="fitnessClass : ${allClasses}" class="fitness-class">
                 <div class="fitness-class-details">
-                    <span>Name:</span> <span th:text="${fitnessClass.fitnessclassname}"></span><br>
-                    <span>Description:</span> <span th:text="${fitnessClass.classdescription}"></span><br>
-                    <span>Duration:</span> <span th:text="${fitnessClass.classduration}"></span><br>
-                    <!-- Add "Book Appointment" button -->
-                    <!-- Modify the form around the "Book Appointment" button to submit class information -->
-                    <form action="/bookAppointment" method="GET">
-                        <input type="hidden" name="classId" th:value="${fitnessClass.id}" />
-                        <input type="hidden" name="className" th:value="${fitnessClass.fitnessclassname}" />
-                        <!-- Add other hidden fields for class description, duration, etc. if needed -->
-                        <button type="submit">Book Appointment</button>
-                    </form>
+                    <span>Name:</span> <span th:text="${fitnessClass.className}">Class Name</span><br>
+                    <span>Description:</span> <span th:text="${fitnessClass.classDescription}">Class Description</span><br>
+                    <span>Duration:</span> <span th:text="${fitnessClass.classDuration}">Class Duration</span><br>
                 </div>
+            </li>
+            <!-- Message to show if the list is empty -->
+            <li th:if="${allClasses.isEmpty()}">
+                <div>No fitness classes are currently available.</div>
             </li>
         </ul>
     </div>

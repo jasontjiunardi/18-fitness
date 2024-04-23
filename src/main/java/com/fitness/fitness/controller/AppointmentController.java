@@ -1,26 +1,19 @@
 package com.fitness.fitness.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
+import java.time.LocalDate;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
-
-import com.fitness.fitness.model.Appointment;
-import com.fitness.fitness.model.FitnessClass;
-import com.fitness.fitness.model.Trainer;
 import com.fitness.fitness.model.User;
 import com.fitness.fitness.service.AppointmentService;
 import com.fitness.fitness.service.FitnessClassService;
 import com.fitness.fitness.service.TrainerService;
 import com.fitness.fitness.service.UserService;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @Controller
@@ -42,14 +35,16 @@ public class AppointmentController {
 
     @GetMapping("/userAppointment")
     public String userAppointment(Model model, @SessionAttribute("user") User user) {
+        // Update the status of past appointments to "inactive"
+        appointmentService.deactivatePastAppointments();
+    
         User retrievedUser = userService.getUserByEmail(user.getEmail());
-        model.addAttribute("retrievedUser", retrievedUser); // add rertivedUser to the model as an attribute gitu
-        int userId = retrievedUser.getUserId(); // id dr email dia
+        model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
+        int userId = retrievedUser.getUserId(); // ID from user email
+    
         List<Integer> appointmentIds = appointmentService.getAppointmentIdsByUserId(userId);
-        
-
         model.addAttribute("appointmentIds", appointmentIds);
-
+    
         return "userViewAppointments"; 
     }
 
@@ -60,9 +55,14 @@ public class AppointmentController {
     public String getClassNameByAppointmentId(int appointmentId) {
         return appointmentService.getClassNameByAppointmentId(appointmentId);
     }
-    public Date getDateByAppointmentId(int appointmentId){
+    public LocalDate getDateByAppointmentId(int appointmentId){
         return appointmentService.getDateByAppointmentId(appointmentId);
     }
+
+    public String getStatusByAppointmentId(int appointmentId){
+        return appointmentService.getStatusByAppointmentId(appointmentId);
+    }
+
     
     // // Method to fetch trainer ID by appointment ID for Thymeleaf template JGN DI HAPUS KERJA KERAS 6 JAM
     // public int getTrainerIdByAppointmentId(int appointmentId) {
