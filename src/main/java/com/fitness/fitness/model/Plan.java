@@ -1,6 +1,7 @@
 package com.fitness.fitness.model;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -21,6 +22,7 @@ import java.util.Set;
 public class Plan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+  
     private int id;
     private String planType;
     private String planDetails; 
