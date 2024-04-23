@@ -11,14 +11,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.fitness.fitness.model.Manager;
 import com.fitness.fitness.model.Trainer;
-import com.fitness.fitness.model.User;
 import com.fitness.fitness.repository.TrainerRepo;
 import com.fitness.fitness.service.ManagerService;
 import com.fitness.fitness.service.TrainerService;
 import com.fitness.fitness.service.UserService;
+
+import jakarta.servlet.http.HttpSession;
 
 
 
@@ -85,35 +87,37 @@ public class ManagerController {
     //     return "manager-add-appointment";
     // }
 
-    //arden buat untuk data manager pas signin jdi perlu ada email sm password di manager model
+
     @GetMapping("/manager_signin")
     public String showLoginForm(Model model) {
-        User existingUser = new User();
-        model.addAttribute("user", existingUser ) ;
+        Manager existingManager = new Manager();
+        model.addAttribute("manager", existingManager);
         return "sign_manager";
     }
-    
+
     @PostMapping("/manager_signin")
-    public String showMangagerHomePage(){
-        return "manager_home";
+    public String login(@ModelAttribute Manager manager, HttpSession session) {
+        if (managerService.managerLogin(manager)) {
+            session.setAttribute("manager", manager);
+            return "manager_home";
+        }
+        return "login_fail";
     }
 
     @GetMapping("/managerViewTrainers")
-    public String showTrainers(Model model) {
+    public String showTrainers(Model model, @SessionAttribute("manager") Manager manager) {
         model.addAttribute("trainers", trainerService.getAllTrainers());
         return "managerViewTrainers";
     }
   
-    
-
     @GetMapping("/managerAddTrainer")
-    public String showAddTrainerForm(Model model) {
+    public String showAddTrainerForm(Model model, @SessionAttribute("manager") Manager manager) {
         model.addAttribute("trainer", new Trainer());
         return "managerAddTrainer";
     }
 
     @PostMapping("/managerSaveTrainer")
-    public String saveTrainer(@ModelAttribute("trainer") Trainer trainer, Model model) {
+    public String saveTrainer(@ModelAttribute("trainer") Trainer trainer, Model model, @SessionAttribute("manager") Manager manager) {
         trainerService.saveTrainer(trainer);
         return "redirect:/managerViewTrainers";
     }
