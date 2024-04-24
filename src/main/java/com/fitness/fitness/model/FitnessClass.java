@@ -69,5 +69,10 @@ public class FitnessClass {
     public void setClassDuration(String classDuration) {
         this.classDuration = classDuration;
     }
+
+    public void getFitnessClassId(int classId2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getFitnessClassId'");
+    }
 }
 

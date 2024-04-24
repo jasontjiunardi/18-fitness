@@ -4,11 +4,127 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
+    <style>
+        /* General Body Styles */
+body {
+    font-family: Arial, sans-serif; /* Using a modern font */
+    background-color: #f8f8fffb; /* Very light purple for a soft background */
+    color: #333; /* Dark grey color for text to maintain readability */
+    margin: 20px;
+    padding: 0;
+    line-height: 1.6;
+}
+
+h1 {
+    color: #4a154b; /* Subtle purple for header */
+    text-align: center;
+}
+
+/* Profile Picture Styles */
+.profile-picture-box {
+    width: 200px;
+    height: 200px;
+    border: 3px solid #4a154b; /* Light purple border */
+    border-radius: 50%; /* Circular profile pictures */
+    overflow: hidden;
+    display: block; /* Center the profile picture */
+    margin: 0 auto 20px; /* Center and space below */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+}
+
+.profile-picture-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image fits well */
+}
+
+.profile-container {
+            text-align: center; /* Centers the content */
+            margin-bottom: 20px; /* Spacing below the container */
+        }
+
+/* Form and Buttons Styles */
+form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1); /* Soft shadow for depth */
+    margin: 10px auto; /* Center forms with automatic horizontal margins */
+    width: 90%; /* Responsive width */
+    max-width: 500px; /* Maximum width for larger screens */
+}
+
+input[type="text"], input[type="date"], input[type="email"] {
+    width: calc(100% - 22px); /* Full width minus padding */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 4px;
+}
+
+input[type="submit"], button {
+    background-color: #4a154b; /* A deeper purple for buttons */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Smooth transition for button hover */
+}
+
+input[type="submit"]:hover, button:hover {
+    background-color: #4a154b; /* A slightly darker purple on hover */
+}
+
+a {
+    color: #4a154b; /* Matching link colors to the header */
+    text-decoration: none; /* No underline by default */
+}
+
+a:hover {
+    text-decoration: underline; /* Underline on hover for clarity */
+}
+
+.button-link {
+            display: block; 
+            background-color: #4a154b; /* Purple background for the button */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none; /* Removes underline */
+            margin-top: 10px; /* Space between image and button */
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+        }
+
+        .button-link:hover {
+            background-color: #4a154b; /* Darker purple on hover */
+        }
+label {
+    display: block; /* Makes labels block-level for cleaner form alignment */
+    margin-bottom: 5px;
+}
+
+    </style>
 </head>
 <body>
     <h1>Edit Profile</h1>
-    <form method="POST" action="/edit_profile" th:object="${user}" enctype="multipart/form-data">
 
+
+    <!-- Profile picture and change button in a single container -->
+    <div class="profile-container">
+        <!-- Display current profile picture if available -->
+        <div class="profile-picture-box">
+            <img th:src="@{'/images/' + ${user.image}}" alt="User Image"/>
+        </div>
+        <a href="/choose_profile_picture" class="button-link">Change Profile Picture</a>
+    </div>
+
+    <form method="POST" action="/remove_profile_picture">
+        <button type="submit">Remove Profile Picture</button>
+    </form>
+
+
+    <form method="POST" action="/edit_profile" th:object="${user}">
         <!-- Hidden field to send user's email for identification -->
         <input type="hidden" name="email" th:value="${user.email}">
         
@@ -23,14 +139,15 @@
         
         <label for="cardNumber">Credit Card Number:</label>
         <input type="text" id="cardNumber" name="cardNumber" th:value="${user.cardNumber}" required pattern="\d{16}" title="Credit card number must be 16 digits" maxlength="16"><br>
-    
-        <input type="hidden" th:field="*{image}"/>
-        <label for="image">Profile Picture:</label>
-        <input type="file" id="image" name="image" accept="image/png, image/jpg"> 
-        
+
         <button type="submit">Save Changes</button>
     </form>
-    
+
+    <!-- Button to redirect to the password reset page -->
+    <form method="GET" action="/reset_password">
+        <input type="hidden" name="email" th:value="${user.email}">
+        <button type="submit">Reset Password</button>
+    </form>
     
     <!-- Link to go back to the profile page -->
     <form method="GET" action="/profile">

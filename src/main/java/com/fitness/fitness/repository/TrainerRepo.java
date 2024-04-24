@@ -14,7 +14,7 @@ public interface TrainerRepo extends JpaRepository<Trainer, Integer>{
     List<Trainer> findAll();
     Trainer findByName(String name);
     List<Trainer> findByRank(int rank);
-    
+
 }
 
     

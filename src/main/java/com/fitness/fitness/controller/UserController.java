@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fitness.FileUploadUtil;
+// import com.fitness.FileUploadUtil;
 import com.fitness.fitness.model.User;
 import com.fitness.fitness.repository.UserRepo;
 import com.fitness.fitness.service.UserService;
@@ -156,20 +156,20 @@ public class UserController {
     }
 
     @PostMapping("edit_profile")
-    public String userEditInformation(@RequestParam("image") MultipartFile multipartFile, @ModelAttribute User user, Model model) throws IOException {
-        try {
-            if (!multipartFile.isEmpty()) {
-                String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-                user.setimage(fileName);
-                User updatedUser = userService.saveUser(user);
-                String uploadDir = "images/" + updatedUser.getUserId();
-                FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-            } else {
+    public String userEditInformation( @ModelAttribute User user, Model model) { // @RequestParam("image") MultipartFile multipartFile harusnya ada ini su
+        // try {
+        //     if (!multipartFile.isEmpty()) {
+        //         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        //         user.setimage(fileName);
+        //         User updatedUser = userService.saveUser(user);
+        //         String uploadDir = "images/" + updatedUser.getUserId();
+        //         FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+        //     } else {
                 userService.saveUser(user);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //     }
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        // }
         return "redirect:/profile";
      }
 

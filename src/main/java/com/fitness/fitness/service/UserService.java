@@ -108,5 +108,18 @@ public class UserService {
     // }
     
     
-    
+    // public String getProfilePicture(String email) {
+    //     User user = userRepo.findByEmail(email);
+    //     return user.getProfilePictureUrl();
+    // }
+
+    public void updateExpiredUsersStatus() {
+        LocalDate today = LocalDate.now();
+        int updatedCount = userRepo.updateExpiredUsers(today);
+        System.out.println(updatedCount + " users have been updated to 'Inactive'.");
+    }
+    public User getUserById(int userId) {
+        // Use the userRepository to find the user by ID
+        return userRepo.findById(userId).orElse(null);
+}
 }

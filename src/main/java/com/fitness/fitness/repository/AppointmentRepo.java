@@ -1,6 +1,7 @@
 package com.fitness.fitness.repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,15 +28,17 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
     String findClassNameByAppointmentId(@Param("appointmentId") int appointmentId);
     
     @Query("SELECT a.date FROM Appointment a WHERE a.appointmentId = :appointmentId")
-    LocalDate findDateByAppointmentId(@Param("appointmentId") int appointmentId);
+    LocalDateTime findDateTimeByAppointmentId(@Param("appointmentId") int appointmentId);
 
     @Query("SELECT a.status FROM Appointment a WHERE a.appointmentId = :appointmentId")
     String findStatusByappointmentId(@Param("appointmentId") int appointmentId);
 
     @Transactional
     @Modifying
-    @Query("UPDATE Appointment a SET a.status = 'inactive' WHERE a.date < :currentDate")
-    int updateStatusForPastAppointments(@Param("currentDate") LocalDate currentDate);
+    @Query("UPDATE Appointment a SET a.status = 'inactive' WHERE a.date < :currentDateTime")
+    int updateStatusForPastAppointments(@Param("currentDateTime") LocalDateTime currentDateTime); 
+
+    
 }
 
 
