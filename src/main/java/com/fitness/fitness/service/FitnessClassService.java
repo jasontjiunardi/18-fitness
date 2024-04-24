@@ -23,6 +23,13 @@ public class FitnessClassService {
         return fitnessClassRepository.findAll();
     }
 
+    public FitnessClass getClassByName(String className) {
+        return fitnessClassRepository.findByClassName(className);
+    }
+    public FitnessClass getClassById(int classId) {
+        return fitnessClassRepository.findById(classId);
+    }
+
 
 }
     // pblic FitnessClass getFitnessClassById(int id) {

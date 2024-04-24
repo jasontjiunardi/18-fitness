@@ -1,11 +1,14 @@
 package com.fitness.fitness.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.fitness.fitness.model.Appointment;
 import com.fitness.fitness.repository.AppointmentRepo;
+
+import jakarta.transaction.Transactional;
 
 
 @Service
@@ -35,18 +38,29 @@ public class AppointmentService {
         return appointmentRepo.findClassNameByAppointmentId(appointmentId);
     }
 
-    public LocalDate getDateByAppointmentId(int appointmentId) {
-        return appointmentRepo.findDateByAppointmentId(appointmentId);
+    public LocalDateTime getDateTimeByAppointmentId(int appointmentId) {
+        return appointmentRepo.findDateTimeByAppointmentId(appointmentId);
     }
 
     public String getStatusByAppointmentId(int appointmentId){
         return appointmentRepo.findStatusByappointmentId(appointmentId);
     }
 
-    public int deactivatePastAppointments() {
-        LocalDate today = LocalDate.now();
-        return appointmentRepo.updateStatusForPastAppointments(today);
+    public int getUserIdByAppointmentId(int appointmentId) {
+    Appointment appointment = appointmentRepo.findById(appointmentId).orElseThrow();
+    return appointment.getUser().getUserId();
     }
+
+    public int deactivatePastAppointments() {
+    LocalDateTime currentDateTime = LocalDateTime.now();
+    return appointmentRepo.updateStatusForPastAppointments(currentDateTime);
+    }
+
+    @Transactional
+    public void updateAppointment(Appointment appointment) {
+            appointmentRepo.save(appointment); // save method handles both insert and update
+
+}
 
 }
 

@@ -1,48 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Appointment</title>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Set the minimum date to today
-            var today = new Date().toISOString().split('T')[0];
-            document.getElementById('date').setAttribute('min', today);
-
-            var form = document.querySelector('form');
-            document.getElementById('confirmButton').addEventListener('click', function(event) {
-                event.preventDefault(); // Prevent the form from submitting on button click
-                if (confirm('Are you sure you want to modify changes?')) {
-                    form.submit(); // Submit the form if user confirms
-                }
-            });
-        });
-    </script>
 </head>
 <body>
     <h1>Edit Appointment</h1>
-    <form method="post" action="/updateAppointment">
-        <input type="hidden" name="id" value="${appointment.id}">
-        
-        <!-- Date input with dd/MM/yyyy format, modified to allow only today or future dates -->
-        <label for="date">Date:</label>
-        <input id="date" type="date" name="date" th:value="${#dates.format(appointment.date, 'dd-MM-yyyy')}" required><br><br>
-        
-        <!-- Trainer dropdown box -->
-        <label for="trainer">Trainer:</label>
-        <select id="trainer" name="trainer" required>
-            <option th:each="trainer : ${allTrainers}" th:value="${trainer.name}" th:text="${trainer.name}" th:selected="${trainer.name == appointment.trainer}"></option>
-        </select><br><br>
-        
-        <!-- Class dropdown box -->
-        <label for="class">Class:</label>
-        <select id="class" name="class" required>
-            <option th:each="class : ${allClasses}" th:value="${class}" th:text="${class.fitnessclassname}" ></option>
-        </select><br><br>
-        
-        <button type="submit" id="confirmButton">Confirm Changes</button>
-        <a href="/appointments">Cancel</a>
+    <form th:action="@{/save_appointment}" th:object="${appointment}" method="post">
+        <!-- Appointment ID - Hidden Field -->
+        <input type="hidden" th:field="*{appointmentId}" />
+
+        <!-- User ID - Hidden Field (not directly used but maintained for integrity and tracking) -->
+        <input type="hidden" name="userId" th:value="${userId}" />
+        <input type="hidden" name="status" th:value="${status}" />
+
+        <!-- Class Selection Dropdown -->
+        <div>
+            <label for="classId">Class:</label>
+            <select id="classId" name="classId" required>
+                <option value="">Select Class</option>
+                <option th:each="class : ${classList}" th:value="${class.classId}" th:text="${class.className}"></option>
+            </select>
+        </div>
+
+        <!-- Trainer Selection Dropdown -->
+        <div>
+            <label for="trainerId">Trainer:</label>
+            <select id="trainerId" name="trainerId" required>
+                <option value="">Select Trainer</option>
+                <option th:each="trainer : ${trainerList}" th:value="${trainer.id}" th:text="${trainer.name}"></option>
+            </select>
+        </div>
+
+        <!-- Date and Time Input -->
+        <div>
+            <label for="datetime">Date and Time:</label>
+            <input type="datetime-local" id="datetime" name="datetime"
+                   th:value="${formattedAppointmentDateTime}"
+                   th:min="${formattedDateTimeNow}" required />
+        </div>
+        <!-- Submit Button -->
+        <button type="submit">Save Appointment</button>
+
+        <!-- Link Back to Appointment Listings -->
+        <a th:href="@{/userAppointment}">Back to Appointments</a>
     </form>
 </body>
 </html>

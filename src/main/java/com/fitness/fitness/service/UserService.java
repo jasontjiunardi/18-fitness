@@ -114,5 +114,8 @@ public class UserService {
         int updatedCount = userRepo.updateExpiredUsers(today);
         System.out.println(updatedCount + " users have been updated to 'Inactive'.");
     }
-    
+    public User getUserById(int userId) {
+        // Use the userRepository to find the user by ID
+        return userRepo.findById(userId).orElse(null);
+}
 }

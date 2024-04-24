@@ -23,4 +23,5 @@ public interface UserRepo extends JpaRepository<User, Integer>{
     @Transactional
     @Query("UPDATE User u SET u.status = 'Inactive', u.activeDate = NULL WHERE u.activeDate < ?1")
     int updateExpiredUsers(LocalDate currentDate);
+
 }

@@ -22,14 +22,16 @@
                 <td th:text="${appointmentId}">-</td>
                 <td th:text="${@appointmentController.getTrainerNameByAppointmentId(appointmentId)}">-</td>
                 <td th:text="${@appointmentController.getClassNameByAppointmentId(appointmentId)}">-</td>
-                <td th:text="${@appointmentController.getDateByAppointmentId(appointmentId)}">-</td>
+                <td th:text="${@appointmentController.getDateTimeByAppointmentId(appointmentId)}">-</td>
                 <td th:text="${@appointmentController.getStatusByAppointmentId(appointmentId)}">-</td>
-                <!-- Conditionally render the Edit button with form -->
-                <td th:if="${@appointmentController.getStatusByAppointmentId(appointmentId) != 'inactive'}">
-                    <form th:action="@{/edit_appointment_page(appointmentId=${appointmentId})}" method="get">
-                        <button type="submit" class="btn btn-primary">Edit</button>
-                    </form>
-                </td>
+                <!-- Assuming each appointment object has a user property with a userId -->          
+                    <td th:if="${@appointmentController.getStatusByAppointmentId(appointmentId) != 'inactive'}">
+                        <a th:href="@{/edit_appointment_page(appointmentId=${appointmentId}, userId=${@appointmentController.getUserIdByAppointmentId(appointmentId)})}">
+                            <button type="button">Edit</button>
+                        </a>
+                    </td>
+                </a>
+            </td>
             </tr>
         </tbody>
     </table>

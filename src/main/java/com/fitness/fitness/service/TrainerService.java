@@ -61,6 +61,10 @@ public class TrainerService {
         trainerRepo.deleteById(id);
     }
 
+    public Trainer getTrainerByName(String trainerName) {
+        return trainerRepo.findByName(trainerName);
+    }
+
     // public void updateEligiblePlans(Trainer trainer) {
     //     Set<Plan> eligiblePlans = new HashSet<>();
     //     switch (trainer.getRank()) {
