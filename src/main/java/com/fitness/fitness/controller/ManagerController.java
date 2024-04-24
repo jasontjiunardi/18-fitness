@@ -43,6 +43,7 @@ public class ManagerController {
 
     @Autowired
     private TrainerService trainerService;
+
     @Autowired
     private UserRepo userRepo;
     
@@ -94,9 +95,19 @@ public class ManagerController {
     //     return "manager-add-appointment";
     // }
 
-
+    @GetMapping("/manager_home_page")
+    public String getHomePage(Model model, @SessionAttribute("manager") Manager manager) {
+        if (manager != null) {
+            model.addAttribute("manager", manager);
+            return "manager_home";
+        } else {
+            return "redirect:/manager_signin";
+        }
+    }
+ 
     @GetMapping("/manager_signin")
-    public String showLoginForm(Model model) {
+    public String showLoginForm(Model model, HttpSession session) {
+        session.invalidate();
         Manager existingManager = new Manager();
         model.addAttribute("manager", existingManager);
         return "sign_manager";
@@ -108,7 +119,7 @@ public class ManagerController {
             session.setAttribute("manager", manager);
             return "manager_home";
         }
-        return "login_fail";
+        return "login_fail_manager";
     }
 
     @GetMapping("/managerViewTrainers")
@@ -122,9 +133,6 @@ public class ManagerController {
         return "managerViewUsers";
     }
   
-  
-    
-
     @GetMapping("/managerAddTrainer")
     public String showAddTrainerForm(Model model, @SessionAttribute("manager") Manager manager) {
         model.addAttribute("trainer", new Trainer());
@@ -156,7 +164,7 @@ public class ManagerController {
             
             FileUploadUtil.saveFile(upload, fileName, multipartFile);
       
-    }   else{
+        } else {
         if (trainer.getImage().isEmpty()) {
             trainer.setImage("wechat_icon.jpg");
             trainerService.saveTrainer(trainer);
