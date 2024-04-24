@@ -22,7 +22,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
-    private String name;
+    private String name; 
     private String username;
     private String password;
     private String email;
@@ -33,7 +33,8 @@ public class User {
     private LocalDate activeDate = null;
     private int recoveryCode;
     private String cardNumber;
-    private String profilePictureUrl;
+    private String image;
+    private String gender;
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Appointment> appointments;
@@ -43,7 +44,7 @@ public class User {
 
 
     public User(int userId, String name, String username, String password, String email, Date dob, String phoneNumber,
-            String status, LocalDate activeDate, int recoveryCode, String cardNumber) {
+            String status, LocalDate activeDate, int recoveryCode, String cardNumber, String image) {
         this.userId = userId;
         this.name = name;
         this.username = username;
@@ -55,7 +56,7 @@ public class User {
         this.activeDate = activeDate;
         this.recoveryCode = recoveryCode;
         this.cardNumber = cardNumber;
-        this.profilePictureUrl = profilePictureUrl;
+        this.image = image;
     }
     
     public int getRecoveryCode() {
@@ -128,12 +129,21 @@ public class User {
         this.cardNumber = cardNumber;
     }
 
-    public String getProfilePictureUrl() {
-        return profilePictureUrl;
+    public String getimage() {
+        return image;
     }
     
-    public void setProfilePictureUrl(String profilePictureUrl) {
-        this.profilePictureUrl = profilePictureUrl;
+    public void setimage(String image) {
+        this.image = image;
+    }
+
+
+    @Override
+    public String toString() {
+        return "User [userId=" + userId + ", name=" + name + ", username=" + username + ", password=" + password
+                + ", email=" + email + ", dob=" + dob + ", phoneNumber=" + phoneNumber + ", status=" + status
+                + ", activeDate=" + activeDate + ", recoveryCode=" + recoveryCode + ", cardNumber=" + cardNumber
+                + ", image=" + image + ", gender=" + gender + ", appointments=" + appointments + "]";
     }
     
 }

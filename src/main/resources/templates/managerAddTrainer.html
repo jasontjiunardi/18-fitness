@@ -92,7 +92,7 @@
     </style>
 </head>
 <body>
-    <h2>Add New Trainer</h2>
+    <h2 style="font-weight: bold;">Add New Trainer</h2>
     <form id="trainerForm" th:action="@{/managerSaveTrainer}" th:object="${trainer}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
         <div class="form-group">
             <label for="name">Name: <span style="color: red;">*</span></label>

@@ -1,19 +1,31 @@
 package com.fitness.fitness.controller;
 
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fitness.FileUploadUtil;
+import org.springframework.web.bind.annotation.SessionAttribute;
+
+import com.fitness.fitness.model.Manager;
 import com.fitness.fitness.model.Trainer;
-import com.fitness.fitness.model.User;
 import com.fitness.fitness.repository.TrainerRepo;
+import com.fitness.fitness.repository.UserRepo;
 import com.fitness.fitness.service.ManagerService;
 import com.fitness.fitness.service.TrainerService;
 import com.fitness.fitness.service.UserService;
+
+import jakarta.servlet.http.HttpSession;
 
 
 
@@ -31,6 +43,8 @@ public class ManagerController {
 
     @Autowired
     private TrainerService trainerService;
+    @Autowired
+    private UserRepo userRepo;
     
     //  cb cek ulang ini
     // @GetMapping("/manager_add_appointment")
@@ -80,35 +94,49 @@ public class ManagerController {
     //     return "manager-add-appointment";
     // }
 
-    //arden buat untuk data manager pas signin jdi perlu ada email sm password di manager model
+
+    @GetMapping("/manager_home_page")
+    public String getHomePage(Model model, @SessionAttribute("manager") Manager manager) {
+        if (manager != null) {
+            model.addAttribute("manager", manager);
+            return "manager_home";
+        } else {
+            return "redirect:/manager_signin";
+        }
+    }
+ 
     @GetMapping("/manager_signin")
-    public String showLoginForm(Model model) {
-        User existingUser = new User();
-        model.addAttribute("user", existingUser ) ;
+    public String showLoginForm(Model model, HttpSession session) {
+        session.invalidate();
+        Manager existingManager = new Manager();
+        model.addAttribute("manager", existingManager);
         return "sign_manager";
     }
-    
+
     @PostMapping("/manager_signin")
-    public String showMangagerHomePage(){
-        return "manager_home";
+    public String login(@ModelAttribute Manager manager, HttpSession session) {
+        if (managerService.managerLogin(manager)) {
+            session.setAttribute("manager", manager);
+            return "manager_home";
+        }
+        return "login_fail_manager";
     }
 
     @GetMapping("/managerViewTrainers")
-    public String showTrainers(Model model) {
+    public String showTrainers(Model model, @SessionAttribute("manager") Manager manager) {
         model.addAttribute("trainers", trainerService.getAllTrainers());
         return "managerViewTrainers";
     }
   
-    
 
     @GetMapping("/managerAddTrainer")
-    public String showAddTrainerForm(Model model) {
+    public String showAddTrainerForm(Model model, @SessionAttribute("manager") Manager manager) {
         model.addAttribute("trainer", new Trainer());
         return "managerAddTrainer";
     }
 
     @PostMapping("/managerSaveTrainer")
-    public String saveTrainer(@ModelAttribute("trainer") Trainer trainer, Model model) {
+    public String saveTrainer(@ModelAttribute("trainer") Trainer trainer, Model model, @SessionAttribute("manager") Manager manager) {
         trainerService.saveTrainer(trainer);
         return "redirect:/managerViewTrainers";
     }
@@ -122,10 +150,25 @@ public class ManagerController {
     }
 
     @PostMapping("/updateTrainer")
-    public String updateTrainer(@ModelAttribute("trainer") Trainer trainer, Model model) {
-        // Update the trainer information in the database
+    public String updateTrainer(@RequestParam("image") MultipartFile multipartFile,@ModelAttribute Trainer trainer, Model model) throws IOException {
+        if (!multipartFile.isEmpty()) {
+            
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            trainer.setImage(fileName);
+            Trainer savedTrainer = trainerService.saveTrainer(trainer);
+            String upload = "images/" + trainer.getId(); // Adjust this URL as needed
+            
+            FileUploadUtil.saveFile(upload, fileName, multipartFile);
+      
+    }   else{
+        if (trainer.getImage().isEmpty()) {
+            trainer.setImage("wechat_icon.jpg");
+            trainerService.saveTrainer(trainer);
+        }
+    } 
+        trainerService.saveTrainer(trainer);// Update the trainer information in the database
         trainerService.updateTrainer(trainer);
-        return "redirect:/managerViewTrainers";
+        return "managerViewTrainers";
     }
 
     @PostMapping("/removeTrainer/{id}")
@@ -133,5 +176,11 @@ public class ManagerController {
         // Remove the trainer from the database
         trainerService.removeTrainer(id);
         return "redirect:/managerViewTrainers";
+    }
+
+    @GetMapping("/managerViewUsers")
+    public String showUsers(Model model) {
+        model.addAttribute("Users", userService.getAllUsers());
+        return "managerViewUsers";
     }
 }

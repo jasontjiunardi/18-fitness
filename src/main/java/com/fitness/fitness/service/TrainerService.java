@@ -19,15 +19,13 @@ import jakarta.transaction.Transactional;
 @Service
 public class TrainerService {
     @Autowired
+    private PlanRepo planRepo;
+    @Autowired
     private TrainerRepo trainerRepo;
 
     public Trainer findById(int id) {
         return trainerRepo.findById(id).orElse(null);
     }
-
-    @Autowired
-    private PlanRepo planRepo;
-
 
     // You can add methods to perform operations using trainerRepo
 
@@ -65,6 +63,11 @@ public class TrainerService {
         return trainerRepo.findByName(trainerName);
     }
 
+    public List<Trainer> getTrainersByPlanId(int planId) {
+        return trainerRepo.findTrainersByPlanId(planId);
+    }
+}
+
     // public void updateEligiblePlans(Trainer trainer) {
     //     Set<Plan> eligiblePlans = new HashSet<>();
     //     switch (trainer.getRank()) {
@@ -84,6 +87,6 @@ public class TrainerService {
     //     trainerRepo.save(trainer);
     // }
 
-}
+
 
     // You can add more methods here depending on your business logic

@@ -30,6 +30,13 @@
                             <button type="button">Edit</button>
                         </a>
                     </td>
+                    <!-- Cancel button -->
+                    <td th:if="${@appointmentController.getStatusByAppointmentId(appointmentId) == 'active'}">
+                        <form method="POST" th:action="@{/cancel_appointment}">
+                            <input type="hidden" name="appointmentId" th:value="${appointmentId}" />
+                            <button type="submit">Cancel</button>
+                        </form>
+                    </td>
                 </a>
             </td>
             </tr>
