@@ -61,6 +61,11 @@ public class AppointmentService {
             appointmentRepo.save(appointment); // save method handles both insert and update
 
 }
+//its the same as the update appointment above but this one i just create a separate method to make it more separate and clear - herman
+    @Transactional
+    public void saveAppointment(Appointment appointment) {
+        appointmentRepo.save(appointment);
+    }
 
 }
 

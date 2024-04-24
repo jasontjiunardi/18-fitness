@@ -27,7 +27,6 @@ public class TrainerService {
         return trainerRepo.findById(id).orElse(null);
     }
 
-
     // You can add methods to perform operations using trainerRepo
 
     public List<Trainer> findAllByRank(int rank) {
@@ -64,6 +63,11 @@ public class TrainerService {
         return trainerRepo.findByName(trainerName);
     }
 
+    public List<Trainer> getTrainersByPlanId(int planId) {
+        return trainerRepo.findTrainersByPlanId(planId);
+    }
+}
+
     // public void updateEligiblePlans(Trainer trainer) {
     //     Set<Plan> eligiblePlans = new HashSet<>();
     //     switch (trainer.getRank()) {
@@ -83,6 +87,6 @@ public class TrainerService {
     //     trainerRepo.save(trainer);
     // }
 
-}
+
 
     // You can add more methods here depending on your business logic

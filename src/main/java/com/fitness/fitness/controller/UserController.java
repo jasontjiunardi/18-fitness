@@ -60,13 +60,13 @@ public class UserController {
     // }
 
     @PostMapping("/register_user")
-    public String registerUser(@ModelAttribute User user, HttpSession session, Model model) {
+    public String registerUser( HttpSession session, @ModelAttribute User user) {
         if (userService.verifyUser(user)) {
             if (userService.emailValid(user.getEmail()) && userService.passwordValid(user.getPassword())) {
                 int recoveryCode = 1000 + (int) (Math.random() * 9000);
                 user.setRecoveryCode(recoveryCode);
                 userService.saveUser(user);
-                session.setAttribute("recoveryCode", recoveryCode);
+                session.setAttribute("user", user);
                 return "redirect:/show_recovery_code";
             }
         }
@@ -74,22 +74,15 @@ public class UserController {
     }
 
     @GetMapping("/show_recovery_code") // Mapping for the new page
-    public String showRecoveryCode(HttpSession session, Model model) {
-        Integer recoveryCode = (Integer) session.getAttribute("recoveryCode");
+    public String showRecoveryCode(@SessionAttribute("user") User user, Model model) {
+        User retrievedUser = userService.getUserByEmail(user.getEmail());
+        Integer recoveryCode = retrievedUser.getRecoveryCode();
         if (recoveryCode != null) {
             model.addAttribute("recoveryCode", recoveryCode);
             return "recoverycode";
-        } else {
+        } 
             // Handle case where recovery code is not found in session
-            return "error"; // You can create an error page to handle this case
-        }
-    }
-
-    @GetMapping("/user_signin")
-    public String showLoginForm(Model model) {
-        User existingUser = new User();
-        model.addAttribute("user", existingUser) ;
-        return "sign";
+       return "error"; // You can create an error page to handle this case
     }
 
     @PostMapping("/user_signin")
@@ -100,6 +93,14 @@ public class UserController {
         }
         return "login_fail";
     }
+
+    @GetMapping("/user_signin")
+    public String showLoginForm(Model model) {
+        User existingUser = new User();
+        model.addAttribute("user", existingUser) ;
+        return "sign";
+    }
+
 
     @GetMapping("/forget_password")
     public String userForgetPassword(Model model, User user){ // existinguser masuk ke model dgn nama "user"

@@ -51,6 +51,7 @@ public class PlanService {
         });
         return startingPrices;
     }
+    
     public LinkedHashMap<String,Double> getSortedPrices(){
     LinkedHashMap<String, Double> sortedStartingPrices = getStartingPricesForAllPlanTypes().entrySet().stream()
             .sorted(Map.Entry.comparingByValue())
