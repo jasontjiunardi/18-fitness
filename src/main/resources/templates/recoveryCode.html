@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recovery Code</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7; /* Light gray background */
+            color: #4a154b; /* Purple text color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff; /* White background for container */
+            text-align: center;
+        }
+
+        h1 {
+            color: #4a154b; /* Purple heading color */
+            margin-bottom: 22px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        span {
+            font-weight: bold;
+        }
+
+        .recovery-info {
+            color: red;
+            font-size: 14px;
+        }
+
+        .close-button {
+            background-color: #4a154b; /* Purple button background */
+            color: #ffffff; /* White text color for button */
+            border: none;
+            padding: 10px 20px; /* Add padding */
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px; /* Add margin-top */
+        }
+
+        .close-button:hover {
+            background-color: #310b33; /* Darker purple on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Recovery Code</h1>
+        <p>Your recovery code is: <span th:text="${recoveryCode}"></span></p>
+        <p class="recovery-info">Please keep this code somewhere safe as it will be used in the event that you forget your password.</p>
+        <button class="close-button" onclick="window.location.href = '/home_page';">Close</button>
+    </div>
+</body>
+</html>

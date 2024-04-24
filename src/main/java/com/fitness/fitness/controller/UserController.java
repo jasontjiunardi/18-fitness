@@ -60,25 +60,29 @@ public class UserController {
     // }
 
     @PostMapping("/register_user")
-    public String registerUser(@ModelAttribute User user, HttpSession session) {
+    public String registerUser(@ModelAttribute User user, HttpSession session, Model model) {
         if (userService.verifyUser(user)) {
             if (userService.emailValid(user.getEmail()) && userService.passwordValid(user.getPassword())) {
-                // Generate a random 4-digit recovery code
                 int recoveryCode = 1000 + (int) (Math.random() * 9000);
-                
-                // Set the recovery code to the user object
                 user.setRecoveryCode(recoveryCode);
-                
-                // Save the user to the database
                 userService.saveUser(user);
-                
-                // Set the user object in session (if needed)
-                session.setAttribute("user", user);
-                
-                return "home";
+                session.setAttribute("recoveryCode", recoveryCode);
+                return "redirect:/show_recovery_code";
             }
         }
         return "registeruserform";
+    }
+
+    @GetMapping("/show_recovery_code") // Mapping for the new page
+    public String showRecoveryCode(HttpSession session, Model model) {
+        Integer recoveryCode = (Integer) session.getAttribute("recoveryCode");
+        if (recoveryCode != null) {
+            model.addAttribute("recoveryCode", recoveryCode);
+            return "recoverycode";
+        } else {
+            // Handle case where recovery code is not found in session
+            return "error"; // You can create an error page to handle this case
+        }
     }
 
     @GetMapping("/user_signin")
