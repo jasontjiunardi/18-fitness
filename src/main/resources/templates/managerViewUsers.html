@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>View Trainers</title>
+    <title>View Users</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            color: #4a154b;
+            background-color: #ffffff; /* White background */
+            color: #4a154b; /* Purple text color */
             margin: 0;
             padding: 0;
             display: flex;
@@ -19,46 +19,47 @@
         }
 
         h1 {
-            font-size: 36px;
-            color: #4a154b;
+            font-size: 36px; /* Larger font size for heading */
+            color: #4a154b; /* Purple heading color */
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 20px; /* Reduced margin */
         }
 
         .btn-primary.add-btn {
-            background-color: #4a154b;
-            border-color: #4a154b;
-            color: #ffffff;
-            position: absolute;
-            top: 20px;
-            right: 20px;
+            background-color: #4a154b; /* Purple button background */
+            border-color: #4a154b; /* Purple border color */
+            color: #ffffff; /* White text color */
+            position: absolute; /* Positioning absolute */
+            top: 20px; /* 20px from top */
+            right: 20px; /* 20px from right */
         }
 
         .btn-primary.add-btn:hover {
-            background-color: #310b33;
-            border-color: #310b33;
+            background-color: #310b33; /* Darker purple on hover */
+            border-color: #310b33; /* Darker purple border color */
         }
 
         .table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 20px; /* Increased margin */
         }
 
-        .table th, .table td {
-            border: 1px solid #4a154b;
+        .table th,
+        .table td {
+            border: 1px solid #4a154b; /* Purple border */
             padding: 8px;
             text-align: left;
         }
 
         .table th {
-            background-color: #4a154b;
-            color: #ffffff;
+            background-color: #4a154b; /* Purple header background */
+            color: #ffffff; /* White text color */
             cursor: pointer;
         }
 
         .table th:hover {
-            background-color: #310b33;
+            background-color: #310b33; /* Darker purple on hover */
         }
 
         .rank-stars {
@@ -66,51 +67,52 @@
         }
 
         .rank-stars i {
-            color: gold;
+            color: gold; /* Gold star color */
             margin-right: 2px;
         }
 
-        .trainer-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 2px solid #4a154b;
-            padding: 2px;
-            object-fit: cover;
+        .User-img {
+            width: 100px; /* Fixed width */
+            height: 100px; /* Fixed height */
+            border-radius: 50%; /* Circular border radius */
+            border: 2px solid #4a154b; /* Purple border */
+            padding: 2px; /* Added padding for better appearance */
+            object-fit: cover; /* Maintain aspect ratio and cover container */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 style="font-weight: bold;">Trainers List</h1>
-        <a href="/managerAddTrainer" class="btn btn-primary add-btn">Add Trainer</a>
+        <h1>Users List</h1>
         <table class="table table-striped table-bordered table-hover">
             <thead class="thead-dark">
                 <tr>
                     <th onclick="sortTable(0, 'number')">ID</th>
                     <th onclick="sortTable(1, 'string')">Name</th>
-                    <th onclick="sortTable(2, 'number')">Age</th>
+                    <th onclick="sortTable(2, 'string')">Username</th>
                     <th onclick="sortTable(3, 'string')">Gender</th>
                     <th onclick="sortTable(4, 'string')">Date of Birth</th>
                     <th onclick="sortTable(5, 'string')">Email</th>
                     <th onclick="sortTable(6, 'string')">Phone</th>
-                    <th onclick="sortTable(7, 'number')">Rank</th>
-                    <th onclick="sortTable(8, 'string')">Since</th>
+                    <th onclick="sortTable(7, 'number')">Status</th>
+                    <th onclick="sortTable(8, 'string')">active Date</th>
                     <th>Profile Picture</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="trainer : ${trainers}">
-                    <td th:text="${trainer.id}"></td>
-                    <td th:text="${trainer.name}"></td>
-                    <td th:text="${trainer.age}"></td>
-                    <td th:text="${trainer.gender}"></td>
-                    <td th:text="${trainer.dob}"></td>
-                    <td th:text="${trainer.email}"></td>
-                    <td th:text="${trainer.phone}"></td>
-                    <td class="rank-stars" th:data-rank="${trainer.rank}" th:text="${trainer.rank}"></td>
-                    <td th:text="${trainer.trainerSince}"></td>
-                    <td> <img th:src="@{'images/' + ${trainer.image}}" alt="Trainer image" class="trainer-img"/></td>
+                <tr th:each="User : ${Users}">
+                    <td th:text="${User.id}"></td>
+                    <td th:text="${User.name}"></td>
+                    <td th:text="${User.username}"></td>
+                    <td th:text="${User.gender}"></td>
+                    <td th:text="${User.dob}"></td>
+                    <td th:text="${User.email}"></td>
+                    <td th:text="${User.phoneNumber}"></td>
+                    <td th:text="${User.status}"></td>
+                    <td th:text="${User.activeDate}"></td>
+                    <td> <img th:src="@{'images/' + ${User.profilePictureUrl}}" alt="User image" class="User-img"/></td>
+                    <td><button onclick="sendNotification('${User.email}')">Send Marketing Notification</button></td>
+                </tr>
                 </tr>
             </tbody>
         </table>
@@ -132,29 +134,22 @@
                     x = rows[i].getElementsByTagName("TD")[n];
                     y = rows[i + 1].getElementsByTagName("TD")[n];
                     
-                    let xVal = x.textContent.trim();
-                    let yVal = y.textContent.trim();
-                    
                     if (type === 'number') {
-                        if (n === 7) {
-                            xVal = parseInt(x.dataset.rank || xVal, 10);
-                            yVal = parseInt(y.dataset.rank || yVal, 10);
-                        } else {
-                            xVal = parseInt(xVal);
-                            yVal = parseInt(yVal);
-                        }
+                        // Parse integers for comparison
+                        x = parseInt(x.textContent.trim());
+                        y = parseInt(y.textContent.trim());
                     } else {
-                        xVal = xVal.toLowerCase();
-                        yVal = yVal.toLowerCase();
+                        x = x.textContent.toLowerCase();
+                        y = y.textContent.toLowerCase();
                     }
                     
                     if (dir == "asc") {
-                        if (xVal > yVal) {
+                        if (x > y) {
                             shouldSwitch= true;
                             break;
                         }
                     } else if (dir == "desc") {
-                        if (xVal < yVal) {
+                        if (x < y) {
                             shouldSwitch= true;
                             break;
                         }
@@ -163,7 +158,7 @@
                 if (shouldSwitch) {
                     rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
                     switching = true;
-                    switchcount++;      
+                    switchcount ++;      
                 } else {
                     if (switchcount == 0 && dir == "asc") {
                         dir = "desc";
@@ -174,24 +169,11 @@
         }
 
         document.addEventListener("DOMContentLoaded", function() {
+            // Convert rank numbers to stars
             updateStars();
         });
 
-        function updateStars() {
-            var ranks = document.querySelectorAll('.rank-stars');
-            ranks.forEach(function(rank) {
-                var rankValue = parseInt(rank.getAttribute('data-rank'), 10);
-                rank.innerHTML = getStars(rankValue);
-            });
-        }
-
-        function getStars(rank) {
-            let stars = '';
-            for(let i = 0; i < rank; i++) {
-                stars += '<i class="fas fa-star"></i>';
-            }
-            return stars;
-        }
+        
     </script>
 </body>
 </html>
