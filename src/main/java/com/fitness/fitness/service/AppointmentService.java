@@ -66,7 +66,9 @@ public class AppointmentService {
     public void saveAppointment(Appointment appointment) {
         appointmentRepo.save(appointment);
     }
-
+    public List<Appointment> findAllAppointment(){
+        return appointmentRepo.findAll();
+    }
 }
 
 

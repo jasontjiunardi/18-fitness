@@ -112,7 +112,7 @@
                 <input type="hidden" id="sessionCardNumber" th:value="${user?.cardNumber}" />
                 <div class="user-agreement">
                     <input type="checkbox" id="userAgreement" name="userAgreement">
-                    <label onclick="showUserAgreement()">I agree to the terms and conditions</label>
+                    <a href="#" onclick="showUserAgreement()">I agree to the terms and conditions</a>
                 </div>
                 <button type="submit" class="submit-button">Confirm Purchase</button>
                 <a href="/browse_plans" class="submit-button" onclick="return confirmCancel();">Cancel Purchase</a>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manager View Appointments</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .sidebar {
+            height: 100vh;
+            width: 200px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        .sidebar button {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .sidebar button:hover, .sidebar button:focus {
+            background-color: #575757;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 200px; /* Same width as the sidebar */
+        }
+
+        .table th {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .table th:after {
+            font-family: "Font Awesome 5 Free";
+            content: "\f0dc"; /* FontAwesome sort icon */
+            font-weight: 900;
+            position: absolute;
+            right: 5px;
+            bottom: 5px;
+            font-size: smaller;
+        }
+
+        .refresh-btn {
+            background-color: #4a154b; /* Deep purple color for the refresh button */
+            color: white;
+            border-color: #4a154b;
+        }
+
+        .refresh-btn:hover, .refresh-btn:focus {
+            background-color: #763087; /* Brighter purple for hover */
+            border-color: #763087;
+        }
+
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("refresh").addEventListener("click", function() {
+                location.reload();
+            });
+        });
+
+        // Track the current sort directions
+        const sortDirections = {};
+
+        function toggleSort(columnIndex) {
+            sortDirections[columnIndex] = !sortDirections[columnIndex];
+            complexSort(columnIndex, sortDirections[columnIndex]);
+        }
+
+        function complexSort(col, asc = true) {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("myTable");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < rows.length - 1; i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[col];
+                    y = rows[i + 1].getElementsByTagName("TD")[col];
+                    if (asc) {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="sidebar">
+        <button onclick="window.location='/managerViewTrainers'">View Trainers</button>
+        <button onclick="window.location='/manager_appointment'" style="background-color: #575757;">Appointment Records</button>
+    </div>
+    <div class="main-content">
+        <h1>All Appointments</h1>
+        <button class="btn btn-primary refresh-btn" id="refresh"><i class="fas fa-sync-alt"></i> Refresh</button>
+        <table class="table table-striped table-bordered" id="myTable">
+            <thead>
+                <tr>
+                    <th onclick="toggleSort(0)">Appointment ID</th>
+                    <th onclick="toggleSort(1)">User Email</th>
+                    <th onclick="toggleSort(2)">Trainer Name</th>
+                    <th onclick="toggleSort(3)">Date</th>
+                    <th>Time</th>
+                    <th onclick="toggleSort(5)">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="appointment : ${allAppointment}">
+                    <td th:text="${appointment.appointmentId}">-</td>
+                    <td th:text="${appointment.user.email}">-</td>
+                    <td th:text="${appointment.trainer.name}">-</td>
+                    <td th:text="${#temporals.format(appointment.date, 'yyyy-MM-dd')}">-</td>
+                    <td th:text="${#temporals.format(appointment.date, 'HH:mm')}">-</td>
+                    <td th:text="${appointment.status}">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
