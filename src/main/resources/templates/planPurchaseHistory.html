@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan Purchase History</title>
+</head>
+<body>
+    <h1>Plan Purchase History</h1>
+    <!-- Check if purchaseHistory is empty -->
+    <th:block th:if="${purchaseHistory.empty}">
+        <p>No purchase history available.</p>
+        <div>
+            <a href="/home_page" class="submit-button">Back to Home</a>
+        </div>
+    </th:block>
+    <!-- If purchaseHistory is not empty, display the table -->
+    <th:block th:unless="${purchaseHistory.empty}">
+        <table>
+            <thead>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Payment Method</th>
+                    <th>Plan Type</th>
+                    <th>Price</th>
+                    <th>Purchased Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Iterate through the purchase history -->
+                <tr th:each="transaction : ${purchaseHistory}">
+                    <td th:text="${transaction.transactionId}"></td>
+                    <td th:text="${transaction.paymentMethod}"></td>
+                    <td th:text="${transaction.planType}"></td>
+                    <td th:text="${transaction.price}"></td>
+                    <td th:text="${transaction.purchasedDate}"></td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <a href="/home_page" class="submit-button">Back to Home</a>
+        </div>
+    </th:block>
+</body>
+</html>
