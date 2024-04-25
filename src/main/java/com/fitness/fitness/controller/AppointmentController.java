@@ -55,6 +55,8 @@ public class AppointmentController {
     public String userAppointment(Model model, @SessionAttribute("user") User user) {
         // Update the status of past appointments to "inactive"
         appointmentService.deactivatePastAppointments();
+        List<FitnessClass> classList = fitnessClassService.getAllClasses();
+        List<Trainer> trainerList =trainerService.getAllTrainers();
     
         User retrievedUser = userService.getUserByEmail(user.getEmail());
         model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
@@ -62,9 +64,13 @@ public class AppointmentController {
     
         List<Integer> appointmentIds = appointmentService.getAppointmentIdsByUserId(userId);
         model.addAttribute("appointmentIds", appointmentIds);
+        model.addAttribute("classList", classList);
+        model.addAttribute("trainerList", trainerList);
     
         return "userViewAppointments"; 
     }
+
+
 
     public String getTrainerNameByAppointmentId(int appointmentId) {
         return appointmentService.getTrainerNameByAppointmentId(appointmentId);
@@ -83,6 +89,32 @@ public class AppointmentController {
     public int getUserIdByAppointmentId(int appointmentId){
         return appointmentService.getUserIdByAppointmentId(appointmentId);
     }
+
+    
+    
+    @GetMapping("/filterAppointments")
+    public String filterAppointments(Model model, 
+                                    @SessionAttribute("user") User user,
+                                    @RequestParam(name = "classId", required = false) Integer classId,
+                                    @RequestParam(name = "trainerId", required = false) Integer trainerId,
+                                    @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                    @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        
+        LocalDateTime startDateTime = startDate != null ? startDate.atStartOfDay() : null;
+        LocalDateTime endDateTime = endDate != null ? endDate.atTime(23, 59, 59) : null;
+        User retrievedUser = userService.getUserByEmail(user.getEmail());
+        model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
+        int userId = retrievedUser.getUserId(); // ID from user email
+    
+        List<Appointment> filteredAppointments = appointmentService.findAppointmentsByFilters(
+        userId, classId, trainerId, startDateTime, endDateTime);
+        model.addAttribute("appointments", filteredAppointments);
+
+        return "filterappointments";
+                                    }
+    
+    
+    
 
     @GetMapping("/book_appointment")
     public String bookAppointment(Model model, @SessionAttribute("user") User user) {
@@ -225,7 +257,7 @@ public class AppointmentController {
         return "redirect:/userAppointment";
     }
 
-}
+
 
     
     // // Method to fetch trainer ID by appointment ID for Thymeleaf template JGN DI HAPUS KERJA KERAS 6 JAM
@@ -233,4 +265,4 @@ public class AppointmentController {
     //     return appointmentService.getTrainerIdByAppointmentId(appointmentId);
     // }
 
-    
+}

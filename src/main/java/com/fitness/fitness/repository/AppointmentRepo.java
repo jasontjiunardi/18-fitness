@@ -1,6 +1,5 @@
 package com.fitness.fitness.repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,8 +36,21 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
     @Modifying
     @Query("UPDATE Appointment a SET a.status = 'inactive' WHERE a.date < :currentDateTime")
     int updateStatusForPastAppointments(@Param("currentDateTime") LocalDateTime currentDateTime); 
-
     
+
+    @Query("SELECT a FROM Appointment a " +
+    "WHERE a.user.userId = :userId " +
+    "AND (:classId IS NULL OR a.fitnessClass.classId = :classId) " +
+    "AND (:trainerId IS NULL OR a.trainer.id = :trainerId) " +
+    "AND a.date >= :startOfDay AND a.date <= :endOfDay")
+    List<Appointment> findAppointmentsByFilters(
+    @Param("userId") int userId,
+    @Param("classId") Integer classId,
+    @Param("trainerId") Integer trainerId,
+    @Param("startOfDay") LocalDateTime startOfDay,
+    @Param("endOfDay") LocalDateTime endOfDay);
 }
+    
+    
 
 
