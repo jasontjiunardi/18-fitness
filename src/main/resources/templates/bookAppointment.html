@@ -101,7 +101,8 @@
         <div>
             <label for="datetime">Date and Time:</label>
             <input type="datetime-local" id="datetime" name="datetime"
-                   th:value="${formattedDateTimeNow}" th:min="${formattedDateTimeNow}" required/>
+                   th:value="${formattedDateTimeNow}" th:min="${formattedDateTimeNow}"
+                   th:max="${endOfActiveDate}" required/>
         </div>
         <!-- Submit Button -->
         <button type="submit">Book Appointment</button>

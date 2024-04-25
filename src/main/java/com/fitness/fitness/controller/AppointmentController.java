@@ -118,7 +118,8 @@ public class AppointmentController {
 
     @GetMapping("/book_appointment")
     public String bookAppointment(Model model, @SessionAttribute("user") User user) {
-        try {    
+        try {
+                
         List<FitnessClass> classList = fitnessClassService.getAllClasses();
         User retrievedUser = userService.getUserByEmail(user.getEmail());
         model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
@@ -130,11 +131,17 @@ public class AppointmentController {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         String formattedDateTimeNow = now.format(formatter);
-        
-
+        LocalDateTime Activenow = LocalDateTime.now();
+        DateTimeFormatter Activeformatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        LocalDate activeDate = user.getActiveDate(); // Assuming this is a LocalDate
+        LocalDateTime endOfActiveDate = activeDate.atTime(23, 59); // End of the active date
+    
+        model.addAttribute("formattedDateTimeNow", Activenow.format(Activeformatter));
+        model.addAttribute("endOfActiveDate", endOfActiveDate.format(formatter)); // Pass as LocalDateTime formatted 
         model.addAttribute("classList", classList);
         model.addAttribute("trainerList", trainerList);
         model.addAttribute("formattedDateTimeNow", formattedDateTimeNow);
+       
 
         return "bookAppointment";}
         catch (Exception e) {
