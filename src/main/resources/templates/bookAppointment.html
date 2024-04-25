@@ -4,6 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Appointment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7; /* Light gray background */
+            color: #333333; /* Dark text color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 36px; /* Larger font size for heading */
+            color: #333333; /* Dark heading color */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background-color: #ffffff; /* White background for form */
+            padding: 20px; /* Add some padding to the form */
+            border-radius: 10px; /* Rounded corners for form */
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); /* Drop shadow effect */
+        }
+
+        label {
+            font-weight: bold; /* Make labels bold */
+            margin-bottom: 10px; /* Add some space below labels */
+            display: block; /* Make labels block elements */
+        }
+
+        select, input[type="datetime-local"] {
+            width: 100%; /* Make inputs full width */
+            padding: 10px; /* Add some padding to inputs */
+            margin-bottom: 20px; /* Add some space below inputs */
+            border-radius: 5px; /* Rounded corners for inputs */
+            border: 1px solid #cccccc; /* Add border to inputs */
+            box-sizing: border-box; /* Include padding and border in width */
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 20px; /* Add margin to top of button */
+            border: none;
+            border-radius: 5px;
+            background-color: #4a154b; /* Purple button background */
+            color: #ffffff; /* White text color for button */
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #310b33; /* Darker purple on hover */
+        }
+
+        .back-button {
+            text-decoration: none; /* Remove underline from link */
+            display: inline-block; /* Make it inline-block to adjust padding */
+            padding: 10px 20px; /* Add padding to button */
+            background-color: #cccccc; /* Light gray background */
+            color: #333333; /* Dark text color */
+            border-radius: 5px; /* Rounded corners */
+            margin-top: 10px; /* Add margin to top */
+        }
+
+        .back-button:hover {
+            background-color: #aaaaaa; /* Darker gray on hover */
+        }
+    </style>
 </head>
 <body>
     <h1>Book Appointment</h1>
@@ -30,13 +101,14 @@
         <div>
             <label for="datetime">Date and Time:</label>
             <input type="datetime-local" id="datetime" name="datetime"
-                   th:value="${formattedDateTimeNow}" th:min="${formattedDateTimeNow}" required/>
+                   th:value="${formattedDateTimeNow}" th:min="${formattedDateTimeNow}"
+                   th:max="${endOfActiveDate}" required/>
         </div>
         <!-- Submit Button -->
         <button type="submit">Book Appointment</button>
 
-        <!-- Link Back to Appointment Listings -->
-        <a th:href="@{/userAppointment}">Back to Appointments</a>
+        <!-- Button to go back to Appointments -->
+        <button class="back-button" onclick="window.location.href='/userAppointment'">Back to Appointments</button>
     </form>
 </body>
 </html>
