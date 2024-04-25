@@ -50,10 +50,16 @@ body {
     border-radius: 2px; /* Slightly rounded corners */
 }
 .header-button.home-button {
-    width: 50px; /* Fixed width for the home button */
-    height: 50px; /* Fixed height for the home button */
-    position: absolute;
-    left: 30px; /* Adjust as needed */
+    position: relative;
+    display: inline-block; /* Ensure inline-block for proper sizing */
+    padding: 10px; /* Adjust padding for additional clickable area */
+    width: 50px;
+    height: 50px;
+}
+.header-button.home-button i {
+    font-size: 1.2em;
+    position: absolute; /* Ensure icon is positioned relative to its parent */
+    z-index: 2; /* Ensure the icon is above the overlay */
 }
 
 .header-button.home-button:hover, .header-button.sign-in-button:hover, .header-button.sign-up-button:hover {
@@ -62,10 +68,6 @@ body {
     border-color: #4a154b; /* Border color change on hover */
 }
 
-.header-button i {
-    font-size: 1.2em; /* Size of the icon */
-    pointer-events: none; /* Ensures that the icon does not interfere with click events */
-}
 
 .auth-buttons {
     position: absolute;
@@ -195,4 +197,156 @@ body {
 
 .wrapper .card:hover ul li::before {
     color: white; /* Check mark turns white on hover */
+}
+h2 {
+    color: #4a154b; /* Purple text color, consistent with your theme */
+    font-size: 1.5em; /* Larger font size for emphasis */
+    text-align: left; /* Center the text */
+    margin-top: 30px; /* Adds space above the heading */
+    font-family: 'Arial', sans-serif; /* Font family (can be adjusted to your preference) */
+    font-weight: bold; /* Makes the text bold */
+    text-transform: uppercase; /* Uppercase text for a more impactful display */
+    letter-spacing: 2px; /* Increases spacing between letters */
+}
+.container {
+    width: 80%;
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Ensures child elements can stretch full width if needed */
+}
+
+.section-title {
+    color: #4a154b;
+    font-size: 1.5em;
+    text-align: left;
+    margin-top: 30px;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.benefits-list {
+    text-align: left;
+    position: relative;
+    padding-left: 40px; /* Increased padding for better visual hierarchy */
+    margin-top: 10px; /* Added top margin for space above the list */
+    margin-bottom: 20px; /* Increased bottom margin */
+    line-height: 1.8; /* Increased line height for better readability */
+    color: #4a154b;
+    list-style-type: circle; /* Adds bullets to the list */
+}
+
+.duration-option {
+    margin: 10px 0;
+    display: flex;
+    align-items: center; /* Aligns the radio button and label nicely */
+}
+
+.duration-option input {
+    margin-right: 10px; /* More space between radio button and label */
+}
+
+.duration-option label {
+    cursor: pointer;
+    color: #4a154b;
+    font-weight: 500; /* Slightly bolder font */
+}
+
+.submit-button {
+    background-color: #4a154b;
+    color: white;
+    padding: 12px 24px;
+    border: 2px solid transparent; /* Prepare for border color change on hover */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+    font-size: 1em; /* Explicit font sizing */
+    margin-top: 20px; /* Space above the button */
+}
+
+.submit-button:hover {
+    background-color: #ffffff; /* White background on hover */
+    color: #4a154b; /* Text color changes to purple on hover */
+    border-color: #4a154b; /* Border becomes visible and matches text color */
+}
+.container .content {
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+}
+
+.plan-description, .price-display, .sign-in-notice {
+    margin-bottom: 20px;
+    color: #4a154b;
+}
+
+.section-heading {
+    color: #333;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+.benefits-list {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.submit-area button {
+    background-color: #4a154b;
+    color: white;
+    padding: 12px 24px;
+    border: 2px solid transparent; /* Prepare for border color change on hover */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+    font-size: 1em; /* Explicit font sizing */
+    margin-top: 20px; /* Space above the button */
+}
+
+.submit-area button:hover {
+    background-color: #ffffff; /* White background on hover */
+    color: #4a154b; /* Text color changes to purple on hover */
+    border-color: #4a154b; /* Border becomes visible and matches text color */
+}
+
+.sign-in-link {
+    color: #8a1272;
+    text-decoration: none;
+}
+
+.sign-in-notice {
+    background-color: #cdb5cd;
+    border-left: 5px solid #4a154b;
+    padding: 10px;
+    border-radius: 5px;
+}
+.price-display{
+    color:#4a154b;
+}
+.payment-option {
+    color:#4a154b;
+    display: flex;
+    align-items: center; /* Ensures that the text and image are centered vertically */
+    margin-bottom: 5px;
+}
+.payment-option img {
+    width: 50px; /* Adjust the width as necessary */
+    height: 50px; /* Keep height same as width for a perfect circle */
+    border-radius: 50%; /* This creates the circular shape */
+    vertical-align: middle; /* Aligns the image with the middle of the text */
+    margin-right: 10px; /* Adds space between the image and the label text */
+}
+
+.user-agreement{
+    margin-top: 20px;
+    color:#4a154b;
 }

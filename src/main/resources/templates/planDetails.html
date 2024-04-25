@@ -3,27 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Plan Details</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
     <script>
         function validateUserPlanType() {
-        var selectedPlanType = document.getElementById('planType').value;
-        var userPlanStatus = document.getElementById('userPlanStatus').value;
-        if (userPlanStatus === 'Paused') {
-            alert('Your subscription is currently paused. Please resume or contact staff.');
-            return false;  // Stop form submission
-        }
-        if (userPlanStatus === selectedPlanType) {
-            const proceed = confirm('You are already enrolled in this plan type. Purchasing again will extend your plan duration. Do you want to proceed?');
-            if (!proceed) {
-                return false;  
+            var selectedPlanType = document.getElementById('planType').value;
+            var userPlanStatus = document.getElementById('userPlanStatus').value;
+
+            if (userPlanStatus === 'Paused') {
+                alert('Your subscription is currently paused. Please return or contact staff.');
+                return false;
             }
-        }
-        if (userPlanStatus !== 'Inactive' && userPlanStatus !== 'Paused' && userPlanStatus !== selectedPlanType) {
-            const proceed = confirm('You are already enrolled in another plan (' + userPlanStatus + '). Purchasing this plan will overwrite your current plan. Do you want to proceed?');
-            if (!proceed) {
-                return false; 
+            if (userPlanStatus === selectedPlanType) {
+                const proceed = confirm('You are already enrolled in this plan type. Purchasing again will extend your plan duration. Do you want to proceed?');
+                if (!proceed) {
+                    return false;
+                }
             }
-        }
-            return true; 
+            if (userPlanStatus !== 'Inactive' && userPlanStatus !== 'Paused' && userPlanStatus !== selectedPlanType) {
+                const proceed = confirm('You are already enrolled in another plan (' + userPlanStatus + '). Purchasing this plan will overwrite your current plan. Do you want to proceed?');
+                if (!proceed) {
+                    return false;
+                }
+            }
+            return true;
         }
         function updatePrice(selectedDuration) {
             const price = selectedDuration.getAttribute('data-price');
@@ -33,41 +36,49 @@
     </script>
 </head>
 <body>
-    <div th:if = "${user == null}">
-        <p>You are not signed in please <a th:href = "@{/user_signin}">sign in</a> before proceeding to purchase</p>
-    </div>
-    <div th:if = "${user != null}">
-        <p>Welcome User: <span th:text="${user.name}">User</span></p>
-        <p>Membership Status: <span th:text="${user.status}">status</span></p>
-        <input type="hidden" id="userPlanStatus" th:value="${user.status}" />
-        <p th:if = "${#strings.equals(user.status, 'Inactive')}">Valid Date: -</p>
-        <p th:if = "${#strings.equals(user.status, 'Paused')}">Valid Date: Paused</p>
-        <p th:if = "${!#strings.equals(user.status, 'Inactive') and !#strings.equals(user.status, 'Paused')}">Valid Date: <span th:text="${user.activeDate}">date</span></p>
-    </div>
-    <h1 th:text="${planType} + ' Plan Details'">Plan Type Details</h1>
-    <p th:text="${planDetails}">Plan Description</p>
-    <h2>Benefits</h2>
-    <ul>
-        <li th:each="benefit : ${benefits}" th:text="${benefit.description}"></li>
-    </ul>
-    <h2>Choose a duration:</h2>
-    <form th:action="@{/browsePlan/{planType}/purchaseForm(planType=${planType})}" method="get" onsubmit="return validateUserPlanType()">
-        <input type="hidden" id="planType" th:value="${planType}" />
-        <div th:each="durationPrice : ${durationPrices}">
-            <input type="radio" th:id="${'duration' + durationPrice.planDuration}" 
-                   name="duration" th:value="${durationPrice.planDuration}" 
-                   th:data-price="${durationPrice.planPrice}" 
-                   onchange="updatePrice(this)" required/>
-            <label th:for="${'duration' + durationPrice.planDuration}" 
-                   th:text="${durationPrice.planDuration + ' months'}"></label>
+    <div class="header">
+        <a th:href="@{/browse_plans}" class="header-button home-button">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="header-center"><span th:text = "${planType}"></span> Plan Details</div> 
+        <div class="auth-buttons">
+            <a th:href="@{/register_user}" th:if="${user == null}" class="header-button sign-up-button">Sign Up</a>
+            <a th:href="@{/user_signin}" th:if="${user == null}" class="header-button sign-in-button">Sign In</a>
+            <div th:if="${user != null}">
+                <p>Welcome User: <span th:text="${user.name}">User</span></p>
+                <p>Your Current Plan Type: <span th:text="${user.status}">status</span></p>
+                <p th:if="${#strings.equals(user.status, 'Inactive')}">Valid Date: -</p>
+                <p th:if="${#strings.equals(user.status, 'Paused')}">Valid Date: Paused</p>
+                <p th:if="${!#strings.equals(user.status, 'Inactive') and !#strings.equals(user.status, 'Paused')}">Valid Date: <span th:text="${user.activeDate}">date</span></p>
+            </div>
         </div>
-        <p>Price: <span id="priceDisplay">Select a duration</span></p>
-        <input type="hidden" id="selectedPrice" name="price" value="" />
-        <div th:if = "${user != null}">
-            <button type="submit">Proceed to Purchase</button>
+    </div>
+    <div class="container">
+        <div class="content">
+            <h1 th:text="${planType} + ' Plan Details'">Plan Type Details</h1>
+            <p class="plan-description" th:text="${planDetails}">Plan Description</p>
+            <h2 class="section-heading">Benefits</h2>
+            <ul class="benefits-list">
+                <li th:each="benefit : ${benefits}" th:text="${benefit.description}">Description here</li>
+            </ul>
+            <h2 class="section-heading">Choose a duration:</h2>
+            <form th:action="@{/browsePlan/{planType}/purchaseForm(planType=${planType})}" method="get" onsubmit="return validateUserPlanType()">
+                <input type="hidden" id="planType" th:value="${planType}" />
+                <div th:each="durationPrice : ${durationPrices}" class="duration-option">
+                    <input type="radio" th:id="${'duration' + durationPrice.planDuration}" name="duration" th:value="${durationPrice.planDuration}" th:data-price="${durationPrice.planPrice}" onchange="updatePrice(this)" required/>
+                    <label th:for="${'duration' + durationPrice.planDuration}" th:text="${durationPrice.planDuration + ' months'}">12 months</label>
+                </div>
+                <p class="price-display">Price: <span id="priceDisplay">Select a duration</span></p>
+                <input type="hidden" id="selectedPrice" name="price" value="" />
+                <div th:if="${user == null}" class="sign-in-notice">
+                    <p>You are not signed in. Please <a th:href="@{/user_signin}" class="sign-in-link">sign in</a> before proceeding to purchase.</p>
+                </div>
+                <div th:if="${user != null}" class="submit-area">
+                    <input type="hidden" id="userPlanStatus" th:value="${user.status}"/>
+                    <button type="submit" class="submit-button">Proceed to Purchase</button>
+                </div>
+            </form>
         </div>
-    </form>
-    
-    <a href="/browse_plans">Back to Plans</a>
+    </div>
 </body>
 </html>

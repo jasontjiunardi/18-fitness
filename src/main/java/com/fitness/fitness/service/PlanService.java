@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import com.fitness.fitness.model.Benefit;
 import com.fitness.fitness.model.Plan;
 import com.fitness.fitness.model.PlanDurationPrice;
-import com.fitness.fitness.model.Trainer;
 import com.fitness.fitness.model.User;
 import com.fitness.fitness.repository.PlanDurationPriceRepo;
 import com.fitness.fitness.repository.PlanRepo;
@@ -20,9 +19,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service

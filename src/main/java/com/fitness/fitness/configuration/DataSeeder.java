@@ -57,11 +57,17 @@ public class DataSeeder {
                 Benefit exclusiveContent = new Benefit("Access to exclusive online content");
                 Benefit groupClasses = new Benefit("Free entry to group classes");
                 Benefit vipAccess = new Benefit("VIP lounge access");
+                Benefit trainerStar3 = new Benefit("Access to 3-star trainer");
+                Benefit trainerStar4 = new Benefit("Access to 4-star trainer");
+                Benefit trainerStar5 = new Benefit("Access to 5-star trainer");
 
                 benefitRepo.save(gymBag);
                 benefitRepo.save(exclusiveContent);
                 benefitRepo.save(groupClasses);
                 benefitRepo.save(vipAccess);
+                benefitRepo.save(trainerStar3);
+                benefitRepo.save(trainerStar4);
+                benefitRepo.save(trainerStar5);
 
                 // Fetch plans from the database and associate benefits
                 planRepo.findAll().forEach(plan -> {
@@ -70,17 +76,20 @@ public class DataSeeder {
                         case "Silver":
                             benefits.add(gymBag);
                             benefits.add(exclusiveContent);
+                            benefits.add(trainerStar3);
                             break;
                         case "Gold":
                             benefits.add(gymBag);
                             benefits.add(exclusiveContent);
                             benefits.add(groupClasses);
+                            benefits.add(trainerStar4);
                             break;
                         case "Diamond":
                             benefits.add(gymBag);
                             benefits.add(exclusiveContent);
                             benefits.add(groupClasses);
                             benefits.add(vipAccess);
+                            benefits.add(trainerStar5);
                             break;
                     }
                     plan.setBenefits(benefits);

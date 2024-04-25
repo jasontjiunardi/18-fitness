@@ -108,11 +108,6 @@ public class planController {
         return "purchaseForm";
     }
 
-    @GetMapping("/confirm_purchase")
-    public String showPurchaseConfirmationPage(Model model) {
-        return "purchaseConfirmation";
-    }
-
     @PostMapping("/finalizePurchase")
     public String finalizePurchase(@RequestParam("userAgreement") boolean userAgreement, 
                                     @RequestParam("paymentMethod") String paymentMethod,
@@ -131,7 +126,8 @@ public class planController {
                 // Handle the case where user is not logged in
                 return "redirect:/login"; 
             }
-                
+    
+            
             PaymentTransaction paymentTransaction = new PaymentTransaction();
             if(loggedInUser.getStatus().equals(planType)){
                 long durationChosen = Integer.parseInt(duration.split(" ")[0]);
@@ -139,9 +135,8 @@ public class planController {
                 loggedInUser.setActiveDate(newActiveDate);
                 paymentTransaction.setDuration((double) durationChosen);
                 paymentTransaction.setActiveDate(newActiveDate);
-                if(loggedInUser.getCardNumber()==null && cardNumber != null){
-                    loggedInUser.setCardNumber(cardNumber);
-                }
+                
+                
             }
             else{
                 loggedInUser.setStatus(planType);
@@ -150,11 +145,10 @@ public class planController {
                 loggedInUser.setActiveDate(now);
                 paymentTransaction.setDuration((double) durationChosen);
                 paymentTransaction.setActiveDate(now);
-                if(loggedInUser.getCardNumber()==null && cardNumber != null){
-                    loggedInUser.setCardNumber(cardNumber);
-                }
             }
-            
+            if(cardNumber.toString().length() == 16 && loggedInUser.getCardNumber() == null){
+                loggedInUser.setCardNumber(cardNumber);
+            }
             userService.saveUser(loggedInUser);
 
 
@@ -172,7 +166,7 @@ public class planController {
             // Save the payment transaction to the database
             paymentTransactionRepo.save(paymentTransaction);
             
-            return "redirect:/confirm_purchase"; 
+            return "purchaseConfirmation"; 
         } else {
             model.addAttribute("error", "You must agree to the user agreement to proceed!");
             return "purchaseForm"; 
@@ -228,7 +222,7 @@ public class planController {
             PaymentTransaction paymentTransaction = new PaymentTransaction();
             loggedInUser.setStatus(planType);
             paymentTransaction.setActiveDate(loggedInUser.getActiveDate());
-            if(loggedInUser.getCardNumber()==null && cardNumber != null){
+            if(cardNumber.toString().length() == 16 && loggedInUser.getCardNumber() == null){
                 loggedInUser.setCardNumber(cardNumber);
             }
             userService.saveUser(loggedInUser);
