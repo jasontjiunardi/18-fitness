@@ -32,7 +32,7 @@ public class UserStatusChecker {
         LocalDate today = LocalDate.now();
         List<User> users = userRepo.findAll();
         for (User user : users) {
-            if (user.getActiveDate().isBefore(today)) {
+            if (user.getActiveDate()!=null && user.getActiveDate().isBefore(today)) {
                 user.setStatus("Inactive");
                 user.setActiveDate(null);
                 userRepo.save(user);
