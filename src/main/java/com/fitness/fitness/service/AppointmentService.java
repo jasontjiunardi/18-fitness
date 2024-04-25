@@ -60,14 +60,22 @@ public class AppointmentService {
     public void updateAppointment(Appointment appointment) {
             appointmentRepo.save(appointment); // save method handles both insert and update
 
-}
+    }
 //its the same as the update appointment above but this one i just create a separate method to make it more separate and clear - herman
     @Transactional
     public void saveAppointment(Appointment appointment) {
         appointmentRepo.save(appointment);
     }
 
+    public List<Appointment> findAppointmentsByFilters(int userId, Integer classId, Integer trainerId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return appointmentRepo.findAppointmentsByFilters(userId, classId, trainerId, startDateTime, endDateTime);
+    }
 }
+    
+
+    
+
+
 
 
     
