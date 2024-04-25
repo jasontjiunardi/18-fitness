@@ -3,19 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Change Subscription</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
 </head>
 <body>
-    <h1>Change Subscription</h1>
+    <div class="header">
+        <a th:href="@{/home_page}" th:if="${user != null}" class="header-button home-button">
+            <i class="fas fa-arrow-left"></i> <!-- Icon is fully within the clickable area -->
+        </a>
+        <a th:href="@{/first_page}" th:if="${user == null}" class="header-button home-button"><i class="fas fa-arrow-left"></i></a>
+        <div class="header-center">Change Subscription</div> 
+        <div class="auth-buttons">
+            <a th:href="@{/register_user}" th:if="${user == null}" class="header-button sign-up-button">Sign Up</a>
+            <a th:href="@{/user_signin}" th:if="${user == null}" class="header-button sign-in-button">Sign In</a>
+            <div th:if="${user != null}">
+                <p>Welcome User: <span th:text="${user.name}">User</span></p>
+                <p>Your Current Plan Type: <span th:text="${user.status}">status</span></p>
+                <p th:if="${#strings.equals(user.status, 'Inactive')}">Valid Date: -</p>
+                <p th:if="${#strings.equals(user.status, 'Paused')}">Valid Date: Paused</p>
+                <p th:if="${!#strings.equals(user.status, 'Inactive') and !#strings.equals(user.status, 'Paused')}">Valid Date: <span th:text="${user.activeDate}">date</span></p>
+            </div>
+        </div>
+    </div>
     <div th:if="${user == null}">
         <p>You are not signed in, please <a th:href="@{/user_signin}">sign in</a> to continue.</p>
     </div>
     <div th:if="${user != null}">
-        <p>Welcome User: <span th:text="${user.name}">User</span></p>
-        <p>Your Current Plan Type: <span th:text="${user.status}">status</span></p>
-        <p th:if="${#strings.equals(user.status, 'Inactive')}">Valid Date: -</p>
-        <p th:if="${#strings.equals(user.status, 'Paused')}">Valid Date: Paused</p>
-        <p th:if="${!#strings.equals(user.status, 'Inactive') and !#strings.equals(user.status, 'Paused')}">Valid Date: <span th:text="${user.activeDate}">date</span></p>
-
         <div th:if="${#strings.equals(user.status, 'Inactive')}">
             <p>You are currently not subscribed to any plans. Please go to <a th:href="@{/browse_plans}">browse plans</a> to subscribe.</p>
         </div>
@@ -23,18 +36,21 @@
             <p>Sorry, your plan is currently on pause. Please go back to <a th:href="@{/home_page}">home page</a> or contact our lovely staff.</p>
         </div>
         <div th:if="!${#strings.equals(user.status, 'Inactive')} and !${#strings.equals(user.status, 'Paused')}">
-        <h2>Available Plans For You</h2>
-            <div th:each="planType : ${planTypes}">
-                <div th:if="${!#strings.equals(user.status, planType)}">
-                    <h3 th:text="${planType}">Plan Type</h3>
-                    <ul>
-                        <li th:each="benefit : ${planBenefits[__${planType}__]}" th:text="${benefit.description}">Benefit Description</li>
-                    </ul>
-                    <a th:href="@{/changeSubscription/{planType}(planType=${planType})}">Details</a>
+            <h2>Available Plans For You</h2>
+            <div class="wrapper">
+                <div th:each="planType : ${planTypes}">
+                    <div th:if="${!#strings.equals(user.status, planType)}" class="card">
+                        <div class="card-content">
+                            <h3 th:text="${planType}">Plan Type</h3>
+                            <ul>
+                                <li th:each="benefit : ${planBenefits[__${planType}__]}" th:text="${benefit.description}">Benefit Description</li>
+                            </ul>
+                        </div>
+                        <a th:href="@{/changeSubscription/{planType}(planType=${planType})}">Details</a>
+                    </div>
                 </div>
-            </div>
+            </div>    
         </div>
     </div>
-    <a th:if = "${user != null}" th:href = "@{/home_page}">Back to home</a>
 </body>
 </html>

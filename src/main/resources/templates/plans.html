@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="header">
-        <a th:href="@{/home_page}" class="header-button home-button">
+        <a th:href="@{/home_page}"  th:if="${user != null}" class="header-button home-button">
             <i class="fas fa-arrow-left"></i> <!-- Icon is fully within the clickable area -->
         </a>
         <a th:href="@{/first_page}" th:if="${user == null}" class="header-button home-button"><i class="fas fa-arrow-left"></i></a>
