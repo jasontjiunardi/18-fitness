@@ -251,6 +251,18 @@ public class planController {
         }
         return "changeSubscriptionForm";
     }
+
+    @GetMapping("/plan_purchase_history")
+    public String viewPlanPurchaseHistory(Model model, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("user");
+        if (loggedInUser != null) {
+            int userId = loggedInUser.getUserId(); 
+            List<PaymentTransaction> purchaseHistory = paymentTransactionRepo.findByUserUserId(userId);
+            model.addAttribute("purchaseHistory", purchaseHistory);
+        } else {
+        }
+        return "planPurchaseHistory";
+    }
     
     
 
