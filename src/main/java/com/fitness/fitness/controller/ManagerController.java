@@ -2,6 +2,8 @@ package com.fitness.fitness.controller;
 
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,10 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fitness.FileUploadUtil;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.fitness.fitness.model.Appointment;
 import com.fitness.fitness.model.Manager;
 import com.fitness.fitness.model.Trainer;
 import com.fitness.fitness.repository.TrainerRepo;
 import com.fitness.fitness.repository.UserRepo;
+import com.fitness.fitness.service.AppointmentService;
 import com.fitness.fitness.service.ManagerService;
 import com.fitness.fitness.service.TrainerService;
 import com.fitness.fitness.service.UserService;
@@ -45,6 +49,8 @@ public class ManagerController {
     private TrainerService trainerService;
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private AppointmentService appointmentService;
     
     //  cb cek ulang ini
     // @GetMapping("/manager_add_appointment")
@@ -183,4 +189,17 @@ public class ManagerController {
         model.addAttribute("Users", userService.getAllUsers());
         return "managerViewUsers";
     }
+    //without session for now
+    @GetMapping("/manager_appointment")
+    public String listAppoingments(Model model, @SessionAttribute("manager") Manager manager) {
+        // Update the status of past appointments to "inactive"
+        appointmentService.deactivatePastAppointments();
+        
+    
+        List<Appointment> allAppointment = appointmentService.findAllAppointment();
+        model.addAttribute("allAppointment", allAppointment);
+    
+        return "managerViewAppointment"; 
+    }
+
 }
