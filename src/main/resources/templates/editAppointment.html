@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Appointment</title>
+    <!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter Appointments</title>
+
 </head>
 <body>
     <h1>Edit Appointment</h1>
@@ -37,8 +44,8 @@
         <div>
             <label for="datetime">Date and Time:</label>
             <input type="datetime-local" id="datetime" name="datetime"
-                   th:value="${formattedAppointmentDateTime}"
-                   th:min="${formattedDateTimeNow}" required />
+                th:value="${formattedDateTimeNow}" th:min="${formattedDateTimeNow}"
+                th:max="${endOfActiveDate}" required/>
         </div>
         <!-- Submit Button -->
         <button type="submit">Save Appointment</button>
