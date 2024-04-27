@@ -122,7 +122,7 @@ public class AppointmentController {
                               @RequestParam(name = "className", required = false) String className,
                               @SessionAttribute("user") User user) {
         try {
-        //this is for if you choose book class from trainer or home page
+        //this is for if you choose book appointment from trainer or home page
             if (classId == null) {
                 List<FitnessClass> classList = fitnessClassService.getAllClasses();
         User retrievedUser = userService.getUserByEmail(user.getEmail());
@@ -146,7 +146,7 @@ public class AppointmentController {
         model.addAttribute("trainerList", trainerList);
         model.addAttribute("formattedDateTimeNow", formattedDateTimeNow);
             } else {
-        // if you choose book class from view class
+        // if you choose book appointment from view class
         List<FitnessClass> classList = fitnessClassService.getAllClasses();
         User retrievedUser = userService.getUserByEmail(user.getEmail());
         model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
