@@ -1,15 +1,174 @@
-.card-container {
-  display: flex;
-  flex-wrap: wrap; /* Allow flex items to wrap to the next line */
-  justify-content: space-around; /* Distribute space between items */
-  align-items: flex-start; /* Align items to the top */
-  margin: 0 auto; /* Center the container horizontally */
-  max-width: 1200px; /* Adjust the maximum width as needed */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
 }
+
+body {
+  background-color: #ebeef1; /* Greyish background */
+  display: flex;
+  flex-direction: column; /* Align items vertically */
+  align-items: center; /* Center items horizontally */
+  min-height: 100vh;
+  padding-top: 20vh; /* Make space for the header */
+}
+
+.header {
+  width: 100%;
+  height: 16vh;
+  background-color: #4a154b;
+  color: white;
+  display: flex;
+  align-items: center;
+  font-size: 1.5em;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 0 30px;
+}
+.header-center {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  left: 0;
+}
+
+.header-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4a154b;
+  color: white;
+  text-decoration: none;
+  border: 2px solid white;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  padding: 5px 10px; /* Provides padding for better click area */
+  border-radius: 2px; /* Slightly rounded corners */
+}
+.header-button.home-button {
+  position: relative;
+  display: inline-block; /* Ensure inline-block for proper sizing */
+  padding: 10px; /* Adjust padding for additional clickable area */
+  width: 50px;
+  height: 50px;
+}
+.header-button.home-button i {
+  font-size: 1.2em;
+  position: absolute; /* Ensure icon is positioned relative to its parent */
+  z-index: 2; /* Ensure the icon is above the overlay */
+}
+
+.header-button.home-button:hover, .header-button.sign-in-button:hover, .header-button.sign-up-button:hover {
+  background-color: white; /* White background on hover */
+  color: #4a154b; /* Purple text on hover */
+  border-color: #4a154b; /* Border color change on hover */
+}
+
+
+.auth-buttons {
+  position: absolute;
+  right: 30px; /* Adjust as needed */
+  display: flex;
+  gap: 5px;
+}
+
+.auth-buttons a {
+  padding: 5px 10px;
+  border-radius: 2px;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap; /* Allow the cards to wrap to the next line */
+  justify-content: center; /* Center the cards within the wrapper */
+  gap: 30px; /* Provides space between the cards */
+  width: 100%; /* Ensures the wrapper takes the full width */
+  margin-top: 65px;
+}
+
+.wrapper .card {
+  flex: 1 0 300px;
+  display: flex;
+  flex-direction: column;
+  max-width: 350px;
+  min-height: 400px; /* Ensures a minimum consistent height for shorter cards */
+  background-color: white;
+  padding: 40px;
+  padding-bottom: 60px; /* Provides extra space at the bottom for the button */
+  border-radius: 10px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  position: relative; /* Essential for positioning the button */
+  transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.wrapper .card:hover {
+  transform: scale(1.05);
+  background-color: #4a154b; /* Dark purple background */
+  color: white;
+}
+
+.wrapper .card:hover h3,
+.wrapper .card:hover h1,
+.wrapper .card:hover p,
+.wrapper .card:hover span,
+.wrapper .card:hover a {
+  color: white; /* Ensures all text including links turns white on hover */
+}
+
+.wrapper .card a {
+  position: absolute;
+  bottom: 20px; /* Positions the button 20px from the bottom of the card */
+  left: 20px;
+  right: 20px;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  border: 1px solid #4a154b; 
+  color: #4a154b;
+  padding: 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.wrapper .card:hover a {
+  border-color: white; /* Button border turns white on card hover */
+}
+
+.wrapper .card a:hover {
+  background-color: white; /* Button background turns white on button hover */
+  color: #4a154b; /* Button text turns purple on button hover */
+}
+.card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: auto; /* Pushes everything else upwards, keeping the button at the bottom */
+}
+/* Adjusted settings for card content and text colors */
+.wrapper .card {
+    color: #4a154b; /* Default text color set to purple */
+}
+
+.wrapper .card h3, .wrapper .card p {
+    color: inherit; /* Inherits the purple color unless hovered */
+}
+
+
+h3{
+  color: #4a154b;
+  text-align: center;
+  font-weight: bold;
+  
+}
+
 .card {
   width: 17em;
   height: 22.5em;
-  background: #5f30e2;
+  background: #4a154b;
   transition: 1s ease-in-out;
   border-radius: 20px;
   display: flex;
@@ -17,39 +176,24 @@
   align-items: center;
   justify-content: center;
 }
+ 
 
-.card span {
-  font-weight: bold;
-  color: white;
-  text-align: center;
-  display: block;
-  font-size: 1em;
-}
-
-
-.card .imgbox {
-  width: 4.8em;
-  height: 4.8em;
-  background: white;
+.card .imgbox img {
+  position: relative;
+  bottom:30px;
+  margin-top: 0.1em;
+  width: 180px;
+  height: 180px;
   border-radius: 15px;
-  margin: auto;
   object-fit: cover;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.card .imgbox img {
-  margin-top: 0.3em;
-  width: 4.8em;
-  height: 4.8em;
-  border-radius: 15px;
-  object-fit: cover;
-}
-
 .card .rank {
   position: relative;
-  top:70px;
+  top:40px;
   font-weight: normal;
   color: white;
   display: block;
@@ -58,34 +202,15 @@
 }
 .stars {
   position: relative;
-  top:55px;
+  top:40px;
     text-align: center;
 }
 .stars span {
   display: inline-block; /* Change display property to inline-block */
   margin-right: 5px; /* Add some margin between the stars */
   text-align: center;
-  color: gold;
+  color: #4a154b;
 }
-
-.card button {
-  padding: 0.8em 1.7em;
-  display: center;
-  margin: 50px;
-  border-radius: 25px;
-  border: none;
-  font-weight: bold;
-  background: #ffffff;
-  color: rgb(0, 0, 0);
-  transition: .4s ease-in-out;
-}
-
-.card button:hover {
-  background: gold;
-  color: white;
-  cursor: pointer;
-}
-  
 
 .radio-group {
     display: flex;
@@ -97,15 +222,17 @@
     align-items: center;
     padding: 0.5em;
     margin-bottom: 0.5em;
-    background-color: #5f30e2;
+    background-color: white;
     border: 1px solid #ccc;
     border-radius: 4px;
     transition: background-color 0.2s, border-color 0.2s;
-    color: #fff;
+    color: #4a154b;
   }
   
   .radio-label:hover {
-    background-color: gold;
+    background-color: #4a154b;
+    border-color: white;
+    color: white;
   }
   
   .radio-input {
@@ -114,24 +241,5 @@
   }
 
 
-  .radio-label:hover  {
-    border-color: rgb(233, 233, 233);
-  }
   
-  .radio-input:checked + .radio-label  {
-    border-color: #5f30e2;
-  }
-  
-  .radio-input:checked + .radio-label  {
-    content: '';
-    display: block;
-    width: 0.5em;
-    height: 0.5em;
-    background-color: #5f30e2;
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-      
+ 

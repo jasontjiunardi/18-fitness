@@ -42,9 +42,9 @@
         <input type="date" class="form-control" id="trainerSince" name="trainerSince" th:value="${trainer.trainerSince}" />
     </div>
     <div class="form-group">
-        <input type="hidden" th:field="${trainer.image}"/>
-        <label for="image">Profile Picture:</label>
-        <input type="file" id="image" name="image" accept="image/png, image/jpg"> 
+        <!-- <input type="hidden" th:field="${trainer.image}"/> -->
+        <label for="fileImage">Profile Picture:</label>
+        <input type="file" id="fileImage" name="image" accept="image/png, image/jpg, iamge/jpeg"> 
     </div>
     
     <!-- Confirm changes button -->
