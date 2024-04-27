@@ -72,6 +72,11 @@
                     <span>Description:</span> <span th:text="${fitnessClass.classDescription}">Class Description</span><br>
                     <span>Duration:</span> <span th:text="${fitnessClass.classDuration}">Class Duration</span><br>
                 </div>
+                <form th:action="@{/book_appointment}" method="GET">
+                    <input type="hidden" name="classId" th:value="${fitnessClass.classId}" />
+                    <input type="hidden" name="className" th:value="${fitnessClass.className}" />
+                    <button type="submit">Book Appointment</button>
+                </form>
             </li>
             <!-- Message to show if the list is empty -->
             <li th:if="${allClasses.isEmpty()}">
