@@ -96,6 +96,7 @@
                     <th onclick="sortTable(6, 'string')">Phone</th>
                     <th onclick="sortTable(7, 'number')">Rank</th>
                     <th onclick="sortTable(8, 'string')">Since</th>
+                    <th>Edit</th> <!-- New column for the Edit button -->
                     <th>Profile Picture</th>
                 </tr>
             </thead>
@@ -111,6 +112,7 @@
                     <td class="rank-stars" th:data-rank="${trainer.rank}" th:text="${trainer.rank}"></td>
                     <td th:text="${trainer.trainerSince}"></td>
                     <td> <img th:src="@{'images/' + ${trainer.image}}" alt="Trainer image" class="trainer-img"/></td>
+                    <td><a th:href="@{'/editTrainer/' + ${trainer.id}}" class="btn btn-primary">Edit</a></td>
                 </tr>
             </tbody>
         </table>

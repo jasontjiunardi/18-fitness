@@ -117,9 +117,34 @@ public class AppointmentController {
     
 
     @GetMapping("/book_appointment")
-    public String bookAppointment(Model model, @SessionAttribute("user") User user) {
+    public String bookAppointment(Model model, 
+                              @RequestParam(name = "classId", required = false) Integer classId,
+                              @RequestParam(name = "className", required = false) String className,
+                              @SessionAttribute("user") User user) {
         try {
-                
+            if (classId == null) {
+                List<FitnessClass> classList = fitnessClassService.getAllClasses();
+        User retrievedUser = userService.getUserByEmail(user.getEmail());
+        model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
+        int planTypeId = planService.findByPlanType(retrievedUser.getStatus()).getId();
+        List<Trainer> trainerList = trainerService.getTrainersByPlanId(planTypeId);
+
+
+        // Formatting date and time for the frontend
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        String formattedDateTimeNow = now.format(formatter);
+        LocalDateTime Activenow = LocalDateTime.now();
+        DateTimeFormatter Activeformatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        LocalDate activeDate = user.getActiveDate(); // Assuming this is a LocalDate
+        LocalDateTime endOfActiveDate = activeDate.atTime(23, 59); // End of the active date
+        
+        model.addAttribute("formattedDateTimeNow", Activenow.format(Activeformatter));
+        model.addAttribute("endOfActiveDate", endOfActiveDate.format(formatter)); // Pass as LocalDateTime formatted 
+        model.addAttribute("classList", classList);
+        model.addAttribute("trainerList", trainerList);
+        model.addAttribute("formattedDateTimeNow", formattedDateTimeNow);
+            } else {
         List<FitnessClass> classList = fitnessClassService.getAllClasses();
         User retrievedUser = userService.getUserByEmail(user.getEmail());
         model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
@@ -135,13 +160,19 @@ public class AppointmentController {
         DateTimeFormatter Activeformatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         LocalDate activeDate = user.getActiveDate(); // Assuming this is a LocalDate
         LocalDateTime endOfActiveDate = activeDate.atTime(23, 59); // End of the active date
-    
+        // Fetch the selected class by ID
+        FitnessClass fitnessClass = fitnessClassService.getClassById(classId);
+        model.addAttribute("classId", classId);
+        // Add the selected class to the model
+        model.addAttribute("fitnessClass", fitnessClass);
+        // Pass the class name as a model attribute
+        model.addAttribute("className", className);
         model.addAttribute("formattedDateTimeNow", Activenow.format(Activeformatter));
         model.addAttribute("endOfActiveDate", endOfActiveDate.format(formatter)); // Pass as LocalDateTime formatted 
         model.addAttribute("classList", classList);
         model.addAttribute("trainerList", trainerList);
         model.addAttribute("formattedDateTimeNow", formattedDateTimeNow);
-       
+            }
 
         return "bookAppointment";}
         catch (Exception e) {

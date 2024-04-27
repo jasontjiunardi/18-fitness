@@ -84,7 +84,8 @@
             <label for="classId">Class:</label>
             <select id="classId" name="classId" required>
                 <option value="">Select Class</option>
-                <option th:each="class : ${classList}" th:value="${class.classId}" th:text="${class.className}"></option>
+                <option th:each="class : ${classList}" th:value="${class.classId}" th:text="${class.className}"
+                        th:selected="${class.classId == classId}"></option>
             </select>
         </div>
 
@@ -96,7 +97,7 @@
                 <option th:each="trainer : ${trainerList}" th:value="${trainer.id}" th:text="${trainer.name}"></option>
             </select>
         </div>
-
+    
         <!-- Date and Time Input -->
         <div>
             <label for="datetime">Date and Time:</label>
@@ -106,9 +107,9 @@
         </div>
         <!-- Submit Button -->
         <button type="submit">Book Appointment</button>
-
+    
         <!-- Button to go back to Appointments -->
         <button class="back-button" onclick="window.location.href='/userAppointment'">Back to Appointments</button>
-    </form>
+    </form>    
 </body>
 </html>
