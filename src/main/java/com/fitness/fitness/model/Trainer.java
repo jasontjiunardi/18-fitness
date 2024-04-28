@@ -139,6 +139,14 @@ public class Trainer {
                 + ", email=" + email + ", image=" + image + ", phone=" + phone + ", rank=" + rank + ", trainerSince="
                 + trainerSince + ", plans=" + plans + "]";
     }
+//for promoting and demoting trainers
+    public void updateRank(int newRank) {
+        if (newRank >= 3 && newRank <= 5) {
+            this.rank = newRank;
+        } else {
+            // Optionally handle invalid rank values here
+        }
+    }
 
 
 }

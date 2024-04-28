@@ -1,4 +1,4 @@
-package com.fitness.fitness.configuration;
+/*package com.fitness.fitness.configuration;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,4 +58,4 @@ public class ReviewDataSeeder implements CommandLineRunner {
             reviewRepo.saveAll(reviews);
         }
     }
-}
+}*/

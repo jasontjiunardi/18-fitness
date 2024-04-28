@@ -184,6 +184,32 @@ public class ManagerController {
         return "redirect:/managerViewTrainers";
     }
 
+    @PostMapping("/promoteTrainer/{id}")
+public String promoteTrainer(@PathVariable("id") int id) {
+    Trainer trainer = trainerService.getTrainerById(id);
+    if (trainer != null) {
+        int currentRank = trainer.getRank();
+        if (currentRank < 5) {
+            trainer.updateRank(currentRank + 1);
+            trainerService.saveTrainer(trainer);
+        }
+    }
+    return "redirect:/managerViewTrainers";
+}
+
+@PostMapping("/demoteTrainer/{id}")
+public String demoteTrainer(@PathVariable("id") int id) {
+    Trainer trainer = trainerService.getTrainerById(id);
+    if (trainer != null) {
+        int currentRank = trainer.getRank();
+        if (currentRank > 3) {
+            trainer.updateRank(currentRank - 1);
+            trainerService.saveTrainer(trainer);
+        }
+    }
+    return "redirect:/managerViewTrainers";
+}
+
     @GetMapping("/managerViewUsers")
     public String showUsers(Model model) {
         model.addAttribute("Users", userService.getAllUsers());
