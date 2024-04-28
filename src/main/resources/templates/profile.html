@@ -3,112 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="UserProfile.css" />
     <title>User Profile</title>
 </head>
 
-<style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #eaeef3;
-        color: #4a4a4a;
-        margin: 0;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        min-height: 100vh;
-    }
-
-    h1 {
-        font-size: 2.5rem;
-        color: #4a154b;
-        margin-bottom: 20px;
-    }
-
-    .profile-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: start;
-    width: 100%;
-    max-width: 800px;
-    padding: 20px;
-    margin-top: 10px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-}
-
-.profile-picture-box {
-    width: 200px;
-    margin-right: 20px; 
-}
-
-img {
-    width: 100%;
-    height: auto;
-    border-radius: 50%;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.user-details {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-    .profile-info, form {
-        width: 100%;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-        background-color: #fff;
-        margin-bottom: 20px;
-    }
-
-    input[type="text"], input[type="password"], button {
-        width: 100%;
-        padding: 10px;
-        margin-top: 5px;
-        border: 2px solid #4a154b;
-        border-radius: 5px;
-    }
-
-    button {
-        background-color: #4a154b;
-        color: white;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-        background-color: #4a154b;
-    }
-
-    a, a:hover {
-        text-decoration: none;
-        color: #4a154b;
-    }
-
-    @media (max-width: 768px) {
-        .profile-container {
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .profile-content, .profile-picture-box {
-            width: 100%;
-            align-items: center;
-        }
-    }
-</style>
 
 <body>
     <h1>User Profile</h1>
     <div class="profile-container">
         <div class="profile-picture-box">
-            <img th:src="@{'images/' + ${user.image}}" alt="User Image"/>
+            <img th:src="@{'/images/' + ${user.photo}}" alt="User Image"/>
         </div>
         <div class="user-details">
             <p>Email: <span th:text="${user.email}"></span></p >

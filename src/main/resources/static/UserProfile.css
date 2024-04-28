@@ -1,0 +1,97 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #eaeef3; /* Updated to a softer background */
+    color: #4a4a4a; /* Neutral dark gray for text */
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #4a154b; /* A deep, vibrant purple */
+    margin-bottom: 20px;
+}
+
+.profile-container {
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: start;
+width: 100%;
+max-width: 800px;
+padding: 20px;
+margin-top: 10px;
+background: #ffffff; /* White background for contrast */
+border-radius: 10px;
+box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.profile-picture-box {
+width: 200px; /* Adjusted width for the profile picture */
+margin-right: 20px; /* Spacing between the picture and details */
+}
+
+img {
+width: 180px;
+height: 180px;
+border-radius: 50%; /* Circular image */
+box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+object-fit: cover;
+}
+
+.user-details {
+display: flex;
+flex-direction: column;
+align-items: flex-start; /* Align text to the left */
+}
+
+.profile-info, form {
+    width: 100%;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+
+input[type="text"], input[type="password"], button {
+    width: 100%; /* Adjusted to full width */
+    padding: 10px;
+    margin-top: 5px;
+    border: 2px solid #4a154b; /* Consistent purple border */
+    border-radius: 5px;
+}
+
+button {
+    background-color: #4a154b;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #4a154b; /* Darker purple on hover */
+}
+
+a, a:hover {
+    text-decoration: none;
+    color: #4a154b; /* Maintain color consistency */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-content, .profile-picture-box {
+        width: 100%; /* Full width on smaller screens */
+        align-items: center;
+    }
+}

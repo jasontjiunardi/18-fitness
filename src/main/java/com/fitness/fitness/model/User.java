@@ -33,7 +33,7 @@ public class User {
     private LocalDate activeDate = null;
     private int recoveryCode;
     private String cardNumber;
-    private String image;
+    private String photo = "wechat_icon.jpg";
     private String gender;
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -44,7 +44,7 @@ public class User {
 
 
     public User(int userId, String name, String username, String password, String email, Date dob, String phoneNumber,
-            String status, LocalDate activeDate, int recoveryCode, String cardNumber, String image) {
+            String status, LocalDate activeDate, int recoveryCode, String cardNumber, String photo) {
         this.userId = userId;
         this.name = name;
         this.username = username;
@@ -56,7 +56,7 @@ public class User {
         this.activeDate = activeDate;
         this.recoveryCode = recoveryCode;
         this.cardNumber = cardNumber;
-        this.image = image;
+        this.photo = photo;
     }
     
     public int getRecoveryCode() {
@@ -129,12 +129,12 @@ public class User {
         this.cardNumber = cardNumber;
     }
 
-    public String getImage() {
-        return image;
+    public String getPhoto() {
+        return photo;
     }
     
-    public void setImage(String image) {
-        this.image = image;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
 
@@ -143,7 +143,7 @@ public class User {
         return "User [userId=" + userId + ", name=" + name + ", username=" + username + ", password=" + password
                 + ", email=" + email + ", dob=" + dob + ", phoneNumber=" + phoneNumber + ", status=" + status
                 + ", activeDate=" + activeDate + ", recoveryCode=" + recoveryCode + ", cardNumber=" + cardNumber
-                + ", image=" + image + ", gender=" + gender + ", appointments=" + appointments + "]";
+                + ", photo=" + photo + ", gender=" + gender + ", appointments=" + appointments + "]";
     }
     
 }
