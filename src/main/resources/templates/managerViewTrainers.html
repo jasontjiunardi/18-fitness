@@ -96,8 +96,8 @@
                     <th onclick="sortTable(6, 'string')">Phone</th>
                     <th onclick="sortTable(7, 'number')">Rank</th>
                     <th onclick="sortTable(8, 'string')">Since</th>
-                    <th>Edit</th> <!-- New column for the Edit button -->
-                    <th>Profile Picture</th>
+                    <th>Profile Picture</th> <!-- New column for the Edit button -->
+                    <th>Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -121,6 +121,7 @@
                             <button type="submit" class="btn btn-danger btn-sm">Demote</button>
                         </form>
                     </td>
+                    
                     <td><a th:href="@{'/editTrainer/' + ${trainer.id}}" class="btn btn-primary">Edit</a></td>
                     
                 </tr>
