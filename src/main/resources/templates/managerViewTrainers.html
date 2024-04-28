@@ -112,8 +112,20 @@
                     <td class="rank-stars" th:data-rank="${trainer.rank}" th:text="${trainer.rank}"></td>
                     <td th:text="${trainer.trainerSince}"></td>
                     <td> <img th:src="@{'images/' + ${trainer.photo}}" alt="Trainer image" class="trainer-img"/></td>
+                    
+                    <td>
+                        <form th:action="@{/promoteTrainer/{id}(id=${trainer.id})}" method="post">
+                            <button type="submit" class="btn btn-success btn-sm">Promote</button>
+                        </form>
+                        <form th:action="@{/demoteTrainer/{id}(id=${trainer.id})}" method="post">
+                            <button type="submit" class="btn btn-danger btn-sm">Demote</button>
+                        </form>
+                    </td>
+                    
                     <td><a th:href="@{'/editTrainer/' + ${trainer.id}}" class="btn btn-primary">Edit</a></td>
+                    
                 </tr>
+                
             </tbody>
         </table>
     </div>

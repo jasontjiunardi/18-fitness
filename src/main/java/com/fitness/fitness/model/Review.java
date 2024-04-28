@@ -1,77 +1,57 @@
 package com.fitness.fitness.model;
 
-import java.util.Date;
-
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDate;
 
 @Entity
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String username;
-    private int rating;
-    private String content;
-    private Date dateAdded;
-
-    public Review(){
-    }
+    private int id;
     
-    public Review(Long id, String username, int rating, String content, Date dateAdded){
-        this.id = id;
-        this.username = username;
-        this.rating = rating;
-        this.content = content;
-        this.dateAdded = dateAdded;
-    }
-    @ManyToOne
+    // Many-to-one relationship with User
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    // Many-to-one relationship with Trainer
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id")
     private Trainer trainer;
+    
+    private String comment;
+    private LocalDate date;
 
-    public Long getId() {
+    public Review() {
+    }
+
+    public Review(User user, Trainer trainer, String comment, LocalDate date) {
+        this.user = user;
+        this.trainer = trainer;
+        this.comment = comment;
+        this.date = date;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Date getDateAdded() {
-        return dateAdded;
-    }
-
-    public void setDateAdded(Date dateAdded) {
-        this.dateAdded = dateAdded;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Trainer getTrainer() {
@@ -82,4 +62,24 @@ public class Review {
         this.trainer = trainer;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "Review [id=" + id + ", user=" + user + ", trainer=" + trainer + ", comment=" + comment + ", date=" + date + "]";
+    }
 }
