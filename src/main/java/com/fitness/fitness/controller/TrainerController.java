@@ -11,7 +11,7 @@ import com.fitness.fitness.model.User;
 import com.fitness.fitness.model.Review;
 import com.fitness.fitness.service.TrainerService;
 import com.fitness.fitness.service.UserService;
-import com.fitness.fitness.service.ReviewService;
+//import com.fitness.fitness.service.ReviewService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -24,8 +24,8 @@ import jakarta.servlet.http.HttpSession;
 public class TrainerController {
     @Autowired
     private TrainerService trainerService;
-    @Autowired
-    private ReviewService reviewService;
+   // @Autowired
+    //private ReviewService reviewService;
 
     @Autowired
     private UserService userService;
@@ -55,9 +55,9 @@ public class TrainerController {
     @GetMapping("/trainer_profile")
     public String trainerProfile(@RequestParam(value = "id", required = false) Integer id, Model model) {
         Trainer trainer = trainerService.findById(id);
-        List<Review> reviews = reviewService.findByTrainer(trainer); // Get reviews for the trainer
+        //List<Review> reviews = reviewService.findByTrainer(trainer); // Get reviews for the trainer
         model.addAttribute("trainer", trainer);
-        model.addAttribute("reviews", reviews); 
+        //model.addAttribute("reviews", reviews); 
         return "trainerprofile";
     }
 

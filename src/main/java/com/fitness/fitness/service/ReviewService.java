@@ -1,4 +1,4 @@
-package com.fitness.fitness.service;
+/*package com.fitness.fitness.service;
 
 import java.util.List;
 
@@ -21,4 +21,4 @@ public class ReviewService {
     public List<Review> getAllReviews() {
         return reviewRepo.findAll();
     }
-}
+}*/

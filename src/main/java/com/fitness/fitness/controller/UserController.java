@@ -158,6 +158,11 @@ public class UserController {
         return "editProfile";
     }
 
+    @PostMapping("/edit_profile")
+    public String userEditInformation(@ModelAttribute User user, Model model) {
+        userService.saveUser(user);
+        return "profile"; 
+}
     @PostMapping("updateProfile")
     public String userEditInformation( @RequestParam("image") MultipartFile multipartFile,@ModelAttribute User user, Model model) throws IOException{
         if (!multipartFile.isEmpty()) {
@@ -198,6 +203,37 @@ public class UserController {
         } else {
             return "login";
         }
+    }
+
+        
+    @GetMapping("/choose_profile_picture")
+    public String chooseProfilePicture(Model model) {
+        model.addAttribute("avatar2", "avatar2.jpg");
+        model.addAttribute("avatar3", "avatar3.jpg");
+        return "profilePicture";
+    }
+    
+    @PostMapping("/save_profile_picture")
+    public String saveProfilePicture(@RequestParam("avatar") String avatar, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            user.setPhoto(avatar);
+            userService.saveUserProfile(user);
+        }
+        return "redirect:/edit_profile";
+    }
+    
+    @PostMapping("/remove_profile_picture")
+    public String removeProfilePicture(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            user.setPhoto("avatar1.jpg");
+            userService.saveUserProfile(user);
+            session.setAttribute("user", user);
+        }
+        return "redirect:/edit_profile";
+    }    
+    
 // }
 //     @GetMapping("/upload_profile_picture")
 //     public String showProfilePictureUploadForm(Model model, @SessionAttribute("user") User user) {
@@ -306,4 +342,4 @@ public class UserController {
 
 
   }
-}
+
