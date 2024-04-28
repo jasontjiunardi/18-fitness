@@ -10,9 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fitness.FileUploadUtil;
 // import com.fitness.FileUploadUtil;
 import com.fitness.fitness.model.User;
 import com.fitness.fitness.repository.UserRepo;
@@ -156,22 +158,22 @@ public class UserController {
         return "editProfile";
     }
 
-    @PostMapping("edit_profile")
-    public String userEditInformation( @ModelAttribute User user, Model model) { // @RequestParam("image") MultipartFile multipartFile harusnya ada ini su
-        // try {
-        //     if (!multipartFile.isEmpty()) {
-        //         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        //         user.setimage(fileName);
-        //         User updatedUser = userService.saveUser(user);
-        //         String uploadDir = "images/" + updatedUser.getUserId();
-        //         FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-        //     } else {
+    @PostMapping("updateProfile")
+    public String userEditInformation( @RequestParam("image") MultipartFile multipartFile,@ModelAttribute User user, Model model) throws IOException{
+        if (!multipartFile.isEmpty()) {
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            user.setPhoto(fileName);
+            String upload = "src/main/resources/static/images/"; // Adjust this URL as needed
+            FileUploadUtil.saveFile(upload, fileName, multipartFile);
+
+        } else {
+            if (user.getPhoto().isEmpty()) {
+                user.setPhoto("wechat_icon.jpg");
                 userService.saveUser(user);
-        //     }
-        // } catch (IOException e) {
-        //     e.printStackTrace();
-        // }
-        return "redirect:/profile";
+            }
+        }
+        userService.saveUser(user);
+        return "profile";
      }
 
 
