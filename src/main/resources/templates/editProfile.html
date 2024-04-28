@@ -9,9 +9,9 @@
 <body> 
     <h1>Edit Profile</h1>
 
-    <div class="profile-container">
    
-    <!-- <div class="profile-container">
+   
+     <div class="profile-container">
 
         <div class="profile-picture-box">
             <img th:src="@{'/images/' + ${user.photo}}" alt="User Image"/>
@@ -21,7 +21,7 @@
 
     <form method="POST" action="/remove_profile_picture">
         <button type="submit">Remove Profile Picture</button>
-    </form> -->
+    </form>
 
 
     <form method="POST" action="/updateProfile" th:object="${user}" enctype="multipart/form-data">

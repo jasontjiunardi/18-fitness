@@ -120,8 +120,8 @@ public class UserService {
     }
     
     public User saveUserProfile(User user) {
-        if (user.getImage() == null || user.getImage().isEmpty()) {
-            user.setImage("avatar1.jpg");
+        if (user.getPhoto() == null || user.getPhoto().isEmpty()) {
+            user.setPhoto("avatar1.jpg");
         }
         return userRepo.save(user);
     }
