@@ -29,6 +29,8 @@ import com.fitness.fitness.service.TrainerService;
 import com.fitness.fitness.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 public class ManagerController {
@@ -213,6 +215,19 @@ public String demoteTrainer(@PathVariable("id") int id) {
         model.addAttribute("Users", userService.getAllUsers());
         return "managerViewUsers";
     }
+    @PostMapping("/removeUser/{email}")
+    public String removeUser(@PathVariable("email") String email) {
+        // Remove the trainer from the database
+        userService.removeUser(email);
+        return "redirect:/managerViewUsers";
+    }
+    @PostMapping("sendNotification/{email}")
+    public String sendNotification(@PathVariable("email") String email) {
+        // Send notification to the user
+        
+        return "redirect:/managerViewUsers";
+    }
+    
 
     // without session for now
     @GetMapping("/manager_appointment")
