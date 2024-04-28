@@ -15,16 +15,16 @@
             <img th:src="@{'/images/' + ${user.photo}}" alt="User Image"/>
         </div>
         <div class="user-details">
-            <p>Email: <span th:text="${user.email}"></span></p>
-            <p>Name: <span th:text="${user.name}"></span></p>
-            <p>Date of Birth: <span th:text="${user.dob}"></span></p>
-            <p>Phone Number: <span th:text="${user.phoneNumber}"></span></p>
+            <p>Email: <span th:text="${user.email}"></span></p >
+            <p>Name: <span th:text="${user.name}"></span></p >
+            <p>Date of Birth: <span th:text="${user.dob}"></span></p >
+            <p>Phone Number: <span th:text="${user.phoneNumber}"></span></p >
         </div>
     </div>
     
     <!-- If user has a credit card, display the credit card information -->
     <div th:if="${user.cardNumber != null}">
-        <p>Credit Card Number: <span th:text="${user.cardNumber}"></span></p>
+        <p>Credit Card Number: <span th:text="${user.cardNumber}"></span></p >
     </div>
     
     <!-- If user doesn't have a credit card, display the form to add a credit card -->
@@ -39,7 +39,7 @@
     
 </body>
 <form method="GET" action="/home_page">
-<a th:href="@{/user_signin}"><button>Go Back</button></a>
+<a th:href="@{/user_signin}"><button>Go Back</button></a >
 </form>
 
 <form method="GET" action="/edit_profile">

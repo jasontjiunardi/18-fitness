@@ -1,4 +1,4 @@
-package com.fitness.fitness.controller;
+/*package com.fitness.fitness.controller;
 
 import java.util.List;
 
@@ -46,4 +46,4 @@ public class ReviewController {
 
     return "Trainer review";
 }
-}
+}*/

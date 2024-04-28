@@ -105,19 +105,31 @@ public class UserService {
         userRepo.save(user);
     }
 
-    // public String setProfilePicture(String email, String image) {
-    //     User user = userRepo.findByEmail(email);
-    //     user.setimage(image);
-    //     userRepo.save(user);
-    //     return image;
-    // }
+    public boolean resetPassword(String email, String password, String newPassword) {
+        if (newPassword.equals(password)) {
+            return false;
+        }
     
-    
-    // public String getProfilePicture(String email) {
-    //     User user = userRepo.findByEmail(email);
-    //     return user.getProfilePictureUrl();
-    // }
+        User user = userRepo.findByEmail(email);
+        if (user != null && user.getPassword().equals(password)) {
+            user.setPassword(newPassword);
+            userRepo.save(user);
+            return true;
+        }
+        return false;
+    }
 
+    public boolean validateResetPasswordForm(String password, String newPassword, String confirmPassword) {
+        return password.length() >= 8 && newPassword.length() >= 8 &&
+               containsUppercaseLetterAndNumber(newPassword) && newPassword.equals(confirmPassword);
+    }
+    
+    public User saveUserProfile(User user) {
+        if (user.getPhoto() == null || user.getPhoto().isEmpty()) {
+            user.setPhoto("avatar1.jpg");
+        }
+        return userRepo.save(user);
+    }
     public void updateExpiredUsersStatus() {
         LocalDate today = LocalDate.now();
         int updatedCount = userRepo.updateExpiredUsers(today);
