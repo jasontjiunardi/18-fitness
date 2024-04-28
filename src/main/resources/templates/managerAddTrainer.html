@@ -131,10 +131,11 @@
             <label for="trainerSince">Trainer Since: <span style="color: red;">*</span></label>
             <input type="date" class="form-control" id="trainerSince" th:field="*{trainerSince}" placeholder="Enter start date" required>
         </div>
-        <!-- <div class="form-group">
-            <label for="image">Trainer Image: <span style="color: red;">(only .jpg and .jpeg images are allowed)</span></label>
-            <input type="file" class="form-control-file" id="image" name="image" accept=".jpg, .jpeg">
-        </div> -->
+        <div class="form-group">
+            <!-- <input type="hidden" th:field="${trainer.image}"/> -->
+            <label for="fileImage">Trainer Picture:</label>
+            <input type="file" id="fileImage" name="image" accept="image/png, image/jpg, iamge/jpeg"> 
+        </div>
         <button type="submit" class="btn btn-primary">Submit</button>
         <a href="/managerViewTrainers" class="btn btn-secondary btn-cancel">Cancel</a>
     </form>
