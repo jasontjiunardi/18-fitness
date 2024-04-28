@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.fitness.fitness.model.Review;
+import com.fitness.fitness.model.Trainer;
 import com.fitness.fitness.model.User;
 import com.fitness.fitness.service.ReviewService;
 import com.fitness.fitness.service.TrainerService;
@@ -31,8 +32,10 @@ public class ReviewController {
         }
 
     @GetMapping("/trainerReview")
-    public String viewReviews(Model model, @SessionAttribute("user") User user) {
-        
+    public String viewReviews(Model model, @SessionAttribute("user") User user, @RequestParam("trainerId") int trainerId) {
+    List<Trainer> trainers = trainerService.getAllTrainers();
+    model.addAttribute("trainers", trainers);
+
     
     User retrievedUser = userService.getUserByEmail(user.getEmail());
     model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
