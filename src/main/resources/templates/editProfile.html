@@ -5,114 +5,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
     <style>
-        /* General Body Styles */
 body {
-    font-family: Arial, sans-serif; /* Using a modern font */
-    background-color: #f8f8fffb; /* Very light purple for a soft background */
-    color: #333; /* Dark grey color for text to maintain readability */
+    font-family: Arial, sans-serif;
+    background-color: #f8f8fffb;
+    color: #333;
     margin: 20px;
     padding: 0;
     line-height: 1.6;
 }
 
 h1 {
-    color: #4a154b; /* Subtle purple for header */
+    color: #4a154b;
     text-align: center;
 }
 
-/* Profile Picture Styles */
+
 .profile-picture-box {
     width: 200px;
     height: 200px;
-    border: 3px solid #4a154b; /* Light purple border */
-    border-radius: 50%; /* Circular profile pictures */
+    border: 3px solid #4a154b;
+    border-radius: 50%;
     overflow: hidden;
-    display: block; /* Center the profile picture */
-    margin: 0 auto 20px; /* Center and space below */
-    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    display: block;
+    margin: 0 auto 20px; 
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 .profile-picture-box img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ensures the image fits well */
+    object-fit: cover;
 }
 
 .profile-container {
-            text-align: center; /* Centers the content */
-            margin-bottom: 20px; /* Spacing below the container */
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-/* Form and Buttons Styles */
 form {
     background: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.1); /* Soft shadow for depth */
-    margin: 10px auto; /* Center forms with automatic horizontal margins */
-    width: 90%; /* Responsive width */
-    max-width: 500px; /* Maximum width for larger screens */
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    margin: 10px auto;
+    width: 90%;
+    max-width: 500px;
 }
 
 input[type="text"], input[type="date"], input[type="email"] {
-    width: calc(100% - 22px); /* Full width minus padding */
+    width: calc(100% - 22px);
     padding: 10px;
     margin-bottom: 10px;
-    border: 1px solid #ccc; /* Light grey border */
+    border: 1px solid #ccc;
     border-radius: 4px;
 }
 
 input[type="submit"], button {
-    background-color: #4a154b; /* A deeper purple for buttons */
+    background-color: #4a154b;
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s; /* Smooth transition for button hover */
+    transition: background-color 0.3s;
 }
 
 input[type="submit"]:hover, button:hover {
-    background-color: #4a154b; /* A slightly darker purple on hover */
+    background-color: #4a154b;
 }
 
 a {
-    color: #4a154b; /* Matching link colors to the header */
-    text-decoration: none; /* No underline by default */
+    color: #4a154b;
+    text-decoration: none;
 }
 
 a:hover {
-    text-decoration: underline; /* Underline on hover for clarity */
+    text-decoration: underline;
 }
 
 .button-link {
             display: block; 
-            background-color: #4a154b; /* Purple background for the button */
+            background-color: #4a154b;
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
-            text-decoration: none; /* Removes underline */
-            margin-top: 10px; /* Space between image and button */
-            transition: background-color 0.3s; /* Smooth transition for hover effect */
+            text-decoration: none; 
+            margin-top: 10px; 
+            transition: background-color 0.3s;
         }
 
         .button-link:hover {
-            background-color: #4a154b; /* Darker purple on hover */
+            background-color: #4a154b;
         }
 label {
-    display: block; /* Makes labels block-level for cleaner form alignment */
+    display: block;
     margin-bottom: 5px;
 }
 
     </style>
 </head>
-<body>
+<body> 
     <h1>Edit Profile</h1>
 
-
-    <!-- Profile picture and change button in a single container -->
     <div class="profile-container">
-        <!-- Display current profile picture if available -->
         <div class="profile-picture-box">
             <img th:src="@{'/images/' + ${user.image}}" alt="User Image"/>
         </div>
@@ -125,9 +120,8 @@ label {
 
 
     <form method="POST" action="/edit_profile" th:object="${user}">
-        <!-- Hidden field to send user's email for identification -->
         <input type="hidden" name="email" th:value="${user.email}">
-        
+
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" th:value="${user.name}" required pattern="[A-Za-z ]+" title="Name must contain only letters and spaces"><br>
         
@@ -139,11 +133,10 @@ label {
         
         <label for="cardNumber">Credit Card Number:</label>
         <input type="text" id="cardNumber" name="cardNumber" th:value="${user.cardNumber}" required pattern="\d{16}" title="Credit card number must be 16 digits" maxlength="16"><br>
-
+    
         <button type="submit">Save Changes</button>
     </form>
-
-    <!-- Button to redirect to the password reset page -->
+    
     <form method="GET" action="/reset_password">
         <input type="hidden" name="email" th:value="${user.email}">
         <button type="submit">Reset Password</button>
@@ -151,7 +144,7 @@ label {
     
     <!-- Link to go back to the profile page -->
     <form method="GET" action="/profile">
-        <a th:href="@{/profile}"><button>Go Back</button></a>
+        <a th:href="@{/profile}"><button>Go Back</button></a >
     </form>
 </body>
 </html>
