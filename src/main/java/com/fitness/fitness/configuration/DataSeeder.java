@@ -98,7 +98,7 @@ public class DataSeeder {
 
                 Trainer trainerRank3 = new Trainer( "Chris Bumstead", 27, "Male", "1997-01-01", "cbum@gmail.com", "trainer1.jpg", "188-888-888", 5, "2024-01-01");
                 Trainer trainerRank4 = new Trainer( "Noel Deyzel", 35, "Male", "1997-02-01", "dbum@gmail.com", "trainer2.jpg", "288-888-888", 4, "2024-02-01");
-                Trainer trainerRank5 = new Trainer( "Sam Sulek", 30, "Female", "1997-03-01", "ebum@gmail.com", "trainer3.jpg", "388-888-888", 3, "2024-03-01");
+                Trainer trainerRank5 = new Trainer( "Sam Sulek", 30, "Male", "1997-03-01", "ebum@gmail.com", "", "388-888-888", 3, "2024-03-01");
     
                 trainerRepo.save(trainerRank3);
                 trainerRepo.save(trainerRank4);
