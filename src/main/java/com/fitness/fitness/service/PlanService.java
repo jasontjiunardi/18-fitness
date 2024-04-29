@@ -32,6 +32,18 @@ public class PlanService {
         return planRepo.findByPlanType(planType);
     }
 
+    public List<Plan> findAllPlans() {
+        return planRepo.findAll();
+    }
+
+    public Plan findPlanById(int id) {
+        return planRepo.findById(id).orElse(null);
+    }
+
+    public Plan savePlan(Plan plan) {
+        return planRepo.save(plan);
+    }
+
     public Map<String, Double> getStartingPricesForAllPlanTypes() {
         List<PlanDurationPrice> plans = planDurationPriceRepo.findAll();
         Map<String, List<PlanDurationPrice>> plansByType = plans.stream()

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>View Reviews</title>
+    <style>
+        .review-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 20px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Reviews for <span th:text="${trainer.name}"></span></h1>
+
+    <!-- Display the list of reviews -->
+    <div>
+        <div th:if="${reviews.isEmpty()}">
+            <p>No reviews available for this trainer.</p>
+        </div>
+        <div th:each="review : ${reviews}" class="review-box">
+            <p>Date: <span th:text="${#temporals.format(review.date, 'yyyy-MM-dd HH:mm')}"></span></p>
+            <p>Comment: <span th:text="${review.comment}"></span></p>
+        </div>
+    </div>
+
+    <!-- Assuming this form is used within a Thymeleaf template -->
+<form th:action="@{/addReview}" method="get">
+    <input type="hidden" name="trainerId" th:value="${trainer.trainerId}" />
+    <button type="submit">Add Review</button>
+</form>
+
+</div>
+</body>
+</html>

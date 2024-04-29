@@ -20,11 +20,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fitness.fitness.model.Appointment;
 import com.fitness.fitness.model.Manager;
+import com.fitness.fitness.model.Plan;
 import com.fitness.fitness.model.Trainer;
 import com.fitness.fitness.repository.TrainerRepo;
 import com.fitness.fitness.repository.UserRepo;
 import com.fitness.fitness.service.AppointmentService;
 import com.fitness.fitness.service.ManagerService;
+import com.fitness.fitness.service.PlanService;
 import com.fitness.fitness.service.TrainerService;
 import com.fitness.fitness.service.UserService;
 
@@ -50,6 +52,9 @@ public class ManagerController {
     private UserRepo userRepo;
     @Autowired
     private AppointmentService appointmentService;
+
+    @Autowired
+    private PlanService planService;
 
     // cb cek ulang ini
     // @GetMapping("/manager_add_appointment")
@@ -239,6 +244,29 @@ public String demoteTrainer(@PathVariable("id") int id) {
         model.addAttribute("allAppointment", allAppointment);
 
         return "managerViewAppointment";
+    }
+
+    @GetMapping("/manager_view_plans")
+    public String managerBrowsePlans(Model model) {
+        List<Plan> plans = planService.findAllPlans();
+        model.addAttribute("plans", plans);
+        return "managerViewPlans"; 
+    }
+
+    @GetMapping("/editPlan/{id}")
+    public String editPlanForm(@PathVariable("id") int id, Model model) {
+        Plan plan = planService.findPlanById(id);
+        if (plan == null) {
+            return "redirect:/managerViewPlans";
+        }
+        model.addAttribute("plan", plan);
+        return "editPlan";
+    }
+
+    @PostMapping("/updatePlan/{id}")
+    public String updatePlan(@PathVariable("id") int id, @ModelAttribute Plan plan, Model model) {
+        planService.savePlan(plan);
+        return "redirect:/manager_view_plans";
     }
 
 }
