@@ -1,4 +1,4 @@
-/*package com.fitness.fitness.service;
+package com.fitness.fitness.service;
 
 import java.util.List;
 
@@ -21,4 +21,16 @@ public class ReviewService {
     public List<Review> getAllReviews() {
         return reviewRepo.findAll();
     }
-}*/
+
+    public Review saveReview(Review review) {
+        return reviewRepo.save(review);
+    }
+
+    public Review findReviewById(int id) {
+        return reviewRepo.findById(id).orElse(null);
+    }
+
+    public void deleteReview(int id) {
+        reviewRepo.deleteById(id);
+    }
+}
