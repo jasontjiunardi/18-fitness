@@ -34,6 +34,11 @@ public class UserService {
         }
         return false;
     }
+    public void removeUser(String email) {
+        User u = userRepo.findByEmail(email);
+        userRepo.delete(u);
+    }
+
 
     public boolean userRecoveryCode(User user) {
         User u = userRepo.findByEmail(user.getEmail());
