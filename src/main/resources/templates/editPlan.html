@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Plan</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-container {
+            width: 50%;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+        }
+        textarea {
+            height: 100px;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Edit Plan</h1>
+    </div>
+    <div class="form-container">
+        <form th:action="@{/updatePlan/{id}(id=${plan.id})}" th:object="${plan}" method="post">
+            <div class="form-group">
+                <label for="planType">Plan Type:</label>
+                <input type="text" id="planType" th:field="*{planType}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="planDetails">Plan Details:</label>
+                <textarea id="planDetails" th:field="*{planDetails}" required></textarea>
+            </div>
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+</body>
+</html>

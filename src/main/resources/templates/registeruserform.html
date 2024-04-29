@@ -53,6 +53,22 @@
             background-color: #310b33; /* Darker purple on hover */
         }
 
+        button.back-button {
+            width: 100%;
+            background-color: #4a154b; /* Purple button background */
+            color: #ffffff; /* White text color for button */
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            text-decoration: underline;
+        }
+
+        button.back-button:hover {
+            background-color: #310b33; /* Darker purple on hover */
+        }
+
         span {
             color: #888;
             font-size: 12px;
@@ -71,6 +87,7 @@
         Birth Date: <input type="date" th:field="*{dob}" required> <br />
         Phone Number: <input type="tel" th:field="*{phoneNumber}" required> <br />
         <input type="submit" value="Register" />
+        <button class="back-button" onclick="window.location.href='/first_page'">Back to First Page</button>
     </form>
 </body>
 </html>
