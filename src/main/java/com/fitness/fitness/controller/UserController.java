@@ -91,7 +91,7 @@ public class UserController {
     public String login(@ModelAttribute User user, HttpSession session) {
         if (userService.userLogin(user)) {
             session.setAttribute("user", user);
-            return "home";
+            return "redirect:/home_page";
         }
         return "login_fail";
     }
@@ -198,7 +198,8 @@ public class UserController {
     @GetMapping("/home_page")
     public String getHomePage(Model model, @SessionAttribute("user") User user) {
         if (user != null) {
-            model.addAttribute("user", user);
+            User u = userService.getUserByEmail(user.getEmail());
+            model.addAttribute("user", u);
             return "home";
         } else {
             return "login";
