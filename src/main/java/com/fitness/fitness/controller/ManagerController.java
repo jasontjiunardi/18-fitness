@@ -48,7 +48,6 @@ public class ManagerController {
 
     @Autowired
     private TrainerService trainerService;
-
     @Autowired
     private UserRepo userRepo;
     @Autowired
@@ -87,7 +86,6 @@ public class ManagerController {
     // return "manager-add-appointment";
     // }
 
-<<<<<<< HEAD
     // if (manager.getPreferredTrainer().isEmpty()
     // || manager.getClassName().isEmpty() || manager.getDate() == null
     // || manager.getTimeSlot() == null) {
@@ -110,8 +108,6 @@ public class ManagerController {
     // return "manager-add-appointment";
     // }
 
-=======
->>>>>>> e54b15a769d7999de4f2cf6066f7c51b57756e4e
     @GetMapping("/manager_home_page")
     public String getHomePage(Model model, @SessionAttribute("manager") Manager manager) {
         if (manager != null) {
@@ -121,11 +117,7 @@ public class ManagerController {
             return "redirect:/manager_signin";
         }
     }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> e54b15a769d7999de4f2cf6066f7c51b57756e4e
     @GetMapping("/manager_signin")
     public String showLoginForm(Model model, HttpSession session) {
         session.invalidate();
@@ -148,16 +140,7 @@ public class ManagerController {
         model.addAttribute("trainers", trainerService.getAllTrainers());
         return "managerViewTrainers";
     }
-<<<<<<< HEAD
 
-=======
-    @GetMapping("/managerViewUsers")
-    public String showUsers(Model model) {
-        model.addAttribute("Users", userService.getAllUsers());
-        return "managerViewUsers";
-    }
-  
->>>>>>> e54b15a769d7999de4f2cf6066f7c51b57756e4e
     @GetMapping("/managerAddTrainer")
     public String showAddTrainerForm(Model model, @SessionAttribute("manager") Manager manager) {
         model.addAttribute("trainer", new Trainer());
@@ -187,20 +170,12 @@ public class ManagerController {
             trainer.setPhoto(fileName);
             String upload = "src/main/resources/static/images/"; // Adjust this URL as needed
             FileUploadUtil.saveFile(upload, fileName, multipartFile);
-<<<<<<< HEAD
 
         } else {
             if (trainer.getPhoto().isEmpty()) {
                 trainer.setPhoto("wechat_icon.jpg");
                 trainerService.updateTrainer(trainer);
             }
-=======
-      
-        } else {
-        if (trainer.getImage().isEmpty()) {
-            trainer.setImage("wechat_icon.jpg");
-            trainerService.saveTrainer(trainer);
->>>>>>> e54b15a769d7999de4f2cf6066f7c51b57756e4e
         }
         trainerService.saveTrainer(trainer);
         trainerService.updateTrainer(trainer);
