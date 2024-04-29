@@ -88,16 +88,15 @@
             <thead class="thead-dark">
                 <tr>
                     <th>Profile Picture</th>
-                    <th onclick="sortTable(0, 'number')">ID</th>
-                    <th onclick="sortTable(1, 'string')">Name</th>
-                    <th onclick="sortTable(2, 'number')">Age</th>
-                    <th onclick="sortTable(3, 'string')">Gender</th>
-                    <th onclick="sortTable(4, 'string')">Date of Birth</th>
-                    <th onclick="sortTable(5, 'string')">Email</th>
-                    <th onclick="sortTable(6, 'string')">Phone</th>
-                    <th onclick="sortTable(7, 'string')">Since</th>
-                    <!-- New column for the Edit button -->
-                    <th onclick="sortTable(8, 'number')">Rank</th>
+                    <th onclick="sortTable(1, 'number')">ID</th>
+                    <th onclick="sortTable(2, 'string')">Name</th>
+                    <th onclick="sortTable(3, 'number')">Age</th>
+                    <th onclick="sortTable(4, 'string')">Gender</th>
+                    <th onclick="sortTable(5, 'string')">Date of Birth</th>
+                    <th onclick="sortTable(6, 'string')">Email</th>
+                    <th onclick="sortTable(7, 'string')">Phone</th>
+                    <th onclick="sortTable(8, 'string')">Since</th>
+                    <th onclick="sortTable(9, 'number')">Rank</th>
                     <th>Promote/Demote</th>
                     <th>Edit</th>
                 </tr>
@@ -112,9 +111,7 @@
                     <td th:text="${trainer.dob}"></td>
                     <td th:text="${trainer.email}"></td>
                     <td th:text="${trainer.phone}"></td>
-                    
                     <td th:text="${trainer.trainerSince}"></td>
-                    
                     <td class="rank-stars" th:data-rank="${trainer.rank}" th:text="${trainer.rank}"></td>
                     <td>
                         <form th:action="@{/promoteTrainer/{id}(id=${trainer.id})}" method="post">
@@ -153,7 +150,7 @@
                     let yVal = y.textContent.trim();
                     
                     if (type === 'number') {
-                        if (n === 7) {
+                        if (n === 9) {
                             xVal = parseInt(x.dataset.rank || xVal, 10);
                             yVal = parseInt(y.dataset.rank || yVal, 10);
                         } else {
