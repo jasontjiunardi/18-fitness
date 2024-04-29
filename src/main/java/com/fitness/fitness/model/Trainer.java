@@ -151,5 +151,8 @@ public class Trainer {
         this.photo = photo;
     }
 
+    public int getTrainerId() {
+        return this.id;
+    }
 
 }

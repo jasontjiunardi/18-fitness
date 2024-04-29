@@ -7,7 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.LocalDateTime;
 
 @Entity
 public class Review {
@@ -26,14 +27,14 @@ public class Review {
     private Trainer trainer;
     
     private String comment;
-    private LocalDate date;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime date;
 
     public Review() {
     }
 
-    public Review(User user, Trainer trainer, String comment, LocalDate date) {
-        this.user = user;
-        this.trainer = trainer;
+    public Review(String comment, LocalDateTime date) {
         this.comment = comment;
         this.date = date;
     }
@@ -70,11 +71,11 @@ public class Review {
         this.comment = comment;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
