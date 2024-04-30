@@ -47,18 +47,6 @@ public class UserController {
         return "registeruserform";
     }
 
-    // @PostMapping("/register_user")
-    // public String registerUser(@ModelAttribute User user, HttpSession session) {
-    //     if (userService.verifyUser(user)) {
-    //         if(userService.emailValid(user.getEmail()) && userService.passwordValid(user.getPassword())){
-    //             userService.saveUser(user); 
-    //             session.setAttribute("user", user);
-    //             return "home";
-    //         }
-    //     }
-    //     return "registeruserform";
-    // }
-
     @PostMapping("/register_user")
     public String registerUser( HttpSession session, @ModelAttribute User user) {
         if (userService.verifyUser(user)) {
