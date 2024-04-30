@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Report</title>
+</head>
+<body>
+    <h1>Income Report</h1>
+    
+    <!-- Formulir untuk memilih rentang tanggal -->
+    <form id="dateRangeForm">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate">
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate">
+        <button type="submit">Generate Report</button>
+    </form>
+    
+    <!-- Tabel untuk menampilkan data pendapatan -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Date <button onclick="sortTable(0)">Sort</button></th>
+                <th>Description</th>
+                <th>Amount <button onclick="sortAmount(2)">Sort</button></th>
+                <th>IncomeId</th>
+            </tr>
+        </thead>
+        <tbody id="incomeTableBody">
+            <!-- Data pendapatan akan ditampilkan di sini -->
+            <!-- <%-- Ini menggunakan Thymeleaf, gunakan sesuai dengan framework templating yang digunakan --%> -->
+            <tr th:each="income : ${incomeList}">
+                <td th:text="${income.date}"></td>
+                <td th:text="${income.description}"></td>
+                <td th:text="${income.amount}"></td>
+                <td th:text="${income.IncomeId}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Elemen untuk menampilkan total amount -->
+    <div>Total Amount: <span id="totalAmount" th:text="${totalAmount}">0.00</span></div>
+    
+    <!-- Script untuk menangani pengiriman data ke backend dan menampilkan hasil -->
+    <script>
+        document.getElementById("dateRangeForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var startDate = document.getElementById("startDate").value;
+            var endDate = document.getElementById("endDate").value;
+
+            if (startDate === "" || endDate === "") {
+                alert("Please select both Start Date and End Date.");
+                return;
+            }
+
+            // Set URL dengan tanggal yang dipilih
+            var url = new URL("http://localhost:8080/income");
+            var params = {startDate: startDate, endDate: endDate};
+            url.search = new URLSearchParams(params).toString();
+
+            // Memperbarui URL
+            window.location.href = url;
+
+            // Kirim permintaan ke backend
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Update tabel dengan data pendapatan yang diterima dari backend
+                    var tableBody = document.getElementById("incomeTableBody");
+                    tableBody.innerHTML = "";
+                    data.forEach(income => {
+                        var row = document.createElement("tr");
+                        row.innerHTML = "<td>" + income.date + "</td><td>" + income.description + "</td><td>" + income.amount + "</td><td>" + income.IncomeId + "</td>";
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        function setMinEndDate() {
+            var startDate = document.getElementById("startDate").value;
+            document.getElementById("endDate").min = startDate;
+        }
+
+        document.getElementById("startDate").addEventListener("change", setMinEndDate);
+        setMinEndDate();
+
+        // Fungsi untuk mengurutkan tabel berdasarkan kolom
+        function sortTable(columnIndex) {
+            var table, rows, switching, i, x, y, shouldSwitch, ascending;
+            table = document.querySelector("table");
+            switching = true;
+            ascending = table.getAttribute('data-order') === 'asc'; // Dapatkan urutan saat ini dari atribut data
+
+            // Toggle order
+            table.setAttribute('data-order', ascending ? 'desc' : 'asc');
+
+            // Loop sampai tidak ada lagi yang harus ditukar
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+
+                // Loop melalui semua baris kecuali header
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("td")[columnIndex];
+                    y = rows[i + 1].getElementsByTagName("td")[columnIndex];
+
+                    // Periksa apakah harus ditukar
+                    if (ascending) {
+                        shouldSwitch = x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase();
+                    } else {
+                        shouldSwitch = x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase();
+                    }
+
+                    if (shouldSwitch) {
+                        // Tukar baris dan tandai bahwa telah ada pertukaran
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Fungsi untuk mengurutkan tabel berdasarkan kolom Amount
+        function sortAmount(columnIndex) {
+            var table, rows, switching, i, x, y, shouldSwitch, ascending;
+            table = document.querySelector("table");
+            switching = true;
+            ascending = table.getAttribute('data-order-amount') === 'asc'; // Dapatkan urutan saat ini dari atribut data
+
+            // Toggle order
+            table.setAttribute('data-order-amount', ascending ? 'desc' : 'asc');
+
+            // Loop sampai tidak ada lagi yang harus ditukar
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+
+                // Loop melalui semua baris kecuali header
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("td")[columnIndex];
+                    y = rows[i + 1].getElementsByTagName("td")[columnIndex];
+
+                    // Periksa apakah harus ditukar
+                    if (ascending) {
+                        shouldSwitch = parseInt(x.innerHTML) > parseInt(y.innerHTML);
+                    } else {
+                        shouldSwitch = parseInt(x.innerHTML) < parseInt(y.innerHTML);
+                    }
+
+                    if (shouldSwitch) {
+                        // Tukar baris dan tandai bahwa telah ada pertukaran
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                        break;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

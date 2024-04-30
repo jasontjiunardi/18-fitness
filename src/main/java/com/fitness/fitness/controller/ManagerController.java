@@ -1,11 +1,13 @@
 package com.fitness.fitness.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -19,10 +21,15 @@ import com.fitness.FileUploadUtil;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fitness.fitness.model.Income;
+import com.fitness.fitness.model.Manager;
+import com.fitness.fitness.model.PaymentTransaction;
 import com.fitness.fitness.model.Appointment;
 import com.fitness.fitness.model.Manager;
 import com.fitness.fitness.model.Plan;
 import com.fitness.fitness.model.Trainer;
+import com.fitness.fitness.repository.IncomeRepo;
+import com.fitness.fitness.repository.PaymentTransactionRepo;
 import com.fitness.fitness.repository.PlanRepo;
 import com.fitness.fitness.repository.TrainerRepo;
 import com.fitness.fitness.repository.UserRepo;
@@ -52,6 +59,15 @@ public class ManagerController {
     private TrainerService trainerService;
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private PaymentTransactionRepo paymentTransactionRepo;
+    
+    @Autowired
+    private IncomeRepo incomeRepo;
+
+    
+    //  cb cek ulang ini
     @Autowired
     private AppointmentService appointmentService;
 
@@ -261,6 +277,53 @@ public class ManagerController {
         model.addAttribute("Users", userService.getAllUsers());
         return "managerViewUsers";
     }
+    
+    @GetMapping("/income")
+    public String showIncomeReport(@RequestParam("startDate") LocalDate startDate,
+                                    @RequestParam("endDate") LocalDate endDate,
+                                    Model model) {             
+        
+        // Cari transaksi pembayaran sesuai rentang tanggal yang dipilih
+        List<PaymentTransaction> paymentTransactions = paymentTransactionRepo.findByPurchasedDateBetween(startDate, endDate);
+        // Iterasi melalui setiap transaksi pembayaran
+        for (PaymentTransaction transaction : paymentTransactions) {
+            // Cek apakah sudah ada entri pendapatan dengan incomeId yang sama
+            Income existingIncome = incomeRepo.findByIncomeId(transaction.getTransactionId());
+            if (existingIncome == null) {
+                // Jika tidak ada, buat entri baru
+                Income income = new Income();
+                income.setAmount(transaction.getPrice());
+                income.setDate(transaction.getPurchasedDate());
+                income.setDescription(transaction.getPlanType());
+                income.setIncomeId(transaction.getTransactionId());
+                incomeRepo.save(income);
+            } 
+        }
+        // Cari data pendapatan sesuai rentang tanggal yang dipilih
+        List<Income> incomeList = incomeRepo.findByDateBetween(startDate, endDate);
+        // Hitung total amount
+        double totalAmount = 0;
+        for (Income income : incomeList) {
+            totalAmount += income.getAmount();
+        }
+        // Tambahkan data pendapatan ke model untuk ditampilkan di HTML
+        model.addAttribute("incomeList", incomeList);
+        model.addAttribute("totalAmount", totalAmount);
+        return "income_report";
+    }
+
+    @GetMapping("/cashflows")
+    public String showCashflowsReport(Model model) {
+        // Logika untuk menampilkan laporan arus kas
+        return "cashflows_report"; 
+    }
+
+    @GetMapping("/expenses")
+    public String showExpensesReport(Model model) {
+        // Logika untuk menampilkan laporan biaya
+        return "expenses_report"; 
+    }
+    
     @PostMapping("/removeUser/{email}")
     public String removeUser(@PathVariable("email") String email) {
         // Remove the trainer from the database

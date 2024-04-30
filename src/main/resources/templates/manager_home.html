@@ -25,7 +25,7 @@
         .sidebar a {
             padding: 10px 15px;
             text-decoration: none;
-            font-size: 18px;
+            font-size: 16px;
             color: white;
             display: block;
         }
@@ -35,14 +35,38 @@
         }
 
         .content {
-            margin-left: 200px; /* Same as the sidebar width */
-            padding: 1px 16px;
-            height: 1000px; /* Sample content height */
+            display: none; /* Sub-buttons disembunyikan secara default */
         }
 
         h1 {
             color: #4a154b;
         }
+
+        /* Style untuk tombol Manager Reports */
+        .collapsible {
+            background-color: #111; 
+            color: white;
+            padding: 10px 15px;
+            text-align: left;
+            text-decoration: none;
+            display: block;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            outline: none;
+            font-size: 17px;
+        }
+
+        /* Ketika tombol Manager Reports diklik, beri warna latar yang berbeda */
+        .collapsible.active {
+            background-color: #000000; 
+        }
+
+        /* Style untuk sub-buttons */
+        .sub {
+            padding-left: 40px; /* Menambahkan indentasi untuk membedakan dari tombol utama */
+        }
+
     </style>
 </head>
 <body>
@@ -51,10 +75,43 @@
         <a href="/manager_appointment">Appointment Records</a>
         <a href="/managerViewUsers">View Customers</a>
         <a href="/manager_view_plans">View Plans</a>
+        <!-- Tombol Manager Reports -->
+        <button class="button collapsible">View Reports &#9660;</button>
+        <!-- Sub-buttons -->
+        <div class="content">
+            <a href="#" id="income" class="sub button">Income</a>
+            <a href="#" id="cashflows" class="sub button">Cashflows</a>
+            <a href="#" id="expenses" class="sub button">Expenses</a>
+        </div>
     </div>
-
+    
     <div class="content">
         <h1>Manager Home Page</h1>
     </div>
+
+    <script>
+        var toggleButton = document.querySelector('.collapsible');
+        var subMenu = document.querySelector('.content');
+
+        toggleButton.addEventListener('click', function() {
+            subMenu.style.display = subMenu.style.display === 'block' ? 'none' : 'block';
+            toggleButton.classList.toggle('active');
+        });
+
+        // Fungsi untuk menangani klik pada setiap sub-menu
+        function handleSubMenuClick(event) {
+            // Mendapatkan tanggal hari ini dalam format 'YYYY-MM-DD'
+            var today = new Date().toISOString().slice(0, 10);
+            // Mendapatkan ID dari tautan yang diklik
+            var id = event.target.id;
+            // Mengarahkan ke URL dengan menambahkan tanggal hari ini sebagai parameter 'startDate'
+            // dan 'endDate'
+            window.location.href = '/' + id + '?startDate=' + today + '&endDate=' + today;
+        }
+
+        document.querySelectorAll('.sub').forEach(function(sub) {
+            sub.addEventListener('click', handleSubMenuClick);
+        });
+    </script>
 </body>
 </html>
