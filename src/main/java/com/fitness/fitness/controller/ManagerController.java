@@ -148,8 +148,20 @@ public class ManagerController {
     }
 
     @PostMapping("/managerSaveTrainer")
-    public String saveTrainer(@ModelAttribute("trainer") Trainer trainer, Model model,
-            @SessionAttribute("manager") Manager manager) {
+    public String saveTrainer(@RequestParam("image") MultipartFile multipartFile, @ModelAttribute("trainer") Trainer trainer, Model model,
+            @SessionAttribute("manager") Manager manager) throws IOException {
+                if (!multipartFile.isEmpty()) {
+                    String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                    trainer.setPhoto(fileName);
+                    String upload = "src/main/resources/static/images/"; // Adjust this URL as needed
+                    FileUploadUtil.saveFile(upload, fileName, multipartFile);
+        
+                } else {
+                    if (trainer.getPhoto().isEmpty()) {
+                        trainer.setPhoto("wechat_icon.jpg");
+                        trainerService.updateTrainer(trainer);
+                    }
+                }
         trainerService.saveTrainer(trainer);
         return "redirect:/managerViewTrainers";
     }
@@ -179,7 +191,7 @@ public class ManagerController {
         }
         trainerService.saveTrainer(trainer);
         trainerService.updateTrainer(trainer);
-        return "managerViewTrainers";
+        return "redirect:/managerViewTrainers";
     }
 
     @PostMapping("/removeTrainer/{id}")
@@ -190,30 +202,30 @@ public class ManagerController {
     }
 
     @PostMapping("/promoteTrainer/{id}")
-public String promoteTrainer(@PathVariable("id") int id) {
-    Trainer trainer = trainerService.getTrainerById(id);
-    if (trainer != null) {
-        int currentRank = trainer.getRank();
-        if (currentRank < 5) {
-            trainer.updateRank(currentRank + 1);
-            trainerService.saveTrainer(trainer);
+    public String promoteTrainer(@PathVariable("id") int id) {
+        Trainer trainer = trainerService.getTrainerById(id);
+        if (trainer != null) {
+            int currentRank = trainer.getRank();
+            if (currentRank < 5) {
+                trainer.updateRank(currentRank + 1);
+                trainerService.saveTrainer(trainer);
+            }
         }
+        return "redirect:/managerViewTrainers";
     }
-    return "redirect:/managerViewTrainers";
-}
 
-@PostMapping("/demoteTrainer/{id}")
-public String demoteTrainer(@PathVariable("id") int id) {
-    Trainer trainer = trainerService.getTrainerById(id);
-    if (trainer != null) {
-        int currentRank = trainer.getRank();
-        if (currentRank > 3) {
-            trainer.updateRank(currentRank - 1);
-            trainerService.saveTrainer(trainer);
+    @PostMapping("/demoteTrainer/{id}")
+    public String demoteTrainer(@PathVariable("id") int id) {
+        Trainer trainer = trainerService.getTrainerById(id);
+        if (trainer != null) {
+            int currentRank = trainer.getRank();
+            if (currentRank > 3) {
+                trainer.updateRank(currentRank - 1);
+                trainerService.saveTrainer(trainer);
+            }
         }
+        return "redirect:/managerViewTrainers";
     }
-    return "redirect:/managerViewTrainers";
-}
 
     @GetMapping("/managerViewUsers")
     public String showUsers(Model model) {
