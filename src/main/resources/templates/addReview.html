@@ -4,17 +4,81 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Add Review</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        h1 {
+            font-weight: bold;
+        }
+        form {
+            margin-top: 20px;
+            border: 2px solid #4a154b;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4a154b;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #763087;
+        }
+            .back-btn {
+        background-color: #4a154b;
+        color: white;
+        padding: 10px 20px; /* Match the padding of the submit button */
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 10px;
+        display: inline-block; /* Ensure the button takes up the same space as the submit button */
+    }
+
+        .back-btn:hover {
+            background-color: #763087;
+        }
+    </style>
 </head>
 <body>
-<h1>Add a Review for <span th:text="${review.trainer.name}"></span></h1>
+    <div class="container">
+        <h1>Add a Review for <span th:text="${review.trainer.name}"></span></h1>
+    
+        <form th:action="@{/saveReview}" th:object="${review}" method="post">
+            <!-- Assuming trainerId and userId need to be submitted as part of the form -->
+            <input type="hidden" name="trainerId" th:value="${review.trainer.trainerId}" />
+            <input type="hidden" name="userId" th:value="${review.user.userId}" />
+            <textarea th:name="comment" placeholder="Enter your review here" th:text="${review.comment}"></textarea>
+            <div style="margin-top: 20px;">
+                <button type="submit">Submit Review</button>
+                <a th:href="@{/trainerReview(trainerId=${review.trainer.trainerId})}" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+            </div>
+        </form>
+    </div>
 
-<form th:action="@{/saveReview}" th:object="${review}" method="post">
-    <!-- Assuming trainerId and userId need to be submitted as part of the form -->
-    <input type="hidden" name="trainerId" th:value="${review.trainer.trainerId}" />
-    <input type="hidden" name="userId" th:value="${review.user.userId}" />
-    <textarea th:name="comment" placeholder="Enter your review here" th:text="${review.comment}"></textarea>
-    <button type="submit">Submit Review</button>
-</form>
+
 
 </body>
 </html>
