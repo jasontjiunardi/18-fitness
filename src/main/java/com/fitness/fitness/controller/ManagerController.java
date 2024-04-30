@@ -3,6 +3,7 @@ package com.fitness.fitness.controller;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import com.fitness.fitness.model.Appointment;
 import com.fitness.fitness.model.Manager;
 import com.fitness.fitness.model.Plan;
 import com.fitness.fitness.model.Trainer;
+import com.fitness.fitness.repository.PlanRepo;
 import com.fitness.fitness.repository.TrainerRepo;
 import com.fitness.fitness.repository.UserRepo;
 import com.fitness.fitness.service.AppointmentService;
@@ -55,6 +57,9 @@ public class ManagerController {
 
     @Autowired
     private PlanService planService;
+
+    @Autowired
+    private PlanRepo planRepo;
 
     // cb cek ulang ini
     // @GetMapping("/manager_add_appointment")
@@ -150,6 +155,30 @@ public class ManagerController {
     @PostMapping("/managerSaveTrainer")
     public String saveTrainer(@RequestParam("image") MultipartFile multipartFile, @ModelAttribute("trainer") Trainer trainer, Model model,
             @SessionAttribute("manager") Manager manager) throws IOException {
+                trainerService.saveTrainer(trainer);
+                planRepo.findAll().forEach(plan -> {
+                Set<Trainer> trainers = plan.getTrainers();
+                switch (plan.getPlanType()) {
+                case "Silver":
+                if(trainer.getRank() <=3){
+                trainers.add(trainer);
+                }
+                break;
+                case "Gold":
+                if(trainer.getRank() <=4){
+                trainers.add(trainer);
+                }
+                break;
+                case "Diamond":
+                if(trainer.getRank() <=5){
+                trainers.add(trainer);
+                }
+                break;
+                }
+                plan.setTrainers(trainers);
+                planRepo.save(plan);
+                });
+
                 if (!multipartFile.isEmpty()) {
                     String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
                     trainer.setPhoto(fileName);
