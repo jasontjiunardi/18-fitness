@@ -179,7 +179,7 @@ public class ManagerController {
         }
         trainerService.saveTrainer(trainer);
         trainerService.updateTrainer(trainer);
-        return "managerViewTrainers";
+        return "redirect:/managerViewTrainers";
     }
 
     @PostMapping("/removeTrainer/{id}")
