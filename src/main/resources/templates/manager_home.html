@@ -25,7 +25,7 @@
         .sidebar a {
             padding: 10px 15px;
             text-decoration: none;
-            font-size: 18px;
+            font-size: 16px;
             color: white;
             display: block;
         }
@@ -35,23 +35,98 @@
         }
 
         .content {
-            margin-left: 200px; /* Same as the sidebar width */
-            padding: 1px 16px;
-            height: 1000px; /* Sample content height */
+            display: none; /* Sub-buttons disembunyikan secara default */
         }
 
         h1 {
             color: #4a154b;
         }
+
+        /* Style untuk tombol Manager Reports */
+        .collapsible {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 10px 15px;
+            text-align: left;
+            text-decoration: none;
+            display: block;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            outline: none;
+            font-size: 17px;
+        }
+
+        /* Ketika tombol Manager Reports diklik, beri warna latar yang berbeda */
+        .collapsible.active {
+            background-color: #45a049; /* Darker Green */
+        }
+
+        /* Style untuk sub-buttons */
+        .sub {
+            padding-left: 40px; /* Menambahkan indentasi untuk membedakan dari tombol utama */
+        }
+
+        /* Tambahkan gaya untuk kotak hijau */
+        .green-box {
+            background-color: #4CAF50; /* Green */
+            padding: 10px 15px;
+            text-align: left;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            margin-bottom: 10px; /* Jarak antara tombol */
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
     <div class="sidebar">
-        <a href="/managerViewTrainers">View Trainers</a>
+        <!-- Tambahkan kotak hijau di belakang tombol View Trainers -->
+        <a href="/managerViewTrainers" class="green-box button">View Trainers</a>
+        <!-- Tombol Manager Reports -->
+        <button class="button collapsible">View Reports &#9660;</button>
+        <!-- Sub-buttons -->
+        <div class="content">
+            <!-- Tambahkan ID untuk setiap sub-menu -->
+            <a href="#" id="income" class="sub button">Income</a>
+            <a href="#" id="cashflows" class="sub button">Cashflows</a>
+            <a href="#" id="expenses" class="sub button">Expenses</a>
+        </div>
     </div>
-
+    
     <div class="content">
         <h1>Manager Home Page</h1>
     </div>
+
+    <script>
+        // Ambil tombol Manager Reports dan sub-menu
+        var toggleButton = document.querySelector('.collapsible');
+        var subMenu = document.querySelector('.content');
+
+        // Tambahkan event listener untuk klik pada tombol Manager Reports
+        toggleButton.addEventListener('click', function() {
+            // Toggle tampilan sub-menu
+            subMenu.style.display = subMenu.style.display === 'block' ? 'none' : 'block';
+            // Toggle kelas 'active' pada tombol Manager Reports
+            toggleButton.classList.toggle('active');
+        });
+
+        // Fungsi untuk menangani klik pada setiap sub-menu
+        function handleSubMenuClick(event) {
+            // Mendapatkan tanggal hari ini dalam format 'YYYY-MM-DD'
+            var today = new Date().toISOString().slice(0, 10);
+            // Mendapatkan ID dari tautan yang diklik
+            var id = event.target.id;
+            // Mengarahkan ke URL dengan menambahkan tanggal hari ini sebagai parameter 'startDate'
+            // dan 'endDate'
+            window.location.href = '/' + id + '?startDate=' + today + '&endDate=' + today;
+        }
+
+        // Menambahkan event listener untuk setiap sub-menu
+        document.querySelectorAll('.sub').forEach(function(sub) {
+            sub.addEventListener('click', handleSubMenuClick);
+        });
+    </script>
 </body>
 </html>

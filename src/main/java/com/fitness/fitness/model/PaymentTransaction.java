@@ -14,13 +14,14 @@ public class PaymentTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String paymentMethod; // Metode pembayaran (Alipay, WeChat, Debit, Credit)
-    private String transactionId; // ID transaksi dari Alipay atau WeChat
+    private String paymentMethod; 
+    private String transactionId; 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     @ManyToOne
     @JoinColumn(name = "plan_id", nullable = false)
+    
     private Plan plan;
     private String planType;
     private Double price; 
