@@ -13,7 +13,7 @@
 </head>
 <body>
 <h1>Trainer's profile</h1>
-<img th:src="@{'images/' + ${trainer.image}}" alt="Trainer Image"/>
+<img th:src="@{'images/' + ${trainer.photo}}" alt="Trainer Image"/>
 <br/>
 <h2 th:text="${trainer.name}">Trainer Name</h2>
 <h3>Trainer rank:
@@ -29,8 +29,14 @@
     <button type="submit" value="appointment">Book appointment</button>
 </form>
 
+<!-- Button to add a review -->
+<form method="get" action="/trainerReview">
+    <input type="hidden" name="trainerId" th:value="${trainer.id}">
+    <button type="submit" class="button">View Trainer's Review</button>
+</form>
+
 <!-- Display Reviews -->
-<div>
+<!--<div>
     <h2>Reviews</h2>
     <div th:if="${reviews}">
         <div th:each="review : ${reviews}">
@@ -49,7 +55,7 @@
     <div th:unless="${reviews}">
         <p>No reviews available for this trainer.</p>
     </div>
-</div>
+</div>-->
 
 
 </body>

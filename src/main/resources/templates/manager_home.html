@@ -44,7 +44,7 @@
 
         /* Style untuk tombol Manager Reports */
         .collapsible {
-            background-color: #4CAF50; /* Green */
+            background-color: #111; 
             color: white;
             padding: 10px 15px;
             text-align: left;
@@ -59,7 +59,7 @@
 
         /* Ketika tombol Manager Reports diklik, beri warna latar yang berbeda */
         .collapsible.active {
-            background-color: #45a049; /* Darker Green */
+            background-color: #000000; 
         }
 
         /* Style untuk sub-buttons */
@@ -67,28 +67,18 @@
             padding-left: 40px; /* Menambahkan indentasi untuk membedakan dari tombol utama */
         }
 
-        /* Tambahkan gaya untuk kotak hijau */
-        .green-box {
-            background-color: #4CAF50; /* Green */
-            padding: 10px 15px;
-            text-align: left;
-            text-decoration: none;
-            display: block;
-            width: 100%;
-            margin-bottom: 10px; /* Jarak antara tombol */
-            font-size: 18px;
-        }
     </style>
 </head>
 <body>
     <div class="sidebar">
-        <!-- Tambahkan kotak hijau di belakang tombol View Trainers -->
-        <a href="/managerViewTrainers" class="green-box button">View Trainers</a>
+        <a href="/managerViewTrainers">View Trainers</a>
+        <a href="/manager_appointment">Appointment Records</a>
+        <a href="/managerViewUsers">View Customers</a>
+        <a href="/manager_view_plans">View Plans</a>
         <!-- Tombol Manager Reports -->
         <button class="button collapsible">View Reports &#9660;</button>
         <!-- Sub-buttons -->
         <div class="content">
-            <!-- Tambahkan ID untuk setiap sub-menu -->
             <a href="#" id="income" class="sub button">Income</a>
             <a href="#" id="cashflows" class="sub button">Cashflows</a>
             <a href="#" id="expenses" class="sub button">Expenses</a>
@@ -100,15 +90,11 @@
     </div>
 
     <script>
-        // Ambil tombol Manager Reports dan sub-menu
         var toggleButton = document.querySelector('.collapsible');
         var subMenu = document.querySelector('.content');
 
-        // Tambahkan event listener untuk klik pada tombol Manager Reports
         toggleButton.addEventListener('click', function() {
-            // Toggle tampilan sub-menu
             subMenu.style.display = subMenu.style.display === 'block' ? 'none' : 'block';
-            // Toggle kelas 'active' pada tombol Manager Reports
             toggleButton.classList.toggle('active');
         });
 
@@ -123,7 +109,6 @@
             window.location.href = '/' + id + '?startDate=' + today + '&endDate=' + today;
         }
 
-        // Menambahkan event listener untuk setiap sub-menu
         document.querySelectorAll('.sub').forEach(function(sub) {
             sub.addEventListener('click', handleSubMenuClick);
         });

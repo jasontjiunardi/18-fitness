@@ -66,7 +66,9 @@ public class AppointmentService {
     public void saveAppointment(Appointment appointment) {
         appointmentRepo.save(appointment);
     }
-
+    public List<Appointment> findAllAppointment(){
+        return appointmentRepo.findAll();
+    }
     public List<Appointment> findAppointmentsByFilters(int userId, Integer classId, Integer trainerId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         return appointmentRepo.findAppointmentsByFilters(userId, classId, trainerId, startDateTime, endDateTime);
     }

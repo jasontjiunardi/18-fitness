@@ -87,19 +87,18 @@ public class UserController {
     }
 
     @GetMapping("/edit_profile")
-public String userEditInformation(Model model, @SessionAttribute("user") User user) {
-    String userEmail = user.getEmail();
-    User existingUser = userService.getUserByEmail(userEmail);
-    model.addAttribute("user", existingUser);
-    return "editProfile";
-}
+    public String userEditInformation(Model model, @SessionAttribute("user") User user) {
+        String userEmail = user.getEmail();
+        User existingUser = userService.getUserByEmail(userEmail);
+        model.addAttribute("user", existingUser);
+        return "editProfile";
+    }
 
-@PostMapping("/edit_profile")
-public String userEditInformation(@ModelAttribute User user, Model model) {
-    userService.saveUser(user);
-    return "editProfile"; // Redirect to the profile page after saving
-}
-
+    @PostMapping("/edit_profile")
+    public String userEditInformation(@ModelAttribute User user, Model model) {
+        userService.saveUser(user);
+        return "editProfile"; // Redirect to the profile page after saving
+    }
 
     @GetMapping("/add_credit_card")
     public String addCreditCard(Model model,User user) {
@@ -114,6 +113,7 @@ public String userEditInformation(@ModelAttribute User user, Model model) {
         userService.setCreditCardNumber(user.getEmail(), cardNumber);
         return "profile"; 
     }
+
     @GetMapping("/home_page")
     public String getHomePage(Model model, @SessionAttribute("user") User user) {
         if (user != null) {
@@ -123,32 +123,32 @@ public String userEditInformation(@ModelAttribute User user, Model model) {
             return "login";
         }
 }
-@GetMapping("/choose_profile_picture")
-public String chooseProfilePicture(Model model) {
-    return "profilePicture";
-}
 
-@PostMapping("/save_profile_picture")
-public String saveProfilePicture(@RequestParam("image") String image, @SessionAttribute("user") User user) {
-    String imageUrl = determineProfilePictureUrl(image);
-    user.setImage(imageUrl);
-    userService.saveUser(user);
-    return "/edit_profile"; // Redirect to the edit profile page
-}
-
-private String determineProfilePictureUrl(String image) {
-    // Logic to determine the profile picture URL based on the selected avatar
-    // This could involve fetching URLs from a database or predefined mapping
-    // For simplicity, let's assume we have predefined URLs for avatars
-    if ("avatar1".equals(image)) {
-        return "url_for_avatar_1.jpg";
-    } else if ("avatar2".equals(image)) {
-        return "url_for_avatar_2.jpg";
-    } else {
-        // Default profile picture URL if no match found
-        return "default_profile_picture.jpg";
+    @GetMapping("/choose_profile_picture")
+    public String chooseProfilePicture(Model model) {
+        return "profilePicture";
     }
-}
 
+    @PostMapping("/save_profile_picture")
+    public String saveProfilePicture(@RequestParam("image") String image, @SessionAttribute("user") User user) {
+        String imageUrl = determineProfilePictureUrl(image);
+        user.setImage(imageUrl);
+        userService.saveUser(user);
+        return "/edit_profile"; // Redirect to the edit profile page
+    }
+
+    private String determineProfilePictureUrl(String image) {
+        // Logic to determine the profile picture URL based on the selected avatar
+        // This could involve fetching URLs from a database or predefined mapping
+        // For simplicity, let's assume we have predefined URLs for avatars
+        if ("avatar1".equals(image)) {
+            return "url_for_avatar_1.jpg";
+        } else if ("avatar2".equals(image)) {
+            return "url_for_avatar_2.jpg";
+        } else {
+            // Default profile picture URL if no match found
+            return "default_profile_picture.jpg";
+        }
+    }
 
 }

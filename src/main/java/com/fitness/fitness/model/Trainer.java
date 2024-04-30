@@ -25,8 +25,8 @@ public class Trainer {
     private String gender;
     private String dob;
     private String email;
-    private String image;
-    private String phone;
+    private String photo = "defaultTrainer.jpg"; // Update the default value to the correct file path or handle the case of a missing image separately
+    private String phone ;
     @Column(name = "`rank`") // Enclosing rank in backticks to avoid SQL syntax error
     private int rank; //3 for 3 star. 4 for 4 star, 5 for 5 star
     private String trainerSince;
@@ -34,6 +34,7 @@ public class Trainer {
     public Trainer() {
     }
     
+
     @ManyToMany(mappedBy = "trainers")
     private Set<Plan> plans = new HashSet<>();
 
@@ -49,14 +50,14 @@ public class Trainer {
     @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Review> reviews;
     
-    public Trainer(String name, int age, String gender, String dob, String email, String image, String phone, int rank,
+    public Trainer(String name, int age, String gender, String dob, String email, String photo, String phone, int rank,
             String trainerSince) {
         this.name = name;
         this.age = age;
         this.gender = gender;
         this.dob = dob;
         this.email = email;
-        this.image = image;
+        this.photo = photo;
         this.phone = phone;
         this.rank = rank;
         this.trainerSince = trainerSince;
@@ -117,13 +118,7 @@ public class Trainer {
         this.name = name;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
+    
 
     public List<Review> getReviews() {
         return reviews;
@@ -136,9 +131,28 @@ public class Trainer {
     @Override
     public String toString() {
         return "Trainer [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender + ", dob=" + dob
-                + ", email=" + email + ", image=" + image + ", phone=" + phone + ", rank=" + rank + ", trainerSince="
+                + ", email=" + email + ", photo=" + photo + ", phone=" + phone + ", rank=" + rank + ", trainerSince="
                 + trainerSince + ", plans=" + plans + "]";
     }
+//for promoting and demoting trainers
+    public void updateRank(int newRank) {
+        if (newRank >= 3 && newRank <= 5) {
+            this.rank = newRank;
+        } else {
+            // Optionally handle invalid rank values here
+        }
+    }
 
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public int getTrainerId() {
+        return this.id;
+    }
 
 }

@@ -33,18 +33,42 @@ public class User {
     private LocalDate activeDate = null;
     private int recoveryCode;
     private String cardNumber;
-    private String image;
+    private String photo = "defaultUser.jpeg";
     private String gender;
     
+    
+
+
+    public String getGender() {
+        return gender;
+    }
+
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
+    }
+
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Appointment> appointments;
 
     public User() {
     }
 
-
+    
     public User(int userId, String name, String username, String password, String email, Date dob, String phoneNumber,
-            String status, LocalDate activeDate, int recoveryCode, String cardNumber, String image) {
+            String status, LocalDate activeDate, int recoveryCode, String cardNumber, String photo, String gender,
+            List<Appointment> appointments) {
         this.userId = userId;
         this.name = name;
         this.username = username;
@@ -56,9 +80,12 @@ public class User {
         this.activeDate = activeDate;
         this.recoveryCode = recoveryCode;
         this.cardNumber = cardNumber;
-        this.image = image;
+        this.photo = photo;
+        this.gender = gender;
+        this.appointments = appointments;
     }
-    
+
+
     public int getRecoveryCode() {
         return recoveryCode;
     }
@@ -129,12 +156,12 @@ public class User {
         this.cardNumber = cardNumber;
     }
 
-    public String getimage() {
-        return image;
+    public String getPhoto() {
+        return photo;
     }
     
-    public void setimage(String image) {
-        this.image = image;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
 
@@ -143,7 +170,7 @@ public class User {
         return "User [userId=" + userId + ", name=" + name + ", username=" + username + ", password=" + password
                 + ", email=" + email + ", dob=" + dob + ", phoneNumber=" + phoneNumber + ", status=" + status
                 + ", activeDate=" + activeDate + ", recoveryCode=" + recoveryCode + ", cardNumber=" + cardNumber
-                + ", image=" + image + ", gender=" + gender + ", appointments=" + appointments + "]";
+                + ", photo=" + photo + ", gender=" + gender + ", appointments=" + appointments + "]";
     }
     
 }

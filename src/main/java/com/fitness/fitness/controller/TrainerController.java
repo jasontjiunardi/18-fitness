@@ -7,19 +7,28 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import com.fitness.fitness.model.Trainer;
+import com.fitness.fitness.model.User;
 import com.fitness.fitness.model.Review;
 import com.fitness.fitness.service.TrainerService;
-import com.fitness.fitness.service.ReviewService;
+import com.fitness.fitness.service.UserService;
+//import com.fitness.fitness.service.ReviewService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
+@SessionAttributes("user")
 public class TrainerController {
     @Autowired
     private TrainerService trainerService;
+   // @Autowired
+    //private ReviewService reviewService;
+
     @Autowired
-    private ReviewService reviewService;
+    private UserService userService;
 
     @GetMapping("/trainers/view")
     public ModelAndView view(Model model) {
@@ -27,7 +36,12 @@ public class TrainerController {
     }
 
     @GetMapping("/view_trainers")
-    public String viewTrainers(@RequestParam(value = "rank", required = false) Integer rank, Model model) {
+    public String viewTrainers(@RequestParam(value = "rank", required = false) Integer rank, Model model, HttpSession session) {
+         User user = (User) session.getAttribute("user");
+         if(user != null){
+            User existingUser = userService.getUserByEmail(user.getEmail());
+            model.addAttribute("user", existingUser);
+        }
         if (rank == null) {
             List<Trainer> trainers = trainerService.getAllTrainers();
             model.addAttribute("trainers", trainers);
@@ -41,9 +55,9 @@ public class TrainerController {
     @GetMapping("/trainer_profile")
     public String trainerProfile(@RequestParam(value = "id", required = false) Integer id, Model model) {
         Trainer trainer = trainerService.findById(id);
-        List<Review> reviews = reviewService.findByTrainer(trainer); // Get reviews for the trainer
+        //List<Review> reviews = reviewService.findByTrainer(trainer); // Get reviews for the trainer
         model.addAttribute("trainer", trainer);
-        model.addAttribute("reviews", reviews); 
+        //model.addAttribute("reviews", reviews); 
         return "trainerprofile";
     }
 

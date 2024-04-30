@@ -97,11 +97,13 @@
                     <th onclick="sortTable(7, 'number')">Status</th>
                     <th onclick="sortTable(8, 'string')">active Date</th>
                     <th>Profile Picture</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="User : ${Users}">
-                    <td th:text="${User.id}"></td>
+                    <td th:text="${User.userId}"></td>
                     <td th:text="${User.name}"></td>
                     <td th:text="${User.username}"></td>
                     <td th:text="${User.gender}"></td>
@@ -110,10 +112,19 @@
                     <td th:text="${User.phoneNumber}"></td>
                     <td th:text="${User.status}"></td>
                     <td th:text="${User.activeDate}"></td>
-                    <td> <img th:src="@{'images/' + ${User.profilePictureUrl}}" alt="User image" class="User-img"/></td>
-                    <td><button onclick="sendNotification('${User.email}')">Send Marketing Notification</button></td>
+                    <td> <img th:src="@{'images/' + ${User.photo}}" alt="User image" class="User-img"/></td>
+                    <td>
+                        <form id="sendNotificationForm" method="post" th:action="@{/sendNotification/{email}(email=${User.email})}">                       
+                            <button type="button" class="btn btn-danger" onclick="confirmSendNotification('${User.email}')">Send Marketing Notification</button>
+                        </form>
+                    </td>
+                   <td> 
+                        <form id="removeUserForm" th:action="@{/removeUser/{email}(email=${User.email})}" method="post">
+                            <button class="btn btn-danger" onclick="confirmRemove()">Remove User</button>
+                        </form>
+                   </td>
                 </tr>
-                </tr>
+                
             </tbody>
         </table>
     </div>
@@ -172,7 +183,17 @@
             // Convert rank numbers to stars
             updateStars();
         });
-
+    function confirmSendNotification(email) {
+        if (confirm("Are you sure you want to send a marketing notification to this user?")) {
+            // window.location.href = "/sendNotification/" + email;
+            document.getElementById("sendNotificationForm").submit();
+        }
+    }
+    function confirmRemove() {
+        if (confirm("Are you sure you want to remove this customer?")) {
+            document.getElementById("removeCustomerForm").submit();
+        }
+    }
         
     </script>
 </body>
