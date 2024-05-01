@@ -185,7 +185,18 @@
 
     </style>
     <title>User Profile</title>
+    <script type="text/javascript">
+        function confirmPause() {
+            if (confirm("Are you sure you want to pause your account?")) {
+                document.getElementById("pauseButton").innerText = "Pausing..."; // Change button text
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
 </head>
+
 <body>
     <div class="sidebar">
         <form method="get" th:action="@{/profile}">
@@ -258,5 +269,73 @@
             </form>
         </div>
     </div>
+
+    <!-- Button to pause/unpause account -->
+    <div>
+        <form id="accountForm" method="POST">
+            <button id="accountButton" type="submit"></button>
+        </form>
+    </div>
+
+    <script th:inline="javascript">
+        var userStatus = /*[[${user.status}]]*/ '';
+        var accountButton = document.getElementById('accountButton');
+        var accountForm = document.getElementById('accountForm');
+
+        // Function to set button properties based on user status
+        function setButtonProperties() {
+            if (userStatus === 'Silver') {
+                accountButton.textContent = 'Pause Account';
+                accountForm.action = '/pause_account';
+                accountButton.disabled = false; // Enable the button
+            } else if (userStatus === 'Gold') {
+                accountButton.textContent = 'Pause Account';
+                accountForm.action = '/pause_account';
+                accountButton.disabled = false; // Enable the button
+            } else if (userStatus === 'Diamond') {
+                accountButton.textContent = 'Pause Account';
+                accountForm.action = '/pause_account';
+                accountButton.disabled = false; // Enable the button
+            } else if (userStatus === 'paused') {
+                accountButton.textContent = 'Unpause Account';
+                accountForm.action = '/unpause_account';
+                accountButton.disabled = false; // Enable the button
+            } else {
+                accountButton.textContent = 'Inactive Account';
+                accountForm.action = ''; // Clear the action
+                accountButton.disabled = true; // Disable the button
+            }
+        }
+
+
+        // Function to show confirmation alert
+        function showConfirmation(action) {
+            if (action === 'pause') {
+                return confirm('Are you sure you want to pause your account?');
+            } else if (action === 'unpause') {
+                return confirm('Are you sure you want to unpause your account?');
+            }
+            return false;
+        }
+
+        // Add event listener to the form
+        accountForm.addEventListener('submit', function(event) {
+            if (accountButton.textContent.includes('Pause')) {
+                // Show confirmation alert before submitting the form for pause action
+                if (!showConfirmation('pause')) {
+                    event.preventDefault(); // Prevent form submission if cancel button is clicked
+                }
+            } else if (accountButton.textContent.includes('Unpause')) {
+                // Show confirmation alert before submitting the form for unpause action
+                if (!showConfirmation('unpause')) {
+                    event.preventDefault(); // Prevent form submission if cancel button is clicked
+                }
+            }
+        });
+
+        // Call the function initially
+        setButtonProperties();
+    </script>
+    
 </body>
 </html>

@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Duration;
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fitness.FileUploadUtil;
+import com.fitness.fitness.model.PauseInfo;
 // import com.fitness.FileUploadUtil;
 import com.fitness.fitness.model.User;
 import com.fitness.fitness.repository.UserRepo;
@@ -261,85 +265,56 @@ public class UserController {
 //     return "profilePicture";
 // }
 
-    // @PostMapping("/pause_account")
-    // public String pauseAccount(Model model, @SessionAttribute("user") User user) {
-    //     // Retrieve user from database to ensure the data is up-to-date
-    //     User existingUser = userService.getUserByEmail(user.getEmail());
-        
-    //     // Check if user status is active
-    //     if ("active".equals(existingUser.getStatus())) {
-    //         // Set pause start date
-    //         existingUser.setPauseStartDate(LocalDate.now());
-            
-    //         // Set pause end date (30 days from now)
-    //         LocalDate pauseEndDate = LocalDate.now().plusDays(30); // 30 days from now
-    //         existingUser.setPauseEndDate(pauseEndDate);
-            
-    //         // Update user status to paused
-    //         existingUser.setStatus("paused");
+@PostMapping("/pause_account")
+public String pauseAccount(Model model, @SessionAttribute("user") User user) {
+    User existingUser = userService.getUserByEmail(user.getEmail());
 
-    //         // Save updated user data to database
-    //         userService.saveUser(existingUser);
-            
-    //         // Redirect to profile page
-    //         return "redirect:/profile";
-    //     } else if ("paused".equals(existingUser.getStatus())) {
-    //         // Check if pause end date has passed
-    //         LocalDate currentDate = LocalDate.now();
-    //         LocalDate pauseEndDate = existingUser.getPauseEndDate();
-    //         if (currentDate.isAfter(pauseEndDate)) {
-    //             // Update user status to active
-    //             existingUser.setStatus("active");
-                
-    //             // Save updated user data to database
-    //             userService.saveUser(existingUser);
-                
-    //             // Redirect to profile page with notification
-    //             return "redirect:/profile?notification=Your account has been reactivated.";
-    //         } else {
-    //             // User is already paused, redirect to profile with a notification
-    //             return "redirect:/profile?notification=Your account is already paused.";
-    //         }
-    //     } else {
-    //         // User is inactive, redirect to profile with a notification
-    //         return "redirect:/profile?notification=You must have an active plan to pause your account.";
-    //     }
-    // }
+    if ("paused".equals(existingUser.getStatus())) {
+        // User already paused, no need to create new PauseInfo
+        return "redirect:/profile?notification=Your account is already paused.";
+    }
+
+    // Check if user has an existing PauseInfo entry
+    PauseInfo existingPauseInfo = existingUser.getPauseInfo();
+    if (existingPauseInfo != null) {
+        // Update existing PauseInfo
+        existingPauseInfo.setPauseStartDate(LocalDate.now());
+        existingPauseInfo.setPauseEndDate(LocalDate.now().plusDays(30));
+        existingUser.setStatus("paused");
+        userService.saveUser(existingUser);
+    } else {
+        // Create new PauseInfo
+        PauseInfo pauseInfo = new PauseInfo();
+        pauseInfo.setPauseStartDate(LocalDate.now());
+        pauseInfo.setPauseEndDate(LocalDate.now().plusDays(30));
+        pauseInfo.setUser(existingUser);
+        pauseInfo.setStatus(existingUser.getStatus());
+        existingUser.setPauseInfo(pauseInfo);
+        existingUser.setStatus("paused");
+        userService.saveUser(existingUser);
+    }
+
+    return "redirect:/profile";
+}
 
 
-    // @PostMapping("/unpause_account")
-    // public String unpauseAccount(Model model, @SessionAttribute("user") User user) {
-    //     // Retrieve user from database to ensure the data is up-to-date
-    //     User existingUser = userService.getUserByEmail(user.getEmail());
+    @PostMapping("/unpause_account")
+    public String unpauseAccount(Model model, @SessionAttribute("user") User user) {
+        User existingUser = userService.getUserByEmail(user.getEmail());
 
-    //     // Check if the user status is "paused"
-    //     if ("paused".equals(existingUser.getStatus())) {
-    //         // Hitung durasi pembekuan
-    //         LocalDate pauseStartDate = existingUser.getPauseStartDate();
-    //         LocalDate today = LocalDate.now();
-    //         Duration duration = Duration.between(pauseStartDate.atStartOfDay(), today.atStartOfDay());
-    //         long daysPaused = duration.toDays();
+        if ("paused".equals(existingUser.getStatus())) {
+            PauseInfo pauseInfo = existingUser.getPauseInfo();
+            LocalDate pauseStartDate = pauseInfo.getPauseStartDate();
+            LocalDate today = LocalDate.now();
+            long daysPaused = Duration.between(pauseStartDate.atStartOfDay(), today.atStartOfDay()).toDays();
+            pauseInfo.setDaysPaused(daysPaused);
+            pauseInfo.setPauseStartDate(null);
+            pauseInfo.setPauseEndDate(null);
+            existingUser.setStatus(existingUser.getPauseInfo().getStatus());
+            userService.saveUser(existingUser);
+        }
 
-    //         // Simpan jumlah hari pembekuan dalam variabel atau di objek User
-    //         existingUser.setDaysPaused(daysPaused);
-
-    //         // Set pause start date to null
-    //         existingUser.setPauseStartDate(null);
-            
-    //         // Set pause end date to null
-    //         existingUser.setPauseEndDate(null);
-            
-    //         // Update user status to "active"
-    //         existingUser.setStatus("active");
-            
-    //         // Save updated user data to database
-    //         userService.saveUser(existingUser);
-    //     }
-        
-    //     // Redirect to profile page
-    //     return "redirect:/profile";
-    // }
-
-
+        return "redirect:/profile";
+    }
   }
 

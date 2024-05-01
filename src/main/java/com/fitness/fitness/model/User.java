@@ -35,8 +35,9 @@ public class User {
     private String cardNumber;
     private String photo = "defaultUser.jpeg";
     private String gender;
-    
-    
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private PauseInfo pauseInfo;
 
 
     public String getGender() {
@@ -171,6 +172,16 @@ public class User {
                 + ", email=" + email + ", dob=" + dob + ", phoneNumber=" + phoneNumber + ", status=" + status
                 + ", activeDate=" + activeDate + ", recoveryCode=" + recoveryCode + ", cardNumber=" + cardNumber
                 + ", photo=" + photo + ", gender=" + gender + ", appointments=" + appointments + "]";
+    }
+
+
+    public PauseInfo getPauseInfo() {
+        return pauseInfo;
+    }
+
+
+    public void setPauseInfo(PauseInfo pauseInfo) {
+        this.pauseInfo = pauseInfo;
     }
     
 }
