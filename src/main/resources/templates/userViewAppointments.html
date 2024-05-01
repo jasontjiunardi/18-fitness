@@ -1,159 +1,198 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Appointments</title>
+    <title>User View Appointments Page</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            color: #333333;
             margin: 0;
-            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .header {
+            background-color: #4a154b;
+            color: #fff;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            padding: 10px 20px;
         }
-
-        h1 {
-            font-size: 36px;
-            color: #333333;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        form {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        label {
+        .header-center {
+            font-size: 24px;
             font-weight: bold;
-            margin-bottom: 10px;
-            display: block;
-            width: 100px;
-            text-align: right;
-            margin-right: 20px;
         }
-
-        select, input[type="date"] {
-            width: 200px;
-            padding: 10px;
-            margin-bottom: 20px;
+        .auth-buttons a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 10px;
+            padding: 8px 16px;
             border-radius: 5px;
-            border: 1px solid #cccccc;
-            box-sizing: border-box;
+            transition: background-color 0.3s;
         }
-
-        button[type="submit"], button[type="button"], .back-button {
+        .auth-buttons a:hover {
+            background-color: #310b33;
+        }
+        form {
+            margin: 0px; /* Reduced margin */
+            padding: 0px; /* Reduced padding */
+            background-color: transparent; /* Removed white background */
+            border-radius: 0px;
+            box-shadow: none; /* Removed shadow */
+        }
+        .d-flex {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        label {
+            margin-right: 10px;
+        }
+        select, input[type="date"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: auto;
+        }
+        .button-container {
+            padding-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        button {
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
             background-color: #4a154b;
-            color: #ffffff;
+            color: white;
             cursor: pointer;
-            margin-bottom: 20px; /* Added margin bottom */
+            transition: background-color 0.3s;
         }
-
-        button[type="submit"]:hover, button[type="button"]:hover, .back-button:hover {
+        button:hover {
             background-color: #310b33;
         }
-
-        table {
-            width: 80%;
+        .table {
+            margin: 20px;
+            width: calc(100% - 40px);
             border-collapse: collapse;
-            margin-bottom: 20px;
-            text-align: center;
         }
-
         th, td {
-            padding: 10px;
-            text-align: center;
-            border-bottom: 1px solid #dddddd;
+            padding: 8px;
+            border: 1px solid #ccc;
+            vertical-align: middle;
         }
-
         th {
-            background-color: #f2f2f2;
-            font-weight: bold;
+            background-color: #4a154b;
+            color: #fff;
         }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
         .back-button {
-            background-color: #cccccc;
-            color: #333333;
+            display: inline-block;
+            margin: 20px;
+            padding: 8px 16px;
+            background-color: #4a154b;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
         }
-
         .back-button:hover {
-            background-color: #aaaaaa;
+            background-color: #310b33;
         }
-
-        button:focus {
-            outline: none;
-        }
-
-        /* Adjust button container width */
-        .button-container {
+        .d-flex.justify-content-center {
+            justify-content: center;
             width: 100%;
-            text-align: center;
+        }
+        .table form {
+            background-color: transparent;
+            border: none;
+            margin: 0;
+            padding: 0;
         }
 
-        /* Adjust button width */
-        button[type="submit"] {
-            width: 150px; /* Adjust width as needed */
+        form.filter-form {
+            display: flex; /* Make the form a flex container */
+            flex-wrap: wrap; /* Allow wrapping if needed */
+            align-items: center; /* Align items vertically in the middle */
+            gap: 10px; /* Spacing between items */
+            padding: 10px; /* Reduced padding */
+            background-color: transparent; /* Transparent background */
+            margin: 20px 0; /* Margin to separate from other elements */
+            border: none;
+            box-shadow: none;
+        }
+        .filter-field {
+            display: flex; /* Make each filter field a flex container */
+            align-items: center; /* Align items vertically in the middle */
+            flex-grow: 1; /* Allow fields to grow and fill available space */
+        }
+        label {
+            margin-right: 10px; /* Space between label and field */
+        }
+        select, input[type="date"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .button-container, .filter-button {
+            background-color: #4a154b; /* Button background */
+            color: white; /* Button text color */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .filter-button:hover {
+            background-color: #310b33; /* Button hover effect */
         }
     </style>
+    
 </head>
 <body>
-    <h1>User Appointments</h1>
+    <div class="header">
+        <a href="/home_page" class="header-button home-button">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="header-center">My Appointments</div> 
+        <div class="auth-buttons">
+        
+            <p th:if="${retrievedUser != null}">Logged In: <span th:text="${retrievedUser.Name}"></span></p>
+
+        </div>
+    </div>
 
     <!-- Filtering Form -->
-    <form th:action="@{/filterAppointments}" method="get">
-        <div>
+    <form th:action="@{/filterAppointments}" method="get" class="filter-form">
+        <div class="filter-field">
             <label for="classId">Class:</label>
             <select id="classId" name="classId" required>
                 <option value="">Select Class</option>
                 <option th:each="class : ${classList}" th:value="${class.classId}" th:text="${class.className}"></option>
             </select>
         </div>
-
-        <div>
+        <div class="filter-field">
             <label for="trainerId">Trainer:</label>
             <select id="trainerId" name="trainerId" required>
                 <option value="">Select Trainer</option>
                 <option th:each="trainer : ${trainerList}" th:value="${trainer.id}" th:text="${trainer.name}"></option>
             </select>
         </div>
-
-        <div>
+        <div class="filter-field">
             <label for="startDate">Start Date:</label>
             <input type="date" id="startDate" name="startDate" required/>
         </div>
-    
-        <div>
+        <div class="filter-field">
             <label for="endDate">End Date:</label>
             <input type="date" id="endDate" name="endDate" required />
         </div>
-        
-        <!-- Button Container -->
-        <div class="button-container">
-            <button type="submit">Filter Appointment</button>
-        </div>
+        <button type="submit" class="filter-button">Filter Appointment</button>
     </form>
 
+
     <!-- Results Table -->
-    <table>
+    <table class="table">
         <thead>
             <tr>
                 <th>Appointment ID</th>
@@ -161,8 +200,7 @@
                 <th>Class Name</th>
                 <th>Date</th>
                 <th>Status</th>
-                <th>Edit</th>
-                <th>Cancel</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -170,18 +208,18 @@
                 <td th:text="${appointmentId}">-</td>
                 <td th:text="${@appointmentController.getTrainerNameByAppointmentId(appointmentId)}">-</td>
                 <td th:text="${@appointmentController.getClassNameByAppointmentId(appointmentId)}">-</td>
-                <td th:text="${@appointmentController.getDateTimeByAppointmentId(appointmentId)}">-</td>
+                <td class="date-time" th:text="${@appointmentController.getDateTimeByAppointmentId(appointmentId)}">-</td>
                 <td th:text="${@appointmentController.getStatusByAppointmentId(appointmentId)}">-</td>
-                <td th:if="${@appointmentController.getStatusByAppointmentId(appointmentId) != 'inactive'}">
-                    <a th:href="@{/edit_appointment_page(appointmentId=${appointmentId}, userId=${@appointmentController.getUserIdByAppointmentId(appointmentId)})}">
-                        <button type="button">Edit</button>
-                    </a>
-                </td>
-                <td th:if="${@appointmentController.getStatusByAppointmentId(appointmentId) == 'active'}">
-                    <form method="POST" th:action="@{/cancel_appointment}">
-                        <input type="hidden" name="appointmentId" th:value="${appointmentId}" />
-                        <button type="submit">Cancel</button>
-                    </form>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <a th:if="${@appointmentController.getStatusByAppointmentId(appointmentId) != 'inactive'}" th:href="@{/edit_appointment_page(appointmentId=${appointmentId}, userId=${@appointmentController.getUserIdByAppointmentId(appointmentId)})}" class="me-2">
+                            <button type="button" class="btn btn-primary">Edit</button>
+                        </a>
+                        <form th:if="${@appointmentController.getStatusByAppointmentId(appointmentId) == 'active'}" method="POST" th:action="@{/cancel_appointment}" class="ms-2">
+                            <input type="hidden" name="appointmentId" th:value="${appointmentId}" />
+                            <button type="submit" class="btn btn-danger">Cancel</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
         </tbody>
@@ -189,5 +227,18 @@
 
     <!-- Back Button -->
     <a th:href="@{/home_page}" class="back-button">Back to HomePage</a>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var dateTimeElements = document.querySelectorAll('.date-time');
+    
+            dateTimeElements.forEach(function(element) {
+                // Ensure the element has content before attempting to replace characters
+                if (element.textContent && element.textContent.includes('T')) {
+                    element.textContent = element.textContent.replace('T', '   '); // Replace 'T' with a space
+                }
+            });
+        });
+    </script>
 </body>
 </html>

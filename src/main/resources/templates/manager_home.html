@@ -67,6 +67,21 @@
             padding-left: 40px; /* Menambahkan indentasi untuk membedakan dari tombol utama */
         }
 
+        /* Style for the "Log Out" button */
+        .logout {
+            position: absolute; /* Make it absolute to position it at the bottom */
+            bottom: 20px; /* Adjust vertical position */
+            left: 20px; /* Adjust horizontal position */
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center; /* Align items vertically */
+        }
+
+        .logout:hover {
+            background-color: #575757; /* Gray on hover */
+        }
     </style>
 </head>
 <body>
@@ -83,6 +98,11 @@
             <a href="#" id="cashflows" class="sub button">Cashflows</a>
             <a href="#" id="expenses" class="sub button">Expenses</a>
         </div>
+        <!-- Log Out button -->
+        <a href="/first_page" class="logout">
+            <i class="fa fa-sign-out"></i>
+            Log Out
+        </a>
     </div>
     
     <div class="content">

@@ -8,39 +8,88 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
             margin: 0;
             padding: 0;
+            display: flex;
         }
-        .dashboard {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+        .sidebar {
+            height: 100vh;
+            width: 275px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Align items at the top and bottom */
         }
-        .dashboard-button {
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
             display: block;
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 10px;
-            border: none;
-            background-color: #4a154b;
-            color: #fff;
-            font-size: 16px;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
         }
+
+        .sidebar a:hover {
+            background-color: #575757; /* Gray */
+        }
+
+        .content {
+            margin-left: 200px; /* Same as the sidebar width */
+            padding: 1px 16px;
+            height: 1000px; /* Sample content height */
+        }
+
+        h1 {
+            color: #4a154b;
+        }
+
+        /* Style for the logout button */
+        .logout {
+            margin-top: auto;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .logout:hover {
+            background-color: #575757;
+        }
+
+        .logout i {
+            margin-right: 10px;
+        }
+
+        .dashboard-button {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+            background-color: #111;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+        }
+
         .dashboard-button:hover {
-            background-color: #4a154b;
+            background-color: #575757;
         }
     </style>
 </head>
 <body>
-    <div class="dashboard">
+    <div class="sidebar">
         <form method="get" th:action="@{/profile}">
             <input type="hidden" name="email" th:value="${user.email}">
             <button type="submit" class="dashboard-button">View Profile</button>
@@ -69,6 +118,14 @@
         <form method="get" th:action="@{/plan_purchase_history}">
             <button type="submit" class="dashboard-button">View Plan Purchase History</button>
         </form>
+        <a href="/first_page" class="logout">
+            <i class="fa fa-sign-out"></i>
+            Log Out
+        </a>
+    </div>
+
+    <div class="content">
+        <h1>User Dashboard</h1>
     </div>
 </body>
 </html>

@@ -3,60 +3,135 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="trainerprofile.css"/>
-    <title>Trainer's profile</title>
+    <title>Trainer's Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 20px;
+            font-size: 2em;
+            color: #333;
+        }
+        img {
+            margin-top: 20px;
+            width: 200px;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #4a154b;
+        }
         .stars {
             color: gold;
+            font-size: 1.2em;
+        }
+        h3 {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #4a154b;
+        }
+        p {
+            font-size: 1em;
+            color: #666;
+        }
+        form {
+            margin-top: 20px;
+        }
+        button {
+            background-color: #4a154b;
+            color: white;
+            padding: 10px 20px;
+            margin: 20px 10px 20px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #763087;
+        }
+        .back-btn {
+            background-color: #4a154b;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .back-btn:hover {
+            background-color: #763087;
+        }
+
+        .header-button {
+            display: inline-flex; /* Use inline-flex to align items properly */
+            align-items: center;
+            justify-content: center;
+            background-color: #4a154b;
+            color: white;
+            text-decoration: none;
+            border: 2px solid white;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            padding: 5px 10px; /* Provides padding for better click area */
+            border-radius: 2px; /* Slightly rounded corners */
+        }
+
+        .header-button.home-button {
+            width: 50px;
+            height: 50px;
+            position: absolute; /* Position the button */
+            top: 20px; /* Adjust top position as needed */
+            left: 20px; /* Adjust left position as needed */
+        }
+
+        .header-button.home-button i {
+            font-size: 1.2em;
+            position: absolute; /* Ensure icon is positioned relative to its parent */
+            z-index: 2; /* Ensure the icon is above the overlay */
+        }
+
+        .header-button.home-button:hover, .header-button.sign-in-button:hover, .header-button.sign-up-button:hover {
+            background-color: white; /* White background on hover */
+            color: #4a154b; /* Purple text on hover */
+            border-color: #4a154b; /* Border color change on hover */
         }
     </style>
 </head>
 <body>
-<h1>Trainer's profile</h1>
-<img th:src="@{'images/' + ${trainer.photo}}" alt="Trainer Image"/>
-<br/>
-<h2 th:text="${trainer.name}">Trainer Name</h2>
-<h3>Trainer rank:
-    <div class="stars">
-        <span th:each="starNumber : ${#numbers.sequence(1, trainer.rank)}">&#9733;</span>
+    <div class="header">
+        <a th:href="@{/view_trainers}" class="header-button home-button">
+            <i class="fas fa-arrow-left"></i>
+        </a>
     </div>
-    <h3>Contact at:</h3>
-    <p th:text="${trainer.email}">trainer@example.com</p>
-    <p th:text="${trainer.phone}"> Trainer's phone number:</p>
-</h3>
-<form method="get" action="/bookAppointment">
-    <input type="hidden" name="trainerId" th:value="${trainer.id}">
-    <button type="submit" value="appointment">Book appointment</button>
-</form>
+    <h1>Trainer's Profile</h1>
+    <img th:src="@{'images/' + ${trainer.photo}}" alt="Trainer Image"/>
+    <h2 th:text="${trainer.name}">Trainer Name</h2>
+    <h3>Trainer Rank:
+        <span class="stars">
+            <span th:each="starNumber : ${#numbers.sequence(1, trainer.rank)}">&#9733;</span>
+        </span>
+    </h3>
+    <h3>Contact Information:</h3>
+    <p th:text="${trainer.email}">Email: trainer@example.com</p>
+    <p th:text="${trainer.phone}">Phone: Trainer's phone number</p>
 
-<!-- Button to add a review -->
-<form method="get" action="/trainerReview">
-    <input type="hidden" name="trainerId" th:value="${trainer.id}">
-    <button type="submit" class="button">View Trainer's Review</button>
-</form>
+    <!-- Button to book an appointment -->
+    <form method="get" action="/book_appointment">
+        <input type="hidden" name="trainerId" th:value="${trainer.id}">
+        <button type="submit">Book Appointment</button>
+    </form>
 
-<!-- Display Reviews -->
-<!--<div>
-    <h2>Reviews</h2>
-    <div th:if="${reviews}">
-        <div th:each="review : ${reviews}">
-            <div>
-                <p>Username: <span th:text="${review.username}"></span></p>
-                <p>Rating:
-                    <span class="stars">
-                        <span th:each="starNumber : ${#numbers.sequence(1, review.rating)}">&#9733;</span>
-                    </span>
-                </p>
-                <p>Content: <span th:text="${review.content}"></span></p>
-                <p>Date Added: <span th:text="${#dates.format(review.dateAdded, 'dd-MM-yyyy HH:mm')}"></span></p>
-            </div>
-        </div>
-    </div>
-    <div th:unless="${reviews}">
-        <p>No reviews available for this trainer.</p>
-    </div>
-</div>-->
-
-
+    <!-- Button to view trainer's reviews -->
+    <form method="get" action="/trainerReview">
+        <input type="hidden" name="trainerId" th:value="${trainer.id}">
+        <button type="submit">View Trainer's Reviews</button>
+    </form>
 </body>
 </html>

@@ -73,6 +73,26 @@
             border-color: #763087;
         }
 
+        .logout {
+            position: absolute; /* Position the logout button absolutely */
+            bottom: 20px; /* 20px from the bottom */
+            left: 20px; /* 20px from the left */
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .logout:hover {
+            background-color: #575757; /* Gray */
+        }
+
+        .logout i {
+            margin-right: 10px; /* Add space between icon and text */
+        }
+
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -125,6 +145,11 @@
         <button onclick="window.location='/managerViewTrainers'">View Trainers</button>
         <button onclick="window.location='/manager_appointment'" style="background-color: #575757;">Appointment Records</button>
         <button onclick="window.location='/managerViewUsers'">View Customers</button>
+        <button onclick="window.location='/manager_view_plans'">View Plans</button>
+        <a href="/first_page" class="logout">
+            <i class="fa fa-sign-out"></i> 
+            Log Out
+        </a>
     </div>
     <div class="main-content">
         <h1><b>All Appointments</b></h1>

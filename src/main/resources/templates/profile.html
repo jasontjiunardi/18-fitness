@@ -3,7 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="UserProfile.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eaeef3;
+            color: #4a4a4a;
+            margin: 0;
+            padding: 20px;
+            display: flex; /* Added */
+            justify-content: center; /* Added */
+            align-items: center; /* Added */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #4a154b;
+            margin-bottom: 20px;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .profile-picture-box {
+            width: 200px;
+            height: 200px;
+            border: 3px solid #4a154b;
+            border-radius: 50%;
+            overflow: hidden;
+            display: block;
+            margin-right: 20px;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-details p {
+            margin-bottom: 10px;
+        }
+
+        .user-details strong {
+            font-weight: bold;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .button-container form {
+            margin-right: 10px;
+        }
+
+        /* Style for the "Add Credit Card" button */
+        .add-card-button {
+            background-color: #4a154b;
+            color: white;
+            padding: 4px 15px; /* Adjusted padding */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 14px; /* Adjusted font size */
+        }
+
+        .add-card-button:hover {
+            background-color: #6d1d6d;
+        }
+
+        /* Style for the logout button */
+        .logout {
+            margin-top: auto;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .logout:hover {
+            background-color: #575757;
+        }
+
+        .logout i {
+            margin-right: 10px;
+        }
+
+        .sidebar {
+            height: 100vh;
+            width: 275px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* Changed */
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #575757; /* Gray */
+        }
+
+        .content {
+            margin-left: 275px; /* Adjusted */
+            padding: 1px 16px;
+            height: 1000px; /* Sample content height */
+        }
+
+        h1 {
+            color: #4a154b;
+        }
+
+        /* Style for the dashboard button */
+        .dashboard-button {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+            background-color: #111;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .dashboard-button:hover {
+            background-color: #575757;
+        }
+
+        .purple-button {
+            background-color: #4a154b; /* Changed color */
+            color: white;
+            padding: 8px 15px; /* Adjusted padding */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 16px; /* Adjusted font size */
+        }
+
+        .purple-button:hover {
+            background-color: #6d1d6d; /* Changed hover color */
+        }
+
+    </style>
     <title>User Profile</title>
     <script type="text/javascript">
         function confirmPause() {
@@ -18,32 +198,76 @@
 </head>
 
 <body>
-    <h1>User Profile</h1>
-    <div class="profile-container">
-        <div class="profile-picture-box">
-            <img th:src="@{'/images/' + ${user.photo}}" alt="User Image"/>
-        </div>
-        <div class="user-details">
-            <p>Email: <span th:text="${user.email}"></span></p >
-            <p>Name: <span th:text="${user.name}"></span></p >
-            <p>Date of Birth: <span th:text="${user.dob}"></span></p >
-            <p>Phone Number: <span th:text="${user.phoneNumber}"></span></p >
-        </div>
-    </div>
-    
-    <!-- If user has a credit card, display the credit card information -->
-    <div th:if="${user.cardNumber != null}">
-        <p>Credit Card Number: <span th:text="${user.cardNumber}"></span></p >
-    </div>
-    
-    <!-- If user doesn't have a credit card, display the form to add a credit card -->
-    <div th:unless="${user.cardNumber != null}">
-        <form method="POST" action="/add_credit_card" th:object="${creditCard}">
+    <div class="sidebar">
+        <form method="get" th:action="@{/profile}">
             <input type="hidden" name="email" th:value="${user.email}">
-            <label for="cardNumber">Credit Card Number:</label>
-            <input type="text" id="cardNumber" name="cardNumber" required pattern="\d{16}" title="Credit card number must be 16 digits" maxlength="16"><br>
-            <button type="submit">Add Credit Card</button>
+            <button type="submit" class="dashboard-button">View Profile</button>
         </form>
+        <form method="get" th:action="@{/browse_plans}">
+            <button type="submit" class="dashboard-button">Browse Plans</button>
+        </form>
+        <form method="get" th:action="@{/showFitnessClasses}">
+            <input type="hidden" name="email" th:value="${user.email}">
+            <button type="submit" class="dashboard-button">View Fitness Classes</button>
+        </form>
+        <form method="get" th:action="@{/browseChangeSubscription}">
+            <button type="submit" class="dashboard-button">Change Your Plan</button>
+        </form>
+        <form method="get" th:action="@{/book_appointment}">
+            <input type="hidden" name="email" th:value="${user.email}">
+            <button type="submit" class="dashboard-button">Book an Appointment</button>
+        </form>
+        <form method="get" th:action="@{/view_trainers}">
+            <button type="submit" class="dashboard-button">View Trainers</button>
+        </form>
+        <form method="get" th:action="@{/userAppointment}">
+            <input type="hidden" name="email" th:value="${user.email}">
+            <button type="submit" class="dashboard-button">View Appointments</button>
+        </form>
+        <form method="get" th:action="@{/plan_purchase_history}">
+            <button type="submit" class="dashboard-button">View Plan Purchase History</button>
+        </form>
+        <a href="/first_page" class="logout">
+            <i class="fa fa-sign-out"></i>
+            Log Out
+        </a>
+    </div>
+
+    <div class="container">
+        <h1>User Profile</h1>
+        <div class="profile-container">
+            <div class="profile-picture-box">
+                <img th:src="@{'/images/' + ${user.photo}}" alt="User Image"/>
+            </div>
+            <div class="user-details">
+                <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+                <p><strong>Name:</strong> <span th:text="${user.name}"></span></p>
+                <p><strong>Date of Birth:</strong> <span th:text="${user.dob}"></span></p>
+                <p><strong>Phone Number:</strong> <span th:text="${user.phoneNumber}"></span></p>
+                <!-- Credit card information -->
+                <div th:if="${user.cardNumber != null}">
+                    <p><strong>Credit Card Number:</strong> <span th:text="${user.cardNumber}"></span></p>
+                </div>
+                <div th:unless="${user.cardNumber != null}">
+                    <form method="POST" action="/add_credit_card" th:object="${creditCard}">
+                        <input type="hidden" name="email" th:value="${user.email}">
+                        <label for="cardNumber"><strong>Credit Card Number:</strong></label>
+                        <input type="text" id="cardNumber" name="cardNumber" required pattern="\d{16}" title="Credit card number must be 16 digits" maxlength="16">
+                        <button type="submit" class="add-card-button">Add Credit Card</button>
+                    </form>
+                </div>
+                <p><strong>Current Plan:</strong> <span th:text="${user.status}">status</span></p>
+            </div>
+        </div>
+        <div class="button-container">
+            <form method="GET" action="/home_page">
+                <a th:href="@{/home_page}" class="purple-button">Go Back</a>
+            </form>
+            <form method="GET" action="/edit_profile">
+                <input type="hidden" name="email" th:value="${user.email}">
+                <button type="submit" class="purple-button">Edit Profile</button>
+            </form>
+        </div>
     </div>
 
     <!-- Button to pause/unpause account -->
@@ -114,13 +338,4 @@
     </script>
     
 </body>
-<form method="GET" action="/home_page">
-<a th:href="@{/user_signin}"><button>Go Back</button></a >
-</form>
-
-<form method="GET" action="/edit_profile">
-    <input type="hidden" name="email" th:value="${user.email}">
-    <button type="submit">Edit Profile</button>
-</form>
-
 </html>
