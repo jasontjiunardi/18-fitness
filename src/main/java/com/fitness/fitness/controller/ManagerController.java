@@ -151,7 +151,7 @@ public class ManagerController {
     public String login(@ModelAttribute Manager manager, HttpSession session) {
         if (managerService.managerLogin(manager)) {
             session.setAttribute("manager", manager);
-            return "manager_home";
+            return "redirect:/manager_home_page";
         }
         return "login_fail_manager";
     }

@@ -49,7 +49,7 @@
             background-color: white !important;
         }
 
-        .table th:after {
+        .table th:not(.no-sort):after {
             font-family: "Font Awesome 5 Free";
             content: "\f0dc"; /* FontAwesome sort icon */
             font-weight: 900;
@@ -100,6 +100,26 @@
         .refresh-btn:hover, .refresh-btn:focus {
             background-color: #763087; /* Brighter purple for hover */
             border-color: #763087;
+        }
+
+        .logout {
+            position: absolute; /* Position the logout button absolutely */
+            bottom: 20px; /* 20px from the bottom */
+            left: 20px; /* 20px from the left */
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .logout:hover {
+            background-color: #575757; /* Gray */
+        }
+
+        .logout i {
+            margin-right: 10px; /* Add space between icon and text */
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -190,6 +210,12 @@
         <a href="/managerViewTrainers">View Trainers</a>
         <a href="/manager_appointment">Appointment Records</a>
         <a href="/managerViewUsers">View Customers</a>
+        <a href="/manager_view_plans">View Plans</a>
+        <!-- Logout button with an icon -->
+        <a href="/first_page" class="logout">
+            <i class="fa fa-sign-out"></i> <!-- Use any suitable icon library -->
+            Log Out
+        </a>
     </div>
     <div class="main-content">
         <h1><b>Trainers List</b></h1>
@@ -208,8 +234,8 @@
                     <th onclick="sortTable(7, 'string')">Phone</th>
                     <th onclick="sortTable(8, 'string')">Since</th>
                     <th onclick="sortTable(9, 'number')">Rank</th>
-                    <th>Promote/Demote</th>
-                    <th>Edit</th>
+                    <th class="no-sort">Promote/Demote</th> <!-- Added class "no-sort" -->
+                    <th class="no-sort">Edit</th> <!-- Added class "no-sort" -->
                 </tr>
             </thead>
             <tbody>
@@ -232,8 +258,7 @@
                             <button type="submit" class="btn btn-danger btn-sm">Demote</button>
                         </form>
                     </td>
-                    
-                    <td><a th:href="@{'/editTrainer/' + ${trainer.id}}" class="btn btn-primary">Edit</a></td>
+                    <td><a th:href="@{'/editTrainer/' + ${trainer.id}}" class="btn btn-primary" style="background-color: #4a154b; border-color: #4a154b;">Edit</a ></td>
                 </tr>
             </tbody>
         </table>
