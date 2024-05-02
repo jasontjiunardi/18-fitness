@@ -3,6 +3,7 @@ package com.fitness.fitness.controller;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.fitness.fitness.model.FitnessClass;
+import com.fitness.fitness.model.User;
+import com.fitness.fitness.service.FitnessClassService;
 
 import com.fitness.FileUploadUtil;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -25,6 +29,7 @@ import com.fitness.fitness.model.Income;
 import com.fitness.fitness.model.Manager;
 import com.fitness.fitness.model.PaymentTransaction;
 import com.fitness.fitness.model.Appointment;
+import com.fitness.fitness.model.FitnessClass;
 import com.fitness.fitness.model.Manager;
 import com.fitness.fitness.model.Plan;
 import com.fitness.fitness.model.Trainer;
@@ -77,6 +82,8 @@ public class ManagerController {
     @Autowired
     private PlanRepo planRepo;
 
+    @Autowired
+    private FitnessClassService fitnessClassService;
 
     @GetMapping("/manager_home_page")
     public String getHomePage(Model model, @SessionAttribute("manager") Manager manager) {
@@ -321,5 +328,70 @@ public class ManagerController {
         planService.savePlan(plan);
         return "redirect:/manager_view_plans";
     }
+
+@GetMapping("/manager_add_appointment")
+    public String showAddAppointmentForm(@RequestParam(name = "classId", required = false) Integer classId,
+                                         @RequestParam(name = "className", required = false) String className,
+                                         @ModelAttribute User user, Model model, 
+                                         @ModelAttribute("trainer") Trainer trainer,
+                                         @SessionAttribute("manager") Manager manager) 
+        {
+      
+        List<FitnessClass> classList = fitnessClassService.getAllClasses();
+        List<User> userList = userService.getAllUsers();
+        List<Trainer> trainerList = trainerService.getAllTrainers();
+
+        // Formatting date and time for the frontend
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        String formattedDateTimeNow = now.format(formatter);
+        LocalDateTime Activenow = LocalDateTime.now();
+        DateTimeFormatter Activeformatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        User existingUser = userService.getUserByEmail(user.getEmail());
+
+        model.addAttribute("formattedDateTimeNow", Activenow.format(Activeformatter));
+        model.addAttribute("classList", classList);
+        model.addAttribute("formattedDateTimeNow", formattedDateTimeNow);
+        model.addAttribute("manager", manager);
+        model.addAttribute("user", existingUser);
+        model.addAttribute("userList", userList);
+        model.addAttribute("trainerList", trainerList);
+
+        return "manager-add-appointment";
+    }
+
+    @PostMapping("/manager_add_appointment")
+public String addAppointment(@ModelAttribute Appointment appointment, 
+                             @RequestParam("customerEmail") int userId,
+                             @RequestParam("classId") int classId,
+                             @RequestParam("trainerId") int trainerId,
+                             @RequestParam("datetime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime datetime,
+                             Model model) {
+
+    // Fetch the related FitnessClass and Trainer objects based on the IDs provided
+    FitnessClass fitnessClass = fitnessClassService.getClassById(classId);
+    Trainer trainer = trainerService.getTrainerById(trainerId);
+    User user = userService.getUserById(userId);
+
+    // Set the fetched entities to the appointment
+    appointment.setFitnessClass(fitnessClass);
+    appointment.setTrainer(trainer);
+    
+    // Set the user obtained from the form submission
+    User retrivedUser = userService.getUserByEmail(user.getEmail());
+    appointment.setUser(retrivedUser);
+    appointment.setUser(user);
+
+    // Set the date and time for the appointment
+    appointment.setDate(datetime);
+
+    // Set the status of the appointment to "active"
+    appointment.setStatus("active");
+
+    // Save the appointment to the database
+    appointmentService.saveAppointment(appointment);
+    
+    return "redirect:/manager_home_page";
+}
 
 }

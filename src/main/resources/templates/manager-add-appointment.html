@@ -1,3 +1,4 @@
+<!-- manager-add-appointment.html -->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -6,44 +7,58 @@
 <body>
     <h1>Add Appointment</h1>
     <form th:action="@{/manager_add_appointment}" method="post">
+        <!-- Customer Email Dropdown -->
         <div>
             <label for="customerEmail">Customer Email:</label>
-            <input type="email" id="customerEmail" name="customerEmail" th:value="${appointment.customerEmail}" required />
-        </div>
-        <div>
-            <label for="preferredTrainer">Preferred Trainer:</label>
-            <select id="preferredTrainer" name="preferredTrainer" required>
-                <option th:each="trainer : ${trainers}" th:value="${trainer.id}" th:text="${trainer.name}"></option>
-            </select>            
-        </div>
-        <div>
-            <label for="className">Class:</label>
-            <select id="className" name="className" th:value="${appointment.className}" required>
-                <!-- Populate options dynamically based on available classes -->
-                <option value="Class1">Class1</option>
-                <option value="Class2">Class2</option>
-                <!-- Add more options as needed -->
+            <select name="customerEmail" id="customerEmail" required>
+                <option value="">Select Customer</option>
+                <!-- Iterate over userList and display only email addresses -->
+                <option th:each="user : ${userList}" th:value="${user.userId}" th:text="${user.email}"></option>
             </select>
         </div>
+        <!-- Class Selection Dropdown -->
         <div>
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date" th:value="${appointment.date}" th:attr="min=${currentDate}" required />
-        </div>        
-        <div>
-            <label for="timeSlot">Time Slot:</label>
-            <select id="timeSlot" name="timeSlot" th:value="${appointment.timeSlot}" required>
-                <option value="08:00">8:00 AM - 10:00 AM</option>
-                <option value="10:00">10:00 AM - 12:00 PM</option>
-                <option value="12:00">12:00 PM - 2:00 PM</option>
-                <option value="14:00">2:00 PM - 4:00 PM</option>
-                <option value="16:00">4:00 PM - 6:00 PM</option>
-                <option value="18:00">6:00 PM - 8:00 PM</option>
-                <!-- Add more time slot options as needed -->
-            </select>            
+            <label for="classId">Class:</label>
+            <select id="classId" name="classId" required>
+                <option value="">Select Class</option>
+                <!-- Iterate over classList and display className -->
+                <option th:each="class : ${classList}" th:value="${class.classId}" th:text="${class.className}"
+                        th:selected="${class.classId == classId}"></option>
+            </select>
         </div>
-        <button type="submit">Book Appointment</button>
+
+        <!-- Trainer Selection Dropdown -->
+        <div>
+            <label for="trainerId">Trainer:</label>
+            <select id="trainerId" name="trainerId" required>
+                <option value="">Select Trainer</option>
+                <!-- Iterate over trainerList and display trainer's name -->
+                <option th:each="trainer : ${trainerList}" th:value="${trainer.id}" th:text="${trainer.name}"></option>
+            </select>
+        </div>
+    
+        <!-- Date and Time Input -->
+        <div>
+            <label for="datetime">Date and Time:</label>
+            <input type="datetime-local" id="datetime" name="datetime"
+                   th:value="${formattedDateTimeNow}" th:min="${formattedDateTimeNow}"
+                   th:max="${endOfActiveDate}" required/>
+        </div>
+        <!-- Submit Button -->
+        <button type="submit" onclick="validateUpdate()">Book Appointment</button>
+    
+        <!-- Button to go back to Appointments -->
+        <button class="back-button" onclick="window.location.href='/manager_home_page'">Back to Appointments</button>
+        <!-- Feedback messages -->
         <p th:text="${error}" style="color: red;"></p>
         <p th:text="${message}" style="color: green;"></p>
     </form>
+    <script>   
+        function validateUpdate()  {
+            if (confirm("Are you sure you want to add this appointment?")) {
+                document.getElementById("removeTrainerForm").submit();
+            }
+        }
+    </script>
 </body>
 </html>
