@@ -236,6 +236,7 @@
                     <th onclick="sortTable(9, 'number')">Rank</th>
                     <th class="no-sort">Promote/Demote</th> <!-- Added class "no-sort" -->
                     <th class="no-sort">Edit</th> <!-- Added class "no-sort" -->
+                    <th class="no-sort">Customer Reviews</th>
                 </tr>
             </thead>
             <tbody>
@@ -259,6 +260,12 @@
                         </form>
                     </td>
                     <td><a th:href="@{'/editTrainer/' + ${trainer.id}}" class="btn btn-primary" style="background-color: #4a154b; border-color: #4a154b;">Edit</a ></td>
+                    <td>
+                        <form method="get" action="/managerviewtrainerReview">
+                            <input type="hidden" name="trainerId" th:value="${trainer.id}">
+                            <button type="submit">View Trainer's Reviews</button>
+                        </form>                    
+                    </td>                        
                 </tr>
             </tbody>
         </table>

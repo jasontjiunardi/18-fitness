@@ -32,6 +32,7 @@ import com.fitness.fitness.model.Appointment;
 import com.fitness.fitness.model.FitnessClass;
 import com.fitness.fitness.model.Manager;
 import com.fitness.fitness.model.Plan;
+import com.fitness.fitness.model.Review;
 import com.fitness.fitness.model.Trainer;
 import com.fitness.fitness.repository.IncomeRepo;
 import com.fitness.fitness.repository.PaymentTransactionRepo;
@@ -41,6 +42,7 @@ import com.fitness.fitness.repository.UserRepo;
 import com.fitness.fitness.service.AppointmentService;
 import com.fitness.fitness.service.ManagerService;
 import com.fitness.fitness.service.PlanService;
+import com.fitness.fitness.service.ReviewService;
 import com.fitness.fitness.service.TrainerService;
 import com.fitness.fitness.service.UserService;
 
@@ -71,6 +73,8 @@ public class ManagerController {
     @Autowired
     private IncomeRepo incomeRepo;
 
+    @Autowired
+    private ReviewService reviewService;
     
     //  cb cek ulang ini
     @Autowired
@@ -361,37 +365,57 @@ public class ManagerController {
     }
 
     @PostMapping("/manager_add_appointment")
-public String addAppointment(@ModelAttribute Appointment appointment, 
-                             @RequestParam("customerEmail") int userId,
-                             @RequestParam("classId") int classId,
-                             @RequestParam("trainerId") int trainerId,
-                             @RequestParam("datetime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime datetime,
-                             Model model) {
+    public String addAppointment(@ModelAttribute Appointment appointment, 
+                                @RequestParam("customerEmail") int userId,
+                                @RequestParam("classId") int classId,
+                                @RequestParam("trainerId") int trainerId,
+                                @RequestParam("datetime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime datetime,
+                                Model model) {
 
-    // Fetch the related FitnessClass and Trainer objects based on the IDs provided
-    FitnessClass fitnessClass = fitnessClassService.getClassById(classId);
-    Trainer trainer = trainerService.getTrainerById(trainerId);
-    User user = userService.getUserById(userId);
+        // Fetch the related FitnessClass and Trainer objects based on the IDs provided
+        FitnessClass fitnessClass = fitnessClassService.getClassById(classId);
+        Trainer trainer = trainerService.getTrainerById(trainerId);
+        User user = userService.getUserById(userId);
 
-    // Set the fetched entities to the appointment
-    appointment.setFitnessClass(fitnessClass);
-    appointment.setTrainer(trainer);
+        // Set the fetched entities to the appointment
+        appointment.setFitnessClass(fitnessClass);
+        appointment.setTrainer(trainer);
+        
+        // Set the user obtained from the form submission
+        User retrivedUser = userService.getUserByEmail(user.getEmail());
+        appointment.setUser(retrivedUser);
+        appointment.setUser(user);
+
+        // Set the date and time for the appointment
+        appointment.setDate(datetime);
+
+        // Set the status of the appointment to "active"
+        appointment.setStatus("active");
+
+        // Save the appointment to the database
+        appointmentService.saveAppointment(appointment);
+        
+        return "redirect:/manager_home_page";
+        }
+        
+        @GetMapping("/managerviewtrainerReview")
+        public String viewReviews(Model model, @RequestParam("trainerId") int trainerId) {
+        List<Trainer> trainers = trainerService.getAllTrainers();
+        model.addAttribute("trainers", trainers);
+
+        Trainer trainer = trainerService.getTrainerById(trainerId);
+        List<Review> reviews = reviewService.findByTrainer(trainer);
+        model.addAttribute("reviews", reviews);
+
+        model.addAttribute("trainer", trainer);
+
+        return "managerViewReviews";
+    }
     
-    // Set the user obtained from the form submission
-    User retrivedUser = userService.getUserByEmail(user.getEmail());
-    appointment.setUser(retrivedUser);
-    appointment.setUser(user);
-
-    // Set the date and time for the appointment
-    appointment.setDate(datetime);
-
-    // Set the status of the appointment to "active"
-    appointment.setStatus("active");
-
-    // Save the appointment to the database
-    appointmentService.saveAppointment(appointment);
-    
-    return "redirect:/manager_home_page";
-}
+    @PostMapping("/removeReview/{id}")
+    public String removeReviewById(@PathVariable("id") int id) {
+        reviewService.deleteReview(id);
+        return "redirect:/managerViewTrainers";
+    }
 
 }
