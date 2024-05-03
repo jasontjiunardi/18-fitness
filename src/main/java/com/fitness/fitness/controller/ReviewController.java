@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -67,19 +68,19 @@ public class ReviewController {
     }
 
     @PostMapping("/saveReview")
-public String saveReview(@ModelAttribute("review") Review review, @SessionAttribute("user") User user, @RequestParam("trainerId") int trainerId) {
-    
-    Trainer trainer = trainerService.getTrainerById(trainerId);  // Make sure the trainer exists
-    if (trainer == null) {
-        return "redirect:/errorPage"; // Or handle this more gracefully
+    public String saveReview(@ModelAttribute("review") Review review, @SessionAttribute("user") User user, @RequestParam("trainerId") int trainerId) {
+        
+        Trainer trainer = trainerService.getTrainerById(trainerId);  // Make sure the trainer exists
+        if (trainer == null) {
+            return "redirect:/errorPage"; // Or handle this more gracefully
+        }
+
+        review.setUser(user);  // Ensure user is set from session if not already
+        review.setTrainer(trainer);  // Ensure trainer is correctly associated
+        review.setDate(LocalDateTime.now());  // Set the current date and time
+        reviewService.saveReview(review);  // Save the review
+
+        return "redirect:/trainerReview?trainerId=" + trainerId;
     }
-
-    review.setUser(user);  // Ensure user is set from session if not already
-    review.setTrainer(trainer);  // Ensure trainer is correctly associated
-    review.setDate(LocalDateTime.now());  // Set the current date and time
-    reviewService.saveReview(review);  // Save the review
-
-    return "redirect:/trainerReview?trainerId=" + trainerId;
-}
 
 }
