@@ -65,33 +65,33 @@ public class TrainerService {
     }
 
     @Transactional
-public void removeTrainer(int id) throws Exception {
-    Trainer trainer = trainerRepo.findById(id).orElseThrow(() -> new Exception("Trainer not found!"));
+    public void removeTrainer(int id) throws Exception {
+        Trainer trainer = trainerRepo.findById(id).orElseThrow(() -> new Exception("Trainer not found!"));
 
-    // Remove all reviews associated with this trainer
-    List<Review> reviews = reviewRepo.findByTrainer(trainer);
-    if (!reviews.isEmpty()) {
-        reviewRepo.deleteAll(reviews);  // Delete reviews directly
-    }
-
-    // Remove all appointments associated with this trainer
-    List<Appointment> appointments = appointmentRepo.findByTrainer(trainer);
-    if (!appointments.isEmpty()) {
-        appointmentRepo.deleteAll(appointments);  // Delete appointments directly
-    }
-
-    // Remove trainer from any plans
-    List<Plan> plans = planRepo.findAll();
-    plans.forEach(plan -> {
-        if (plan.getTrainers().contains(trainer)) {
-            plan.getTrainers().remove(trainer);
-            planRepo.save(plan);  // Save the updated plan
+        // Remove all reviews associated with this trainer
+        List<Review> reviews = reviewRepo.findByTrainer(trainer);
+        if (!reviews.isEmpty()) {
+            reviewRepo.deleteAll(reviews);  // Delete reviews directly
         }
-    });
 
-    // Finally, delete the trainer
-    trainerRepo.delete(trainer);
-}
+        // Remove all appointments associated with this trainer
+        List<Appointment> appointments = appointmentRepo.findByTrainer(trainer);
+        if (!appointments.isEmpty()) {
+            appointmentRepo.deleteAll(appointments);  // Delete appointments directly
+        }
+
+        // Remove trainer from any plans
+        List<Plan> plans = planRepo.findAll();
+        plans.forEach(plan -> {
+            if (plan.getTrainers().contains(trainer)) {
+                plan.getTrainers().remove(trainer);
+                planRepo.save(plan);  // Save the updated plan
+            }
+        });
+
+        // Finally, delete the trainer
+        trainerRepo.delete(trainer);
+    }
 
 
 
