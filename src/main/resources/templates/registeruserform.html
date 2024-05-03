@@ -19,7 +19,7 @@
 
         form {
             max-width: 400px;
-            margin: 0 auto;
+            margin: 20px auto; /* Centers the form with margin on all sides */
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -30,29 +30,17 @@
         input[type="password"],
         input[type="date"],
         input[type="email"],
-        input[type="tel"] {
-            width: calc(100% - 22px); /* Adjusted width to accommodate borders and padding */
+        input[type="tel"],
+        select {
+            width: 100%; /* Full width to maintain consistency */
             padding: 10px;
             margin-bottom: 10px;
-            border: 1px solid #4a154b; /* Purple border */
+            border: 1px solid #4a154b;
             border-radius: 5px;
-            box-sizing: border-box;
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
         }
 
-        input[type="submit"] {
-            width: 100%;
-            background-color: #4a154b; /* Purple button background */
-            color: #ffffff; /* White text color for button */
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #310b33; /* Darker purple on hover */
-        }
-
+        input[type="submit"],
         button.back-button {
             width: 100%;
             background-color: #4a154b; /* Purple button background */
@@ -61,12 +49,16 @@
             padding: 10px;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 10px;
-            text-decoration: underline;
+            text-decoration: none; /* Remove underline from buttons */
         }
 
+        input[type="submit"]:hover,
         button.back-button:hover {
             background-color: #310b33; /* Darker purple on hover */
+        }
+
+        button.back-button {
+            margin-top: 20px; /* Adds space between the buttons */
         }
 
         span {
@@ -85,7 +77,13 @@
         Email: <input type="email" th:field="*{email}" required> <br />
         <span>(Email must be in the format example@gmail.com)</span><br />
         Birth Date: <input type="date" th:field="*{dob}" required> <br />
-        Phone Number: <input type="tel" th:field="*{phoneNumber}" required> <br />
+        Phone Number: <input type="tel" th:field="*{phoneNumber}" required> <br />   
+        Gender: <select th:field="*{gender}" required>
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select> <br />
+        
         <input type="submit" value="Register" />
         <button class="back-button" onclick="window.location.href='/first_page'">Back to First Page</button>
     </form>
