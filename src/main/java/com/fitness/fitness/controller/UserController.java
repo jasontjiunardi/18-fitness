@@ -95,33 +95,19 @@ public class UserController {
     }
     
     @PostMapping("/forget_password")
-    public String processPasswordReset(Model model, @ModelAttribute User user) {
+    public String processPasswordReset(Model model, @ModelAttribute User user, @RequestParam("recoveryCode") int recoveryCode, @RequestParam("newPassword") String newPassword) {
         User retrievedUser = userService.getUserByEmail(user.getEmail());
-        if (retrievedUser == null) {
-            model.addAttribute("error", "No user found with the provided email");
+        if (retrievedUser != null && retrievedUser.getRecoveryCode() == recoveryCode) {
+            if (!userService.passwordValid(newPassword)) {
+                model.addAttribute("error", "Your new password does not meet the required criteria.");
+                return "forgetPassword";
+            }
+            userService.updatePasswordByEmail(user.getEmail(), newPassword);
+            return "sign"; // Redirect to login page on successful password reset
+        } else {
+            model.addAttribute("error", "Invalid recovery code.");
             return "forgetPassword";
         }
-        
-        if (!userService.userRecoveryCode(retrievedUser)) {
-            model.addAttribute("error", "Invalid recovery code");
-            return "forgetPassword";
-        }
-    
-        if (userService.isNewPasswordDifferent(user, retrievedUser)) {
-            model.addAttribute("error", "The new password must be different from the current password");
-            return "forgetPassword";
-        }
-
-        if (!userService.passwordValid(user.getPassword())) {
-            model.addAttribute("error", "The new password must be at least 8 characters long and include at least one uppercase letter and one number");
-            return "forgetPassword";
-        }
-    
-        // Update password and clear recovery code
-        retrievedUser.setPassword(user.getPassword());
-        userService.saveUser(retrievedUser);
-    
-        return "sign"; // Redirect to the login page or confirmation page
     }
 
     @GetMapping("/profile")
