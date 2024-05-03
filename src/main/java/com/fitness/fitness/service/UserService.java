@@ -54,7 +54,11 @@ public class UserService {
     }
 
     public void updatePasswordByEmail(String email, String newPassword) {
-        userRepo.updatePasswordByEmail(email, newPassword);
+        User user = userRepo.findByEmail(email);
+        if (user != null) {
+            user.setPassword(newPassword);
+            userRepo.save(user);
+        }
     }
 
     public User getUserByEmail(String email) {
@@ -138,5 +142,6 @@ public class UserService {
     public User getUserById(int userId) {
         // Use the userRepository to find the user by ID
         return userRepo.findById(userId).orElse(null);
-}
+    }
+
 }
