@@ -82,4 +82,25 @@ public String saveReview(@ModelAttribute("review") Review review, @SessionAttrib
     return "redirect:/trainerReview?trainerId=" + trainerId;
 }
 
+@PostMapping("/removeReview")
+public String removeReview(@RequestParam("reviewId") int reviewId, @SessionAttribute("user") User user, Model model) {
+    // Retrieve the review from the database
+    Review review = reviewService.findReviewById(reviewId);
+
+    // Check if the review exists and belongs to the logged-in user
+    if (review != null && review.getUser().getUserId() == user.getUserId()) {
+        int trainerId = review.getTrainer().getId();
+
+        // Remove the review
+        reviewService.deleteReview(reviewId);
+
+        // Redirect to the trainer review page with the trainerId
+        return "redirect:/trainerReview?trainerId=" + trainerId;
+    } else {
+        // If review doesn't exist or doesn't belong to the logged-in user, handle error
+        model.addAttribute("error", "You are not authorized to remove this review.");
+        return "errorPage"; 
+    }
+}
+
 }

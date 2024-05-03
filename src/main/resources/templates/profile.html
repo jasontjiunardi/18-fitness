@@ -183,6 +183,28 @@
             background-color: #6d1d6d; /* Changed hover color */
         }
 
+         /* Style for the pause/unpause account button */
+         #accountButton {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        #accountButton[disabled] {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        #accountButton:hover {
+            background-color: #6d1d6d;
+        }
+
     </style>
     <title>User Profile</title>
     <script type="text/javascript">
@@ -263,6 +285,10 @@
             <form method="GET" action="/home_page">
                 <a th:href="@{/home_page}" class="purple-button">Go Back</a>
             </form>
+            <!-- Button to pause/unpause account -->
+            <form id="accountForm" method="POST">
+                    <button id="accountButton" type="submit"></button>
+            </form>
             <form method="GET" action="/edit_profile">
                 <input type="hidden" name="email" th:value="${user.email}">
                 <button type="submit" class="purple-button">Edit Profile</button>
@@ -270,12 +296,7 @@
         </div>
     </div>
 
-    <!-- Button to pause/unpause account -->
-    <div>
-        <form id="accountForm" method="POST">
-            <button id="accountButton" type="submit"></button>
-        </form>
-    </div>
+    
 
     <script th:inline="javascript">
         var userStatus = /*[[${user.status}]]*/ '';

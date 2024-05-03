@@ -25,9 +25,11 @@ import com.fitness.fitness.model.Income;
 import com.fitness.fitness.model.Manager;
 import com.fitness.fitness.model.PaymentTransaction;
 import com.fitness.fitness.model.Appointment;
+import com.fitness.fitness.model.Expense;
 import com.fitness.fitness.model.Manager;
 import com.fitness.fitness.model.Plan;
 import com.fitness.fitness.model.Trainer;
+import com.fitness.fitness.repository.ExpenseRepo;
 import com.fitness.fitness.repository.IncomeRepo;
 import com.fitness.fitness.repository.PaymentTransactionRepo;
 import com.fitness.fitness.repository.PlanRepo;
@@ -77,6 +79,8 @@ public class ManagerController {
     @Autowired
     private PlanRepo planRepo;
 
+    @Autowired
+    private ExpenseRepo expenseRepo;
     // cb cek ulang ini
     // @GetMapping("/manager_add_appointment")
     // public String showAddAppointmentForm(Model model) {
@@ -283,14 +287,10 @@ public class ManagerController {
                                     @RequestParam("endDate") LocalDate endDate,
                                     Model model) {             
         
-        // Cari transaksi pembayaran sesuai rentang tanggal yang dipilih
         List<PaymentTransaction> paymentTransactions = paymentTransactionRepo.findByPurchasedDateBetween(startDate, endDate);
-        // Iterasi melalui setiap transaksi pembayaran
         for (PaymentTransaction transaction : paymentTransactions) {
-            // Cek apakah sudah ada entri pendapatan dengan incomeId yang sama
             Income existingIncome = incomeRepo.findByIncomeId(transaction.getTransactionId());
             if (existingIncome == null) {
-                // Jika tidak ada, buat entri baru
                 Income income = new Income();
                 income.setAmount(transaction.getPrice());
                 income.setDate(transaction.getPurchasedDate());
@@ -299,34 +299,72 @@ public class ManagerController {
                 incomeRepo.save(income);
             } 
         }
-        // Cari data pendapatan sesuai rentang tanggal yang dipilih
         List<Income> incomeList = incomeRepo.findByDateBetween(startDate, endDate);
-        // Hitung total amount
         double totalAmount = 0;
         for (Income income : incomeList) {
             totalAmount += income.getAmount();
         }
-        // Tambahkan data pendapatan ke model untuk ditampilkan di HTML
         model.addAttribute("incomeList", incomeList);
         model.addAttribute("totalAmount", totalAmount);
         return "income_report";
     }
 
-    @GetMapping("/cashflows")
-    public String showCashflowsReport(Model model) {
-        // Logika untuk menampilkan laporan arus kas
-        return "cashflows_report"; 
+    @GetMapping("/profit")
+    public String showProfitReport(@RequestParam("startDate") LocalDate startDate,
+                                    @RequestParam("endDate") LocalDate endDate,
+                                    Model model) {
+        List<Income> incomeList = incomeRepo.findByDateBetween(startDate, endDate);
+        List<Expense> expenseList = expenseRepo.findByDateBetween(startDate, endDate);
+        double totalIncome = calculateTotalIncome(incomeList);
+        double totalExpenses = calculateTotalExpenses(expenseList);
+        double totalProfit = totalIncome - totalExpenses;
+        
+        model.addAttribute("incomeList", incomeList);
+        model.addAttribute("expenseList", expenseList);
+        model.addAttribute("totalProfit", totalProfit);
+        
+        return "profit_report"; 
     }
 
-    @GetMapping("/expenses")
-    public String showExpensesReport(Model model) {
-        // Logika untuk menampilkan laporan biaya
-        return "expenses_report"; 
+    
+    private double calculateTotalIncome(List<Income> incomeList) {
+        double totalIncome = 0;
+        for (Income income : incomeList) {
+            totalIncome += income.getAmount();
+        }
+        return totalIncome;
     }
+    
+    private double calculateTotalExpenses(List<Expense> expenseList) {
+        double totalExpenses = 0;
+        for (Expense expense : expenseList) {
+            totalExpenses += expense.getAmount();
+        }
+        return totalExpenses;
+    }
+    
+
+    @GetMapping("/expenses")
+    public String showExpensesReport(@RequestParam("startDate") LocalDate startDate,
+                                     @RequestParam("endDate") LocalDate endDate,
+                                     Model model) {
+        List<Expense> expenseList = expenseRepo.findByDateBetween(startDate, endDate);
+       
+        double totalExpenses = 0;
+        for (Expense expense : expenseList) {
+            totalExpenses += expense.getAmount();
+        }
+    
+        model.addAttribute("expenseList", expenseList);
+        model.addAttribute("totalExpenses", totalExpenses);
+    
+        return "expenses_report";
+    }
+
     
     @PostMapping("/removeUser/{email}")
     public String removeUser(@PathVariable("email") String email) {
-        // Remove the trainer from the database
+
         userService.removeUser(email);
         return "redirect:/managerViewUsers";
     }

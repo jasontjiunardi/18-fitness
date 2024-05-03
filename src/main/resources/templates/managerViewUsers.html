@@ -25,6 +25,22 @@
             padding-top: 20px;
         }
 
+        .sidebar button {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .sidebar button:hover, .sidebar button:focus {
+            background-color: #575757;
+        }
+
         .sidebar a {
             padding: 10px 15px;
             text-decoration: none;
@@ -83,6 +99,27 @@
         .refresh-btn:hover, .refresh-btn:focus {
             background-color: #310b33; /* Darker background color on hover */
         }
+
+        .logout {
+            position: absolute;
+            bottom: 20px; 
+            left: 20px; 
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .logout:hover {
+            background-color: #575757; 
+        }
+
+        .logout i {
+            margin-right: 10px; 
+        }
+
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
@@ -90,9 +127,14 @@
 </head>
 <body>
     <div class="sidebar">
-        <a href="/managerViewTrainers">View Trainers</a>
-        <a href="/manager_appointment">Appointment Records</a>
-        <a href="/managerViewUsers">View Customers</a>
+        <button onclick="window.location='/managerViewTrainers'">View Trainers</button>
+        <button onclick="window.location='/manager_appointment'" style="background-color: #575757;">Appointment Records</button>
+        <button onclick="window.location='/managerViewUsers'">View Customers</button>
+        <button onclick="window.location='/manager_view_plans'">View Plans</button>
+        <a href="/first_page" class="logout">
+            <i class="fa fa-sign-out"></i> 
+            Log Out
+        </a>
     </div>
     <div class="container main-content"> <!-- Added main-content class -->
         <h1 class="mb-4"><b>Users List</b></h1> <!-- Added margin-bottom for separation -->
