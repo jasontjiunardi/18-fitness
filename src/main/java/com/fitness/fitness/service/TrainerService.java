@@ -6,13 +6,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fitness.fitness.model.Appointment;
 import com.fitness.fitness.model.Plan;
+import com.fitness.fitness.model.Review;
 import com.fitness.fitness.model.Trainer;
+import com.fitness.fitness.repository.AppointmentRepo;
 import com.fitness.fitness.repository.PlanRepo;
+import com.fitness.fitness.repository.ReviewRepo;
 import com.fitness.fitness.repository.TrainerRepo;
 
 import jakarta.transaction.Transactional;
@@ -22,6 +27,10 @@ public class TrainerService {
     private PlanRepo planRepo;
     @Autowired
     private TrainerRepo trainerRepo;
+    @Autowired
+    private AppointmentRepo appointmentRepo;
+    @Autowired
+    private ReviewRepo reviewRepo;
 
     public Trainer findById(int id) {
         return trainerRepo.findById(id).orElse(null);
@@ -55,9 +64,37 @@ public class TrainerService {
         trainerRepo.save(trainer);
     }
 
-    public void removeTrainer(int id) {
-        trainerRepo.deleteById(id);
+    @Transactional
+public void removeTrainer(int id) throws Exception {
+    Trainer trainer = trainerRepo.findById(id).orElseThrow(() -> new Exception("Trainer not found!"));
+
+    // Remove all reviews associated with this trainer
+    List<Review> reviews = reviewRepo.findByTrainer(trainer);
+    if (!reviews.isEmpty()) {
+        reviewRepo.deleteAll(reviews);  // Delete reviews directly
     }
+
+    // Remove all appointments associated with this trainer
+    List<Appointment> appointments = appointmentRepo.findByTrainer(trainer);
+    if (!appointments.isEmpty()) {
+        appointmentRepo.deleteAll(appointments);  // Delete appointments directly
+    }
+
+    // Remove trainer from any plans
+    List<Plan> plans = planRepo.findAll();
+    plans.forEach(plan -> {
+        if (plan.getTrainers().contains(trainer)) {
+            plan.getTrainers().remove(trainer);
+            planRepo.save(plan);  // Save the updated plan
+        }
+    });
+
+    // Finally, delete the trainer
+    trainerRepo.delete(trainer);
+}
+
+
+
 
     public Trainer getTrainerByName(String trainerName) {
         return trainerRepo.findByName(trainerName);

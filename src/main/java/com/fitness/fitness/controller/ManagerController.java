@@ -24,6 +24,7 @@ import com.fitness.fitness.service.FitnessClassService;
 import com.fitness.FileUploadUtil;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fitness.fitness.model.Income;
 import com.fitness.fitness.model.Manager;
@@ -200,9 +201,13 @@ public class ManagerController {
     }
 
     @PostMapping("/removeTrainer/{id}")
-    public String removeTrainer(@PathVariable("id") int id) {
-        // Remove the trainer from the database
-        trainerService.removeTrainer(id);
+    public String removeTrainer(@PathVariable("id") int id, RedirectAttributes redirectAttributes) {
+        try {
+            trainerService.removeTrainer(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Trainer removed successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error removing trainer: " + e.getMessage());
+        }
         return "redirect:/managerViewTrainers";
     }
 
