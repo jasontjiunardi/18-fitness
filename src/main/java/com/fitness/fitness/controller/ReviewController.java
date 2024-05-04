@@ -83,15 +83,6 @@ public class ReviewController {
         return "redirect:/trainerReview?trainerId=" + trainerId;
     }
 
-
-    review.setUser(user);  // Ensure user is set from session if not already
-    review.setTrainer(trainer);  // Ensure trainer is correctly associated
-    review.setDate(LocalDateTime.now());  // Set the current date and time
-    reviewService.saveReview(review);  // Save the review
-
-    return "redirect:/trainerReview?trainerId=" + trainerId;
-}
-
 @PostMapping("/removeReview")
 public String removeReview(@RequestParam("reviewId") int reviewId, @SessionAttribute("user") User user, Model model) {
     // Retrieve the review from the database
