@@ -1,10 +1,9 @@
-<!DO
-TYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Income Report</title>
+    <title>Profit Report</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
@@ -76,7 +75,7 @@ TYPE html>
             background-color: #f2f2f2;
         }
 
-        #totalAmount {
+        #totalProfit {
             color: black;
             font-weight: bold;
         }
@@ -126,10 +125,10 @@ TYPE html>
         }
 
         .content {
-            display: none; /* Sub-buttons are hidden by default */
+            display: none; /* Sub-buttons disembunyikan secara default */
         }
 
-        /* Style for Manager Reports button */
+        /* Style untuk tombol Manager Reports */
         .collapsible {
             background-color: #111; 
             color: white;
@@ -144,23 +143,23 @@ TYPE html>
             font-size: 18px;
         }
 
-        /* When Manager Reports button is clicked, give a different background color */
+        /* Ketika tombol Manager Reports diklik, beri warna latar yang berbeda */
         .collapsible.active {
             background-color: #000000; 
         }
 
-        /* Style for sub-buttons */
+        /* Style untuk sub-buttons */
         .sub {
-            padding-left: 40px; /* Adding indentation to differentiate from main button */
+            padding-left: 40px; /* Menambahkan indentasi untuk membedakan dari tombol utama */
             font-size: 16px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1><b>Income Report</b></h1>
+        <h1><b>Profit Report</b></h1>
 
-        <!-- Form to select date range -->
+        <!-- Formulir untuk memilih rentang tanggal -->
         <form id="dateRangeForm">
             <label for="startDate">Start Date:</label>
             <input type="date" id="startDate" name="startDate">
@@ -169,30 +168,38 @@ TYPE html>
             <button type="submit" class="btn btn-primary">Generate Report</button>
         </form>
 
-        <!-- Table to display income data -->
+        <!-- Tabel untuk menampilkan data laporan profit -->
         <table class="table table-striped table-bordered table-hover">
             <thead class="thead-light">
                 <tr>
-                    <th>Date <button onclick="sortTable(0)" class="btn btn-link"><i class="fas fa-sort"></i></button></th>
+                    <th>Date</th>
                     <th>Description</th>
-                    <th>Amount <button onclick="sortAmount(2)" class="btn btn-link"><i class="fas fa-sort"></i></button></th>
-                    <th>IncomeId</th>
+                    <th>Amount</th>
                 </tr>
             </thead>
-            <tbody id="incomeTableBody">
-                <!-- Income data will be displayed here -->
-                <!-- <%-- This is using Thymeleaf, use as per the templating framework being used --%> -->
+            <tbody id="profitTableBody">
+                <!-- Data Expenses -->
+                <tr th:each="expense : ${expenseList}">
+                    <td th:text="${expense.date}"></td>
+                    <td th:text="${expense.description}"></td>
+                    <td th:text="${expense.amount}"></td>
+                </tr>
+                <!-- Data Incomes -->
                 <tr th:each="income : ${incomeList}">
                     <td th:text="${income.date}"></td>
                     <td th:text="${income.description}"></td>
                     <td th:text="${income.amount}"></td>
-                    <td th:text="${income.IncomeId}"></td>
                 </tr>
             </tbody>
+            <tfoot>
+             
+            </tfoot>
         </table>
 
-        <!-- Element to display total amount -->
-        <div>Total Amount: <span id="totalAmount" th:text="${totalAmount}">0.00</span></div>
+        
+
+        <!-- Elemen untuk menampilkan total biaya -->
+        <div>Total Profit: <span id="totalProfit" th:text="${totalProfit}">0.00</span></div>
     </div>
 
     <!-- Sidebar -->
@@ -215,6 +222,7 @@ TYPE html>
         </a>
     </div>
 
+    <!-- Script untuk mengurutkan tabel -->
     <script>
         var toggleButton = document.querySelector('.collapsible');
         var subMenu = document.querySelector('.content');
@@ -238,6 +246,7 @@ TYPE html>
             sub.addEventListener('click', handleSubMenuClick);
         });
 
+
         document.getElementById("dateRangeForm").addEventListener("submit", function(event) {
             event.preventDefault();
             var startDate = document.getElementById("startDate").value;
@@ -248,30 +257,36 @@ TYPE html>
                 return;
             }
 
-            // Set URL with selected dates
-            var url = new URL("http://localhost:8080/income");
+            var url = new URL("http://localhost:8080/profit");
             var params = {startDate: startDate, endDate: endDate};
             url.search = new URLSearchParams(params).toString();
 
-            // Update URL
             window.location.href = url;
 
-            // Send request to backend
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    // Update table with income data received from backend
-                    var tableBody = document.getElementById("incomeTableBody");
+                    var tableBody = document.getElementById("profitTableBody");
                     tableBody.innerHTML = "";
-                    data.forEach(income => {
+                    var totalExpenses = 0;
+                    var totalIncome = 0;
+                    data.expenses.forEach(expense => {
                         var row = document.createElement("tr");
-                        row.innerHTML = "<td>" + income.date + "</td><td>" + income.description + "</td><td>" + income.amount + "</td><td>" + income.IncomeId + "</td>";
+                        row.innerHTML = "<td>" + expense.date + "</td><td>" + expense.description + "</td><td>" + expense.amount + "</td>";
                         tableBody.appendChild(row);
+                        totalExpenses += parseFloat(expense.amount);
+                    });
+                    data.incomes.forEach(income => {
+                        var row = document.createElement("tr");
+                        row.innerHTML = "<td>" + income.date + "</td><td>" + income.description + "</td><td>" + income.amount + "</td>";
+                        tableBody.appendChild(row);
+                        totalIncome += parseFloat(income.amount);
                     });
                 })
                 .catch(error => console.error('Error:', error));
         });
 
+        // Fungsi untuk mengatur tanggal minimum pada input End Date
         function setMinEndDate() {
             var startDate = document.getElementById("startDate").value;
             document.getElementById("endDate").min = startDate;
@@ -279,82 +294,6 @@ TYPE html>
 
         document.getElementById("startDate").addEventListener("change", setMinEndDate);
         setMinEndDate();
-
-        // Function to sort table based on column
-        function sortTable(columnIndex) {
-            var table, rows, switching, i, x, y, shouldSwitch, ascending;
-            table = document.querySelector("table");
-            switching = true;
-            ascending = table.getAttribute('data-order') === 'asc'; // Get the current order from data attribute
-
-            // Toggle order
-            table.setAttribute('data-order', ascending ? 'desc' : 'asc');
-
-            // Loop until no more switching needs to be done
-            while (switching) {
-                switching = false;
-                rows = table.rows;
-
-                // Loop through all rows except header
-                for (i = 1; i < (rows.length - 1); i++) {
-                    shouldSwitch = false;
-                    x = rows[i].getElementsByTagName("td")[columnIndex];
-                    y = rows[i + 1].getElementsByTagName("td")[columnIndex];
-
-                    // Check if switching is needed
-                    if (ascending) {
-                        shouldSwitch = x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase();
-                    } else {
-                        shouldSwitch = x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase();
-                    }
-
-                    if (shouldSwitch) {
-                        // Switch rows and mark that a switch has been made
-                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                        switching = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        // Function to sort table based on Amount column
-        function sortAmount(columnIndex) {
-            var table, rows, switching, i, x, y, shouldSwitch, ascending;
-            table = document.querySelector("table");
-            switching = true;
-            ascending = table.getAttribute('data-order-amount') === 'asc'; // Get the current order from data attribute
-
-            // Toggle order
-            table.setAttribute('data-order-amount', ascending ? 'desc' : 'asc');
-
-            // Loop until no more switching needs to be done
-            while (switching) {
-                switching = false;
-                rows = table.rows;
-
-                // Loop through all rows except header
-                for (i = 1; i < (rows.length - 1); i++) {
-                    shouldSwitch = false;
-                    x = rows[i].getElementsByTagName("td")[columnIndex];
-                    y = rows[i + 1].getElementsByTagName("td")[columnIndex];
-
-                    // Check if switching is needed
-                    if (ascending) {
-                        shouldSwitch = parseInt(x.innerHTML) > parseInt(y.innerHTML);
-                    } else {
-                        shouldSwitch = parseInt(x.innerHTML) < parseInt(y.innerHTML);
-                    }
-
-                    if (shouldSwitch) {
-                        // Switch rows and mark that a switch has been made
-                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                        switching = true;
-                        break;
-                    }
-                }
-            }
-        }
     </script>
 </body>
 </html>
