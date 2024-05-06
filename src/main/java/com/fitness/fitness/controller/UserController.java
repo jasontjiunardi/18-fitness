@@ -125,7 +125,11 @@ public class UserController {
     @GetMapping("/edit_profile")
     public String userEditInformation(Model model, @SessionAttribute("user") User user) {
         User existingUser = userService.getUserByEmail(user.getEmail());
-        model.addAttribute("user", existingUser);
+        if (existingUser != null) {
+            model.addAttribute("user", existingUser);
+        } else {
+            return "error";
+        }
         return "editProfile";
     }
 
@@ -152,7 +156,6 @@ public class UserController {
         userService.saveUser(user);
         return "profile";
     }
-
 
     @GetMapping("/add_credit_card")
     public String addCreditCard(Model model,User user) {
@@ -192,6 +195,7 @@ public class UserController {
         if (user != null) {
             user.setPhoto(avatar);
             userService.saveUserProfile(user);
+            session.setAttribute("user", user);
         }
         return "redirect:/edit_profile";
     }

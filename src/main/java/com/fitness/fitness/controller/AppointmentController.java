@@ -184,35 +184,69 @@ public class AppointmentController {
     }
 
     @PostMapping("/book_appointment")
-    public String bookAppointment(@ModelAttribute Appointment appointment, 
-                                @SessionAttribute("user") User user,
-                                @RequestParam("classId") int classId,
-                                @RequestParam("trainerId") int trainerId,
-                                @RequestParam("datetime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime datetime) {
+public String bookAppointment(@ModelAttribute Appointment appointment, 
+                              @SessionAttribute("user") User user,
+                              @RequestParam("classId") int classId,
+                              @RequestParam("trainerId") int trainerId,
+                              @RequestParam("datetime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime datetime,
+                              Model model) {
 
-        // Fetch the related FitnessClass and Trainer objects based on the IDs provided
-        FitnessClass fitnessClass = fitnessClassService.getClassById(classId);
-        Trainer trainer = trainerService.getTrainerById(trainerId);
+    // Fetch the current date and time
+    LocalDateTime currentDateTime = LocalDateTime.now();
 
-        // Set the fetched entities to the appointment
-        appointment.setFitnessClass(fitnessClass);
-        appointment.setTrainer(trainer);
+    // Check if the selected datetime is at least one hour ahead of the current time if it's on the same day
+    if (datetime.isBefore(currentDateTime.plusHours(1)) && datetime.toLocalDate().isEqual(currentDateTime.toLocalDate())) {
+        // If the selected datetime is not valid, add an error message to the model and return to the form
+        model.addAttribute("errorMessage", "Please select a time at least one hour ahead of the current time.");
 
-        // Set the user from session to the appointment
-        User retrivedUser = userService.getUserByEmail(user.getEmail());
-        appointment.setUser(retrivedUser);
+        // Repopulate the model with other necessary attributes
+        List<FitnessClass> classList = fitnessClassService.getAllClasses();
+        User retrievedUser = userService.getUserByEmail(user.getEmail());
+        model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
+        int planTypeId = planService.findByPlanType(retrievedUser.getStatus()).getId();
+        List<Trainer> trainerList = trainerService.getTrainersByPlanId(planTypeId);
+        
+        // Formatting date and time for the frontend
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        String formattedDateTimeNow = now.format(formatter);
+        LocalDate activeDate = user.getActiveDate(); // Assuming this is a LocalDate
+        LocalDateTime endOfActiveDate = activeDate.atTime(23, 59); // End of the active date
 
-        // Set the date and time for the appointment
-        appointment.setDate(datetime);
+        model.addAttribute("classList", classList);
+        model.addAttribute("trainerList", trainerList);
+        model.addAttribute("formattedDateTimeNow", formattedDateTimeNow);
+        model.addAttribute("endOfActiveDate", endOfActiveDate.format(formatter));
 
-        // Set the status of the appointment to "active"
-        appointment.setStatus("active");
-
-        // Save the appointment to the database
-        appointmentService.saveAppointment(appointment);
-
-        return "redirect:/userAppointment"; // Redirect to a confirmation or listing page
+        // Return to the form page
+        return "bookAppointment"; 
     }
+
+    // Continue with appointment booking logic if the datetime is valid
+
+    // Fetch the related FitnessClass and Trainer objects based on the IDs provided
+    FitnessClass fitnessClass = fitnessClassService.getClassById(classId);
+    Trainer trainer = trainerService.getTrainerById(trainerId);
+
+    // Set the fetched entities to the appointment
+    appointment.setFitnessClass(fitnessClass);
+    appointment.setTrainer(trainer);
+
+    // Set the user from session to the appointment
+    User retrievedUser = userService.getUserByEmail(user.getEmail());
+    appointment.setUser(retrievedUser);
+
+    // Set the date and time for the appointment
+    appointment.setDate(datetime);
+
+    // Set the status of the appointment to "active"
+    appointment.setStatus("active");
+
+    // Save the appointment to the database
+    appointmentService.saveAppointment(appointment);
+
+    return "redirect:/userAppointment"; // Redirect to a confirmation or listing page
+}
 
 
 
@@ -252,33 +286,68 @@ public class AppointmentController {
     }
     
 
-        @PostMapping("/save_appointment")
-        public String saveAppointment(@ModelAttribute Appointment appointment, 
-                                      @SessionAttribute("user") User user,
-                                      @RequestParam("classId") int classId,
-                                      @RequestParam("trainerId") int trainerId,
-                                      @RequestParam("datetime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime datetime) { {
-
+    @PostMapping("/save_appointment")
+    public String saveAppointment(@ModelAttribute Appointment appointment, 
+                                  @SessionAttribute("user") User user,
+                                  @RequestParam("classId") int classId,
+                                  @RequestParam("trainerId") int trainerId,
+                                  @RequestParam("datetime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime datetime,
+                                  Model model) {
+    
+        // Fetch the current date and time
+        LocalDateTime currentDateTime = LocalDateTime.now();
+    
+        // Check if the selected datetime is at least one hour ahead of the current time if it's on the same day
+        if (datetime.isBefore(currentDateTime.plusHours(1)) && datetime.toLocalDate().isEqual(currentDateTime.toLocalDate())) {
+            // If the selected datetime is not valid, add an error message to the model and return to the form
+            model.addAttribute("errorMessage", "Please select a time at least one hour ahead of the current time.");
+    
+            // Repopulate the model with other necessary attributes
+            List<FitnessClass> classList = fitnessClassService.getAllClasses();
+            User retrievedUser = userService.getUserByEmail(user.getEmail());
+            model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
+            int planTypeId = planService.findByPlanType(retrievedUser.getStatus()).getId();
+            List<Trainer> trainerList = trainerService.getTrainersByPlanId(planTypeId);
+            
+            // Formatting date and time for the frontend
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            String formattedDateTimeNow = now.format(formatter);
+            LocalDate activeDate = user.getActiveDate(); // Assuming this is a LocalDate
+            LocalDateTime endOfActiveDate = activeDate.atTime(23, 59); // End of the active date
+    
+            model.addAttribute("classList", classList);
+            model.addAttribute("trainerList", trainerList);
+            model.addAttribute("formattedDateTimeNow", formattedDateTimeNow);
+            model.addAttribute("endOfActiveDate", endOfActiveDate.format(formatter));
+    
+            // Return to the form page
+            return "editAppointment"; 
+        }
+    
+        // Continue with appointment saving logic if the datetime is valid
+    
         // Fetch the related FitnessClass and Trainer objects based on the IDs provided
         FitnessClass fitnessClass = fitnessClassService.getClassById(classId);
         Trainer trainer = trainerService.getTrainerById(trainerId);
-
-        User retrivedUser = userService.getUserByEmail(user.getEmail());
-
+    
         // Set the fetched entities to the appointment
         appointment.setFitnessClass(fitnessClass);
         appointment.setTrainer(trainer);
-
+    
         // Set the user from session to the appointment
-        appointment.setUser(retrivedUser); // This uses the User object from session to maintain integrity
+        User retrievedUser = userService.getUserByEmail(user.getEmail());
+        appointment.setUser(retrievedUser);
+    
+        // Set the date and time for the appointment
         appointment.setDate(datetime);
-
+    
         // Save the appointment to the database
         appointmentService.updateAppointment(appointment);
-
+    
         return "redirect:/userAppointment"; // Redirect to a confirmation or listing page
-        }
-}
+    }
+    
 
     @PostMapping("/cancel_appointment")
     public String cancelAppointment(@RequestParam("appointmentId") int appointmentId) {

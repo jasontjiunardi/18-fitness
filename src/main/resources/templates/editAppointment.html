@@ -97,6 +97,9 @@
             <input type="datetime-local" id="datetime" name="datetime" th:value="${formattedDateTimeNow}" th:min="${formattedDateTimeNow}" th:max="${endOfActiveDate}" required/>
         </div>
 
+        <!-- Error Message -->
+        <p class="error-message" th:if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></p>
+
         <!-- Submit Button -->
         <button type="submit">Save Appointment</button>
 
