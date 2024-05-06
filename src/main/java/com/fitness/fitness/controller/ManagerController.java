@@ -7,8 +7,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -36,6 +39,7 @@ import com.fitness.fitness.model.Manager;
 import com.fitness.fitness.model.Plan;
 import com.fitness.fitness.model.Review;
 import com.fitness.fitness.model.Trainer;
+import com.fitness.fitness.model.User;
 import com.fitness.fitness.repository.ExpenseRepo;
 import com.fitness.fitness.repository.IncomeRepo;
 import com.fitness.fitness.repository.PaymentTransactionRepo;
@@ -43,6 +47,7 @@ import com.fitness.fitness.repository.PlanRepo;
 import com.fitness.fitness.repository.TrainerRepo;
 import com.fitness.fitness.repository.UserRepo;
 import com.fitness.fitness.service.AppointmentService;
+import com.fitness.fitness.service.EmailService;
 import com.fitness.fitness.service.ManagerService;
 import com.fitness.fitness.service.PlanService;
 import com.fitness.fitness.service.ReviewService;
@@ -55,7 +60,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class ManagerController {
-
+    @Autowired
+    private EmailService emailService;
+    
     @Autowired
     private ManagerService managerService;
 
@@ -92,6 +99,8 @@ public class ManagerController {
     @Autowired
 
     private ExpenseRepo expenseRepo;
+
+    @Autowired
 
     private FitnessClassService fitnessClassService;
 
@@ -376,8 +385,20 @@ public class ManagerController {
         planService.savePlan(plan);
         return "redirect:/manager_view_plans";
     }
+    @PostMapping("/send-email/{email}")
+public ResponseEntity<String> sendEmail(@PathVariable("email") String email) {
+    try {
+        User user = userService.getUserByEmail(email);
+        emailService.sendMembershipReminderEmail(email, user.getName(), user.getActiveDate());
+        return ResponseEntity.ok("{\"message\": \"Email sent successfully to " + email + "\"}");
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Failed to send email due to an error\"}");
+    }
+}
 
-@GetMapping("/manager_add_appointment")
+
+    @GetMapping("/manager_add_appointment")
     public String showAddAppointmentForm(@RequestParam(name = "classId", required = false) Integer classId,
                                          @RequestParam(name = "className", required = false) String className,
                                          @ModelAttribute User user, Model model, 
@@ -407,6 +428,13 @@ public class ManagerController {
 
         return "manager-add-appointment";
     }
+
+   
+        
+    
+    
+
+   
 
     @PostMapping("/manager_add_appointment")
     public String addAppointment(@ModelAttribute Appointment appointment, 

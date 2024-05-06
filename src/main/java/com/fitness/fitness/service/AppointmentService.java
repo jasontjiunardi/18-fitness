@@ -72,6 +72,12 @@ public class AppointmentService {
     public List<Appointment> findAppointmentsByFilters(int userId, Integer classId, Integer trainerId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         return appointmentRepo.findAppointmentsByFilters(userId, classId, trainerId, startDateTime, endDateTime);
     }
+    public void deleteAllAppointmentbyUserId(int userId) {
+        List<Integer> appointments = appointmentRepo.findAppointmentIdsByUserId(userId);
+        for (int id : appointments) {
+            appointmentRepo.deleteById(id);
+        }
+    }
 }
     
 

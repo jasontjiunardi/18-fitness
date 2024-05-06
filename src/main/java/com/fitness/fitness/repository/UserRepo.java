@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.fitness.fitness.model.User;
 
+import jakarta.persistence.criteria.From;
 import jakarta.transaction.Transactional;
 
 @Repository
@@ -23,5 +24,7 @@ public interface UserRepo extends JpaRepository<User, Integer>{
     @Transactional
     @Query("UPDATE User u SET u.status = 'Inactive', u.activeDate = NULL WHERE u.activeDate < ?1")
     int updateExpiredUsers(LocalDate currentDate);
+
+
 
 }

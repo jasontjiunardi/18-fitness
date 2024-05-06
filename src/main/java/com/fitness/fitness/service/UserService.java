@@ -4,21 +4,43 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import com.fitness.fitness.model.User;
+import com.fitness.fitness.model.Appointment;
+import com.fitness.fitness.repository.AppointmentRepo;
+import com.fitness.fitness.repository.PaymentTransactionRepo;
+import com.fitness.fitness.repository.ReviewRepo;
 import com.fitness.fitness.repository.UserRepo;
+
+import jakarta.persistence.CascadeType;
 
 
 @Service
 public class UserService {
+    
+    private final UserRepo userRepo;
+    private final AppointmentRepo appointmentRepo;
+    private final PaymentTransactionRepo paymentTransactionRepo;
+    private final ReviewRepo reviewRepo;
     @Autowired
-    private UserRepo userRepo;
+    private  AppointmentService appointmentService;
+    @Autowired
+    private  PaymentTransactionService paymentTransactionService;
+    @Autowired
+    private  ReviewService reviewService;
+
     // i use constructor injection instead of field injection to avoid difficulties in testing
     
-    public UserService(UserRepo userRepo){
+    public UserService(UserRepo userRepo, AppointmentRepo appointmentRepo,
+            PaymentTransactionRepo paymentTransactionRepo, ReviewRepo reviewRepo) {
         this.userRepo = userRepo;
+        this.appointmentRepo = appointmentRepo;
+        this.paymentTransactionRepo = paymentTransactionRepo;
+        this.reviewRepo = reviewRepo;
     }
+    
     public List<User> getAllUsers(){
         return userRepo.findAll();
     }
@@ -34,10 +56,18 @@ public class UserService {
         }
         return false;
     }
+    
     public void removeUser(String email) {
         User u = userRepo.findByEmail(email);
+        int id = u.getUserId();
+        
+        appointmentRepo.deleteAppointmentByUserId(id);
+        paymentTransactionRepo.deletePaymentTransactionByUserId(id);
+        reviewRepo.deleteReviewByUserId(id);
         userRepo.delete(u);
-    }
+       }
+
+    
 
 
     public boolean userRecoveryCode(User user) {

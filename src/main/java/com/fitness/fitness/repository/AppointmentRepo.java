@@ -39,6 +39,11 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
     @Modifying
     @Query("UPDATE Appointment a SET a.status = 'inactive' WHERE a.date < :currentDateTime")
     int updateStatusForPastAppointments(@Param("currentDateTime") LocalDateTime currentDateTime); 
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Appointment a  WHERE a.user.id = :id")
+    void deleteAppointmentByUserId(@Param("id") int id);
     
 
     @Query("SELECT a FROM Appointment a " +
