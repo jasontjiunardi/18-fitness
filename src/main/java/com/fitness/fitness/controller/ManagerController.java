@@ -100,6 +100,8 @@ public class ManagerController {
 
     private ExpenseRepo expenseRepo;
 
+    @Autowired
+
     private FitnessClassService fitnessClassService;
 
     @GetMapping("/manager_home_page")

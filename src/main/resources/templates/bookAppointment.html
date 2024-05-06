@@ -75,9 +75,14 @@
             background-color: #aaaaaa;
         }
     </style>
+    
 </head>
 <body>
     <h1>Book Appointment</h1>
+     <!-- Display error message if it exists -->
+     <div th:if="${errorMessage}">
+        <p th:text="${errorMessage}" style="color: red;"></p>
+    </div>
     <form th:action="@{/book_appointment}" th:object="${appointment}" method="post">
         <!-- Class Selection Dropdown -->
         <div>
