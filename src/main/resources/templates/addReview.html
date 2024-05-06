@@ -70,30 +70,32 @@
   </head>
   <body>
     <div class="container">
-      <h1>Add a Review for <span th:text="${review.trainer.name}"></span></h1>
-
-      <form th:action="@{/saveReview}" th:object="${review}" method="post">
-        <!-- Assuming trainerId and userId need to be submitted as part of the form -->
-        <input
-          type="hidden"
-          name="trainerId"
-          th:value="${review.trainer.trainerId}"
-        />
-        <input type="hidden" name="userId" th:value="${review.user.userId}" />
-        <textarea
-          th:name="comment"
-          placeholder="Enter your review here"
-          th:text="${review.comment}"
-        ></textarea>
-        <div style="margin-top: 20px">
-          <button type="submit">Submit Review</button>
-          <a
-            th:href="@{/trainerReview(trainerId=${review.trainer.trainerId})}"
-            class="back-btn"
-            ><i class="fas fa-arrow-left"></i> Back</a
-          >
-        </div>
-      </form>
+        <h1>Add a Review for <span th:text="${review.trainer.name}"></span></h1>
+    
+        <form th:action="@{/saveReview}" th:object="${review}" method="post" onsubmit="return validateForm()">
+            <!-- Assuming trainerId and userId need to be submitted as part of the form -->
+            <input type="hidden" name="trainerId" th:value="${review.trainer.trainerId}" />
+            <input type="hidden" name="userId" th:value="${review.user.userId}" />
+            <textarea th:name="comment" placeholder="Enter your review here" th:text="${review.comment}" required></textarea>
+            <div style="margin-top: 20px;">
+                <button type="submit">Submit Review</button>
+                <a th:href="@{/trainerReview(trainerId=${review.trainer.trainerId})}" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+            </div>
+        </form>
     </div>
-  </body>
+
+    <script>
+        function validateForm() {
+            var comment = document.getElementsByName("comment")[0].value;
+            if (comment.trim() == "") {
+                alert("Please enter your review before submitting.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+
+
+</body>
 </html>

@@ -22,63 +22,25 @@
       <button type="submit">Remove Profile Picture</button>
     </form>
 
-    <form
-      method="POST"
-      action="/updateProfile"
-      th:object="${user}"
-      enctype="multipart/form-data"
-    >
-      <input type="hidden" name="email" th:value="${user.email}" />
-      <div class="form-group">
-        <label for="name">Name:</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          th:value="${user.name}"
-          required
-          pattern="[A-Za-z ]+"
-          title="Name must contain only letters and spaces"
-        />
-      </div>
-      <div class="form-group">
-        <label for="phoneNumber">Phone Number:</label>
-        <input
-          type="text"
-          id="phoneNumber"
-          name="phoneNumber"
-          th:value="${user.phoneNumber}"
-          required
-          pattern="[0-9]+"
-          title="Phone number must contain only numbers"
-        /><br />
-      </div>
-      <div class="form-group">
-        <label for="cardNumber">Credit Card Number:</label>
-        <input
-          type="text"
-          id="cardNumber"
-          name="cardNumber"
-          th:value="${user.cardNumber}"
-          required
-          pattern="\d{16}"
-          title="Credit card number must be 16 digits"
-          maxlength="16"
-        /><br />
-      </div>
-      <div class="form-group">
-        <label for="fileImage">Profile Picture:</label>
-        <input
-          type="file"
-          id="fileImage"
-          name="image"
-          accept="image/png, image/jpg, image/jpeg"
-        />
-      </div>
-      <button type="submit">Save Changes</button>
-      <a href="/profile" class="btn-back">Back</a>
-    </form>
-
+    <form method="POST" action="/edit_profile" th:object="${user}" enctype="multipart/form-data">
+        <input type="hidden" name="email" th:value="${user.email}">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" th:value="${user.name}" required pattern="[A-Za-z ]+" title="Name must contain only letters and spaces">    
+        </div>
+        <div class="form-group">
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" th:value="${user.phoneNumber}" required pattern="[0-9]+" title="Phone number must contain only numbers"><br>
+        </div>
+        <div class="form-group">
+            <label for="cardNumber">Credit Card Number:</label>
+            <input type="text" id="cardNumber" name="cardNumber" th:value="${user.cardNumber}" required pattern="\d{16}" title="Credit card number must be 16 digits" maxlength="16"><br>
+        </div>
+        
+        <button type="submit">Save Changes</button>
+        <a href="/profile" class="btn-back">Back</a>
+    </form>    
+    
     <form method="GET" action="/reset_password">
       <input type="hidden" name="email" th:value="${user.email}" />
       <button type="submit">Reset Password</button>
