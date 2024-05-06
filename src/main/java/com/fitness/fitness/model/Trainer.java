@@ -49,6 +49,15 @@ public class Trainer {
     // Relationship with reviews
     @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Review> reviews;
+    @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Appointment> appointments;
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
+    }
     
     public Trainer(String name, int age, String gender, String dob, String email, String photo, String phone, int rank,
             String trainerSince) {

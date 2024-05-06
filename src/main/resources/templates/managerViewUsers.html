@@ -126,8 +126,10 @@
                     <td th:text="${User.activeDate}"></td>
                     <td> <img th:src="@{'images/' + ${User.photo}}" alt="User image" class="User-img"/></td>
                     <td>
-                        <form id="sendNotificationForm" method="post" th:action="@{/sendNotification/{email}(email=${User.email})}">                       
-                            <button type="button" class="btn btn-danger" onclick="confirmSendNotification('${User.email}')">Send Marketing Notification</button>
+                        <form id="sendNotificationForm">            
+                               
+                            <button type="button" class="btn btn-danger" th:attr="onclick='confirmSendNotification(\'' + ${User.email} + '\')'">Send Marketing Notification</button>
+
                         </form>
                     </td>
                     <td> 
@@ -189,10 +191,20 @@
         
         function confirmSendNotification(email) {
             if (confirm("Are you sure you want to send a marketing notification to this user?")) {
-                // window.location.href = "/sendNotification/" + email;
-                document.getElementById("sendNotificationForm").submit();
-            }
-        }
+                fetch("/send-email/" + email, { method: 'POST' })
+                .then(response => response.json())  // assuming you're expecting a JSON response
+                .then(data => alert(data.message))
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Failed to send notification.Error: " + error);
+            });
+             } else {
+                    alert("Action cancelled");
+    }
+    
+}
+            
+        
         
         function confirmRemove() {
             if (confirm("Are you sure you want to remove this customer?")) {

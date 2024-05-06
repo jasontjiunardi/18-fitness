@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f8f8f8;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 0.8em;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Membership Expiration Reminder</h2>
+        <p>Dear [[${name}]],</p>
+        <p>We wanted to remind you that your membership will expire soon, on <strong>[[${expirationDate}]]</strong>. We would hate to see you go!</p>
+        <p>To renew your membership, please visit our website or contact our support team.</p>
+        <p>Thank you for being a valued member!</p>
+
+        <div class="footer">
+            <p>If you have any questions, please do not hesitate to contact us at <a href="mailto:daniellimotto27@gmail.com">support@18-fitness.com</a>.</p>
+        </div>
+    </div>
+</body>
+</html>

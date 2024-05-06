@@ -6,8 +6,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.fitness.FileUploadUtil;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fitness.fitness.model.Income;
 import com.fitness.fitness.model.Manager;
@@ -28,12 +32,14 @@ import com.fitness.fitness.model.Appointment;
 import com.fitness.fitness.model.Manager;
 import com.fitness.fitness.model.Plan;
 import com.fitness.fitness.model.Trainer;
+import com.fitness.fitness.model.User;
 import com.fitness.fitness.repository.IncomeRepo;
 import com.fitness.fitness.repository.PaymentTransactionRepo;
 import com.fitness.fitness.repository.PlanRepo;
 import com.fitness.fitness.repository.TrainerRepo;
 import com.fitness.fitness.repository.UserRepo;
 import com.fitness.fitness.service.AppointmentService;
+import com.fitness.fitness.service.EmailService;
 import com.fitness.fitness.service.ManagerService;
 import com.fitness.fitness.service.PlanService;
 import com.fitness.fitness.service.TrainerService;
@@ -45,7 +51,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class ManagerController {
-
+    @Autowired
+    private EmailService emailService;
+    
     @Autowired
     private ManagerService managerService;
 
@@ -372,5 +380,17 @@ public class ManagerController {
         planService.savePlan(plan);
         return "redirect:/manager_view_plans";
     }
+    @PostMapping("/send-email/{email}")
+public ResponseEntity<String> sendEmail(@PathVariable("email") String email) {
+    try {
+        User user = userService.getUserByEmail(email);
+        emailService.sendMembershipReminderEmail(email, user.getName(), user.getActiveDate());
+        return ResponseEntity.ok("{\"message\": \"Email sent successfully to " + email + "\"}");
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Failed to send email due to an error\"}");
+    }
+}
+
 
 }
