@@ -14,7 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
-
 @Entity
 public class Trainer {
     @Id
@@ -25,17 +24,16 @@ public class Trainer {
     private String gender;
     private String dob;
     private String email;
-    private String photo = "defaultTrainer.jpg"; // Update the default value to the correct file path or handle the case of a missing image separately
-    private String phone ;
-    @Column(name = "`rank`") // Enclosing rank in backticks to avoid SQL syntax error
-    private int rank; //3 for 3 star. 4 for 4 star, 5 for 5 star
+    private String photo = "defaultTrainer.png";
+    private String phone;
+    @Column(name = "`rank`")
+    private int rank; // 3 for 3 star. 4 for 4 star, 5 for 5 star
     private String trainerSince;
-   
+
     public Trainer() {
     }
-    
 
-    @ManyToMany(mappedBy = "trainers",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "trainers", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Plan> plans = new HashSet<>();
 
     // Getter and setter for plans
@@ -46,19 +44,21 @@ public class Trainer {
     public void setPlans(Set<Plan> plans) {
         this.plans = plans;
     }
+
     // Relationship with reviews
-    @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Review> reviews;
-    @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Appointment> appointments;
 
     public List<Appointment> getAppointments() {
         return appointments;
     }
+
     public void setAppointments(List<Appointment> appointments) {
         this.appointments = appointments;
     }
-    
+
     public Trainer(String name, int age, String gender, String dob, String email, String photo, String phone, int rank,
             String trainerSince) {
         this.name = name;
@@ -71,63 +71,78 @@ public class Trainer {
         this.rank = rank;
         this.trainerSince = trainerSince;
     }
-  
+
     public int getId() {
         return id;
     }
+
     public int getAge() {
         return age;
     }
+
     public void setAge(int age) {
         this.age = age;
     }
+
     public String getGender() {
         return gender;
     }
+
     public void setGender(String gender) {
         this.gender = gender;
     }
+
     public String getDob() {
         return dob;
     }
+
     public void setDob(String dob) {
         this.dob = dob;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
+
     public String getPhone() {
         return phone;
     }
+
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
     public String getTrainerSince() {
         return trainerSince;
     }
+
     public void setTrainerSince(String trainerSince) {
         this.trainerSince = trainerSince;
     }
+
     public int getRank() {
         return rank;
     }
+
     public void setRank(int rank) {
         this.rank = rank;
     }
+
     public void setId(int id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
-
-    
 
     public List<Review> getReviews() {
         return reviews;
@@ -143,7 +158,8 @@ public class Trainer {
                 + ", email=" + email + ", photo=" + photo + ", phone=" + phone + ", rank=" + rank + ", trainerSince="
                 + trainerSince + ", plans=" + plans + "]";
     }
-//for promoting and demoting trainers
+
+    // for promoting and demoting trainers
     public void updateRank(int newRank) {
         if (newRank >= 3 && newRank <= 5) {
             this.rank = newRank;

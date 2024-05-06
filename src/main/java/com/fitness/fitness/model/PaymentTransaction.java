@@ -14,22 +14,21 @@ public class PaymentTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String paymentMethod; 
-    private String transactionId; 
+    private String paymentMethod;
+    private String transactionId;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     @ManyToOne
     @JoinColumn(name = "plan_id", nullable = false)
-    
+
     private Plan plan;
     private String planType;
-    private Double price; 
+    private Double price;
     private Double duration;
     private String paymentType;
     private LocalDate purchasedDate;
     private LocalDate activeDate;
-    
 
     // Constructor tanpa parameter
     public PaymentTransaction() {
@@ -107,6 +106,7 @@ public class PaymentTransaction {
     public void setPrice(Double price) {
         this.price = price;
     }
+
     public Double getDuration() {
         return duration;
     }
@@ -124,5 +124,3 @@ public class PaymentTransaction {
     }
 
 }
-
- 

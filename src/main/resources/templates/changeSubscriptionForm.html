@@ -1,55 +1,71 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Change Subscription</title>
-    <link rel="stylesheet" href="/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
+    <link rel="stylesheet" href="/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    />
     <script>
-        function togglePaymentFields() {
-            var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-            var cardFields = document.getElementById('cardPaymentFields');
-            var cardInput = document.getElementById('cardNumber');
-            var cardNumberFromSession = document.getElementById('sessionCardNumber').value;
+      function togglePaymentFields() {
+        var paymentMethod = document.querySelector(
+          'input[name="paymentMethod"]:checked'
+        ).value;
+        var cardFields = document.getElementById("cardPaymentFields");
+        var cardInput = document.getElementById("cardNumber");
+        var cardNumberFromSession =
+          document.getElementById("sessionCardNumber").value;
 
-            if (paymentMethod === 'Credit' && (!cardNumberFromSession || cardNumberFromSession === 'null')) {
-                cardFields.style.display = 'block';
-                cardInput.required = true;
-            } else {
-                cardFields.style.display = 'none';
-                cardInput.required = false;
-                cardInput.value = ''; // Clear the card number input when not visible
-            }
+        if (
+          paymentMethod === "Credit" &&
+          (!cardNumberFromSession || cardNumberFromSession === "null")
+        ) {
+          cardFields.style.display = "block";
+          cardInput.required = true;
+        } else {
+          cardFields.style.display = "none";
+          cardInput.required = false;
+          cardInput.value = ""; // Clear the card number input when not visible
         }
+      }
 
-        function validateForm() {
-            var paymentMethodChecked = document.querySelector('input[name="paymentMethod"]:checked');
-            if (!paymentMethodChecked) {
-                alert('Please select a payment method.');
-                return false;
-            }
-            if (!validateUserAgreement()) {
-                return false;
-            }
-            return confirm('Are you sure you want to change your plan type? You cannot refund or revert your changes.');
+      function validateForm() {
+        var paymentMethodChecked = document.querySelector(
+          'input[name="paymentMethod"]:checked'
+        );
+        if (!paymentMethodChecked) {
+          alert("Please select a payment method.");
+          return false;
         }
+        if (!validateUserAgreement()) {
+          return false;
+        }
+        return confirm(
+          "Are you sure you want to change your plan type? You cannot refund or revert your changes."
+        );
+      }
 
-        function validateUserAgreement() {
-            var userAgreementChecked = document.getElementById('userAgreement').checked;
-            if (!userAgreementChecked) {
-                alert('Please agree to the terms and conditions to proceed.');
-                return false;
-            }
-            return true;
+      function validateUserAgreement() {
+        var userAgreementChecked =
+          document.getElementById("userAgreement").checked;
+        if (!userAgreementChecked) {
+          alert("Please agree to the terms and conditions to proceed.");
+          return false;
         }
-        function confirmCancel() {
-            var confirmation = confirm('Are you sure you want to cancel your purchase? Your information will not be stored.');
-            return confirmation;
-        }
-        
+        return true;
+      }
+      function confirmCancel() {
+        var confirmation = confirm(
+          "Are you sure you want to cancel your purchase? Your information will not be stored."
+        );
+        return confirmation;
+      }
 
-        function showUserAgreement() {
-            var userAgreementText = "\
+      function showUserAgreement() {
+        var userAgreementText =
+          "\
             FITNESS MEMBERSHIP AGREEMENT\n\
             ------------------------------\n\
             By changing your subscription type, you agree to the following terms and conditions:\n\
@@ -61,77 +77,149 @@
             5. Personal Responsibility: You acknowledge that participation in fitness activities carries inherent risks, and you assume full responsibility for any injuries or damages incurred.\n\
             \n\
             By checking this box, you confirm that you have read, understood, and agree to the terms of this agreement.";
-            alert(userAgreementText);
-        }
+        alert(userAgreementText);
+      }
     </script>
-</head>
-<body>
+  </head>
+  <body>
     <div class="header">
-        <a th:href="@{/browseChangeSubscription}" class="header-button home-button">
-            <i class="fas fa-arrow-left"></i>
-        </a>
-        <div class="header-center"><span th:text = "${planType}"></span> Change Subscription</div> 
-        <div class="auth-buttons">
-            <a th:href="@{/register_user}" th:if="${user == null}" class="header-button sign-up-button">Sign Up</a>
-            <a th:href="@{/user_signin}" th:if="${user == null}" class="header-button sign-in-button">Sign In</a>
-            <div th:if="${user != null}">
-                <p>Welcome User: <span th:text="${user.name}">User</span></p>
-                <p>Your Current Plan Type: <span th:text="${user.status}">status</span></p>
-                <p th:if="${#strings.equals(user.status, 'Inactive')}">Valid Date: -</p>
-                <p th:if="${#strings.equals(user.status, 'Paused')}">Valid Date: Paused</p>
-                <p th:if="${!#strings.equals(user.status, 'Inactive') and !#strings.equals(user.status, 'Paused')}">Valid Date: <span th:text="${user.activeDate}">date</span></p>
-            </div>
+      <a
+        th:href="@{/browseChangeSubscription}"
+        class="header-button home-button"
+      >
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div class="header-center">
+        <span th:text="${planType}"></span> Change Subscription
+      </div>
+      <div class="auth-buttons">
+        <a
+          th:href="@{/register_user}"
+          th:if="${user == null}"
+          class="header-button sign-up-button"
+          >Sign Up</a
+        >
+        <a
+          th:href="@{/user_signin}"
+          th:if="${user == null}"
+          class="header-button sign-in-button"
+          >Sign In</a
+        >
+        <div th:if="${user != null}">
+          <p>Welcome User: <span th:text="${user.name}">User</span></p>
+          <p>
+            Your Current Plan Type: <span th:text="${user.status}">status</span>
+          </p>
+          <p th:if="${#strings.equals(user.status, 'Inactive')}">
+            Valid Date: -
+          </p>
+          <p th:if="${#strings.equals(user.status, 'Paused')}">
+            Valid Date: Paused
+          </p>
+          <p
+            th:if="${!#strings.equals(user.status, 'Inactive') and !#strings.equals(user.status, 'Paused')}"
+          >
+            Valid Date: <span th:text="${user.activeDate}">date</span>
+          </p>
         </div>
+      </div>
     </div>
     <div class="container">
-        <div class = "content">
-            <h1 th:text="${planType} + ' Plan Details'">Plan Type Details</h1>
-            <p class="plan-description" th:text="${planDetails}">Plan Description</p>
-            <h2 class="section-heading">Benefits</h2>
-            <ul class="benefits-list">
-                <li th:each="benefit : ${benefits}" th:text="${benefit.description}"></li>
-            </ul>
-            <form th:action="@{/changeSubscription/{planType}(planType=${planType})}" method="post" onsubmit="return validateForm()" onchange="togglePaymentFields()" class="plan-form">
-                <input type="hidden" name="planType" th:value="${planType}">
-                <h2 class="section-heading">Chosen Plan: <span th:text ="${planType}"></span></h2>
-                <p class="price-display">Price: ¥<span th:text="${price}"></span></p>
-                <h2 class="section-heading">Select Payment Method:</h2>
-                <div class="payment-methods">
-                    <label for="alipay" class="payment-option">
-                        <input type="radio" id="alipay" name="paymentMethod" value="Alipay">
-                        Alipay
-                        <img th:src="@{/images/alipay_icon.png}" alt="Alipay">
-                    </label>
-                    
-                    <label for="wechat" class="payment-option">
-                        <input type="radio" id="wechat" name="paymentMethod" value="WeChat">
-                        WeChat
-                        <img th:src="@{/images/wechat_icon.png}" alt="WeChat">
-                    </label>
-                    
-                    <label for="credit" class="payment-option">
-                        <input type="radio" id="credit" name="paymentMethod" value="Credit">
-                        Credit Card
-                        <img th:src="@{/images/credit_card_icon.png}" alt="Credit Card">
-                    </label>
-                </div>
-                
-                <div id="cardPaymentFields" style="display:none;">
-                    <label for="cardNumber">Card Number:</label>
-                    <input type="text" id="cardNumber" name="cardNumber" pattern="\d{16}" placeholder="16 digits" title="Card number must be 16 digits" maxlength="16">
-                </div>
-                <input type="hidden" id="sessionCardNumber" th:value="${user?.cardNumber}" />
-        
-                <div class="user-agreement">
-                    <input type="checkbox" id="userAgreement" name="userAgreement">
-                    <a href="#" onclick="showUserAgreement()">I agree to the terms and conditions</a>
-                </div>
-                <input type="hidden" name="price" th:value="${price}">
-        
-                <button type="submit" class="submit-button">Confirm Purchase</button>
-                <a href="/browseChangeSubscription" class="submit-button" onclick="return confirmCancel()">Cancel Purchase</a>
-            </form>
-        </div>
+      <div class="content">
+        <h1 th:text="${planType} + ' Plan Details'">Plan Type Details</h1>
+        <p class="plan-description" th:text="${planDetails}">
+          Plan Description
+        </p>
+        <h2 class="section-heading">Benefits</h2>
+        <ul class="benefits-list">
+          <li
+            th:each="benefit : ${benefits}"
+            th:text="${benefit.description}"
+          ></li>
+        </ul>
+        <form
+          th:action="@{/changeSubscription/{planType}(planType=${planType})}"
+          method="post"
+          onsubmit="return validateForm()"
+          onchange="togglePaymentFields()"
+          class="plan-form"
+        >
+          <input type="hidden" name="planType" th:value="${planType}" />
+          <h2 class="section-heading">
+            Chosen Plan: <span th:text="${planType}"></span>
+          </h2>
+          <p class="price-display">Price: ¥<span th:text="${price}"></span></p>
+          <h2 class="section-heading">Select Payment Method:</h2>
+          <div class="payment-methods">
+            <label for="alipay" class="payment-option">
+              <input
+                type="radio"
+                id="alipay"
+                name="paymentMethod"
+                value="Alipay"
+              />
+              Alipay
+              <img th:src="@{/images/alipay_icon.png}" alt="Alipay" />
+            </label>
+
+            <label for="wechat" class="payment-option">
+              <input
+                type="radio"
+                id="wechat"
+                name="paymentMethod"
+                value="WeChat"
+              />
+              WeChat
+              <img th:src="@{/images/wechat_icon.png}" alt="WeChat" />
+            </label>
+
+            <label for="credit" class="payment-option">
+              <input
+                type="radio"
+                id="credit"
+                name="paymentMethod"
+                value="Credit"
+              />
+              Credit Card
+              <img th:src="@{/images/credit_card_icon.png}" alt="Credit Card" />
+            </label>
+          </div>
+
+          <div id="cardPaymentFields" style="display: none">
+            <label for="cardNumber">Card Number:</label>
+            <input
+              type="text"
+              id="cardNumber"
+              name="cardNumber"
+              pattern="\d{16}"
+              placeholder="16 digits"
+              title="Card number must be 16 digits"
+              maxlength="16"
+            />
+          </div>
+          <input
+            type="hidden"
+            id="sessionCardNumber"
+            th:value="${user?.cardNumber}"
+          />
+
+          <div class="user-agreement">
+            <input type="checkbox" id="userAgreement" name="userAgreement" />
+            <a href="#" onclick="showUserAgreement()"
+              >I agree to the terms and conditions</a
+            >
+          </div>
+          <input type="hidden" name="price" th:value="${price}" />
+
+          <button type="submit" class="submit-button">Confirm Purchase</button>
+          <a
+            href="/browseChangeSubscription"
+            class="submit-button"
+            onclick="return confirmCancel()"
+            >Cancel Purchase</a
+          >
+        </form>
+      </div>
     </div>
-</body>
+  </body>
 </html>

@@ -12,7 +12,7 @@ public class ManagerService {
     @Autowired
     private ManagerRepo managerRepo;
 
-    public ManagerService(ManagerRepo managerRepo){
+    public ManagerService(ManagerRepo managerRepo) {
         this.managerRepo = managerRepo;
     }
 

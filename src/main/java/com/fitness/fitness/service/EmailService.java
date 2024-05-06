@@ -13,20 +13,19 @@ import jakarta.mail.internet.MimeMessage;
 
 import org.thymeleaf.context.Context;
 
-
 @Service
 public class EmailService {
     @Autowired
-    private  JavaMailSender mailSender;
+    private JavaMailSender mailSender;
 
     @Autowired
     private SpringTemplateEngine templateEngine;;
-   
-    public void sendMembershipReminderEmail(String to, String name, LocalDate expirationDate){
+
+    public void sendMembershipReminderEmail(String to, String name, LocalDate expirationDate) {
         Context context = new Context();
         context.setVariable("name", name);
         context.setVariable("expirationDate", expirationDate);
-        
+
         String processHtml = templateEngine.process("membershipReminder", context);
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -41,6 +40,4 @@ public class EmailService {
         }
     }
 
-    
-    
 }

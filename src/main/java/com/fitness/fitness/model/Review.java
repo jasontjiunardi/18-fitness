@@ -15,7 +15,7 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
+
     // Many-to-one relationship with User
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -25,7 +25,7 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id")
     private Trainer trainer;
-    
+
     private String comment;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -81,6 +81,7 @@ public class Review {
 
     @Override
     public String toString() {
-        return "Review [id=" + id + ", user=" + user + ", trainer=" + trainer + ", comment=" + comment + ", date=" + date + "]";
+        return "Review [id=" + id + ", user=" + user + ", trainer=" + trainer + ", comment=" + comment + ", date="
+                + date + "]";
     }
 }

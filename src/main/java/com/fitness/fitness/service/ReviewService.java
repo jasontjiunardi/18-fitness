@@ -33,6 +33,7 @@ public class ReviewService {
     public void deleteReview(int id) {
         reviewRepo.deleteById(id);
     }
+
     public void deleteAllReviewsByUserId(int id) {
         List<Review> reviews = reviewRepo.findByUserUserId(id);
         for (Review review : reviews) {

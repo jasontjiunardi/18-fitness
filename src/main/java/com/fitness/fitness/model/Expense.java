@@ -1,6 +1,5 @@
 package com.fitness.fitness.model;
 
-
 import java.time.LocalDate;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +18,6 @@ public class Expense {
     private Double amount;
     private LocalDate date;
 
-    // Constructors, getters, and setters
 
     public Expense() {
     }

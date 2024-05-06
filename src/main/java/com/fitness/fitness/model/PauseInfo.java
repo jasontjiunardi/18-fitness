@@ -30,43 +30,53 @@ public class PauseInfo {
     private long daysPaused;
 
     private String status;
-    
+
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public LocalDate getPauseStartDate() {
         return pauseStartDate;
     }
+
     public void setPauseStartDate(LocalDate pauseStartDate) {
         this.pauseStartDate = pauseStartDate;
     }
+
     public LocalDate getPauseEndDate() {
         return pauseEndDate;
     }
+
     public void setPauseEndDate(LocalDate pauseEndDate) {
         this.pauseEndDate = pauseEndDate;
     }
+
     public long getDaysPaused() {
         return daysPaused;
     }
+
     public void setDaysPaused(long daysPaused) {
         this.daysPaused = daysPaused;
     }
+
     public User getUser() {
         return user;
     }
+
     public void setUser(User user) {
         this.user = user;
     }
+
     public String getStatus() {
         return status;
     }
+
     public void setStatus(String status) {
         this.status = status;
     }
 
-    
 }

@@ -8,7 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-
 import java.time.LocalTime;
 
 @Entity
@@ -40,7 +39,7 @@ public class Manager {
      * @param name the name to set
      */
     public void setEmail(String email) {
-        this.email= email;
+        this.email = email;
     }
 
     /**

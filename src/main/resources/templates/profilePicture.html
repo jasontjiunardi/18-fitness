@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Choose Profile Picture</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
@@ -29,25 +29,26 @@
             margin-bottom: 20px;
         }
 
-        .image-button {
-            border: none;
-            background: none;
-            margin: 10px;
-            transition: transform 0.3s ease;
-        }
+      .image-button {
+        border: none;
+        background: none;
+        padding: 0;
+        margin: 10px;
+        transition: transform 0.3s ease;
+      }
 
-        .image-button img {
-            width: 150px;
-            height: auto;
-            cursor: pointer;
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
-        }
+      .image-button img {
+        width: 150px;
+        height: auto;
+        cursor: pointer;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
+      }
 
-        .image-button img:hover {
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-        }
+      .image-button img:hover {
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      }
 
         button, input[type="submit"] {
             background-color: #4a154b;
@@ -107,9 +108,9 @@
     </div>
 
     <div class="cancel-container">
-        <form method="GET" action="/edit_profile">
-            <button>Cancel</button>
-        </form>
+      <form method="GET" action="/edit_profile">
+        <button>Cancel</button>
+      </form>
     </div>
-</body>
+  </body>
 </html>

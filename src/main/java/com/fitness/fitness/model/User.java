@@ -22,7 +22,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
-    private String name; 
+    private String name;
     private String username;
     private String password;
     private String email;
@@ -39,26 +39,21 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private PauseInfo pauseInfo;
 
-
     public String getGender() {
         return gender;
     }
-
 
     public void setGender(String gender) {
         this.gender = gender;
     }
 
-
     public List<Appointment> getAppointments() {
         return appointments;
     }
 
-
     public void setAppointments(List<Appointment> appointments) {
         this.appointments = appointments;
     }
-
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Appointment> appointments;
@@ -66,7 +61,6 @@ public class User {
     public User() {
     }
 
-    
     public User(int userId, String name, String username, String password, String email, Date dob, String phoneNumber,
             String status, LocalDate activeDate, int recoveryCode, String cardNumber, String photo, String gender,
             List<Appointment> appointments) {
@@ -86,7 +80,6 @@ public class User {
         this.appointments = appointments;
     }
 
-
     public int getRecoveryCode() {
         return recoveryCode;
     }
@@ -98,57 +91,75 @@ public class User {
     public int getUserId() {
         return userId;
     }
+
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
+
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
+
     public Date getDob() {
         return dob;
     }
+
     public void setDob(Date dob) {
         this.dob = dob;
     }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
     public String getStatus() {
         return status;
     }
+
     public void setStatus(String status) {
         this.status = status;
     }
-    public LocalDate getActiveDate(){
+
+    public LocalDate getActiveDate() {
         return activeDate;
     }
-    public void setActiveDate(LocalDate activeDate){
+
+    public void setActiveDate(LocalDate activeDate) {
         this.activeDate = activeDate;
     }
+
     public String getCardNumber() {
         return cardNumber;
     }
@@ -160,11 +171,10 @@ public class User {
     public String getPhoto() {
         return photo;
     }
-    
+
     public void setPhoto(String photo) {
         this.photo = photo;
     }
-
 
     @Override
     public String toString() {
@@ -174,14 +184,12 @@ public class User {
                 + ", photo=" + photo + ", gender=" + gender + ", appointments=" + appointments + "]";
     }
 
-
     public PauseInfo getPauseInfo() {
         return pauseInfo;
     }
 
-
     public void setPauseInfo(PauseInfo pauseInfo) {
         this.pauseInfo = pauseInfo;
     }
-    
+
 }

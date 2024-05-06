@@ -28,14 +28,15 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @Autowired
-    public ReviewController(UserService userService, TrainerService trainerService, ReviewService reviewService){
+    public ReviewController(UserService userService, TrainerService trainerService, ReviewService reviewService) {
         this.userService = userService;
         this.trainerService = trainerService;
         this.reviewService = reviewService;
     }
 
     @GetMapping("/trainerReview")
-    public String viewReviews(Model model, @SessionAttribute("user") User user, @RequestParam("trainerId") int trainerId) {
+    public String viewReviews(Model model, @SessionAttribute("user") User user,
+            @RequestParam("trainerId") int trainerId) {
         List<Trainer> trainers = trainerService.getAllTrainers();
         model.addAttribute("trainers", trainers);
 
@@ -50,8 +51,10 @@ public class ReviewController {
 
         return "userViewReviews";
     }
- @GetMapping("/addReview")
-    public String addReview(Model model, @SessionAttribute("user") User user, @RequestParam("trainerId") int trainerId) {
+
+    @GetMapping("/addReview")
+    public String addReview(Model model, @SessionAttribute("user") User user,
+            @RequestParam("trainerId") int trainerId) {
         List<Trainer> trainers = trainerService.getAllTrainers();
         model.addAttribute("trainers", trainers);
 
@@ -68,40 +71,42 @@ public class ReviewController {
     }
 
     @PostMapping("/saveReview")
-    public String saveReview(@ModelAttribute("review") Review review, @SessionAttribute("user") User user, @RequestParam("trainerId") int trainerId) {
-        
-        Trainer trainer = trainerService.getTrainerById(trainerId);  // Make sure the trainer exists
+    public String saveReview(@ModelAttribute("review") Review review, @SessionAttribute("user") User user,
+            @RequestParam("trainerId") int trainerId) {
+
+        Trainer trainer = trainerService.getTrainerById(trainerId); // Make sure the trainer exists
         if (trainer == null) {
             return "redirect:/errorPage"; // Or handle this more gracefully
         }
 
-        review.setUser(user);  // Ensure user is set from session if not already
-        review.setTrainer(trainer);  // Ensure trainer is correctly associated
-        review.setDate(LocalDateTime.now());  // Set the current date and time
-        reviewService.saveReview(review);  // Save the review
+        review.setUser(user); // Ensure user is set from session if not already
+        review.setTrainer(trainer); // Ensure trainer is correctly associated
+        review.setDate(LocalDateTime.now()); // Set the current date and time
+        reviewService.saveReview(review); // Save the review
 
         return "redirect:/trainerReview?trainerId=" + trainerId;
     }
 
-@PostMapping("/removeReview")
-public String removeReview(@RequestParam("reviewId") int reviewId, @SessionAttribute("user") User user, Model model) {
-    // Retrieve the review from the database
-    Review review = reviewService.findReviewById(reviewId);
+    @PostMapping("/removeReview")
+    public String removeReview(@RequestParam("reviewId") int reviewId, @SessionAttribute("user") User user,
+            Model model) {
+        // Retrieve the review from the database
+        Review review = reviewService.findReviewById(reviewId);
 
-    // Check if the review exists and belongs to the logged-in user
-    if (review != null && review.getUser().getUserId() == user.getUserId()) {
-        int trainerId = review.getTrainer().getId();
+        // Check if the review exists and belongs to the logged-in user
+        if (review != null && review.getUser().getUserId() == user.getUserId()) {
+            int trainerId = review.getTrainer().getId();
 
-        // Remove the review
-        reviewService.deleteReview(reviewId);
+            // Remove the review
+            reviewService.deleteReview(reviewId);
 
-        // Redirect to the trainer review page with the trainerId
-        return "redirect:/trainerReview?trainerId=" + trainerId;
-    } else {
-        // If review doesn't exist or doesn't belong to the logged-in user, handle error
-        model.addAttribute("error", "You are not authorized to remove this review.");
-        return "errorPage"; 
+            // Redirect to the trainer review page with the trainerId
+            return "redirect:/trainerReview?trainerId=" + trainerId;
+        } else {
+            // If review doesn't exist or doesn't belong to the logged-in user, handle error
+            model.addAttribute("error", "You are not authorized to remove this review.");
+            return "errorPage";
+        }
     }
-}
 
 }

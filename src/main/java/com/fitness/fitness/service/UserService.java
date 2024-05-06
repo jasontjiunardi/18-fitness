@@ -16,23 +16,23 @@ import com.fitness.fitness.repository.UserRepo;
 
 import jakarta.persistence.CascadeType;
 
-
 @Service
 public class UserService {
-    
+
     private final UserRepo userRepo;
     private final AppointmentRepo appointmentRepo;
     private final PaymentTransactionRepo paymentTransactionRepo;
     private final ReviewRepo reviewRepo;
     @Autowired
-    private  AppointmentService appointmentService;
+    private AppointmentService appointmentService;
     @Autowired
-    private  PaymentTransactionService paymentTransactionService;
+    private PaymentTransactionService paymentTransactionService;
     @Autowired
-    private  ReviewService reviewService;
+    private ReviewService reviewService;
 
-    // i use constructor injection instead of field injection to avoid difficulties in testing
-    
+    // i use constructor injection instead of field injection to avoid difficulties
+    // in testing
+
     public UserService(UserRepo userRepo, AppointmentRepo appointmentRepo,
             PaymentTransactionRepo paymentTransactionRepo, ReviewRepo reviewRepo) {
         this.userRepo = userRepo;
@@ -40,12 +40,12 @@ public class UserService {
         this.paymentTransactionRepo = paymentTransactionRepo;
         this.reviewRepo = reviewRepo;
     }
-    
-    public List<User> getAllUsers(){
+
+    public List<User> getAllUsers() {
         return userRepo.findAll();
     }
 
-    public User saveUser(User user){
+    public User saveUser(User user) {
         return userRepo.save(user);
     }
 
@@ -56,19 +56,16 @@ public class UserService {
         }
         return false;
     }
-    
+
     public void removeUser(String email) {
         User u = userRepo.findByEmail(email);
         int id = u.getUserId();
-        
+
         appointmentRepo.deleteAppointmentByUserId(id);
         paymentTransactionRepo.deletePaymentTransactionByUserId(id);
         reviewRepo.deleteReviewByUserId(id);
         userRepo.delete(u);
-       }
-
-    
-
+    }
 
     public boolean userRecoveryCode(User user) {
         User u = userRepo.findByEmail(user.getEmail());
@@ -77,7 +74,7 @@ public class UserService {
         }
         return false;
     }
-    
+
     public boolean isNewPasswordDifferent(User user, User retrievedUser) {
         // Check that the new password is indeed different from the existing one
         return retrievedUser.getPassword().equals(user.getPassword());
@@ -94,24 +91,24 @@ public class UserService {
     public User getUserByEmail(String email) {
         return userRepo.findByEmail(email);
     }
-    
+
     public boolean verifyUser(User user) {
         User existingUser = userRepo.findByEmail(user.getEmail());
         return existingUser == null;
     }
 
     public boolean emailValid(String email) {
-        if(email.endsWith("@gmail.com")){
+        if (email.endsWith("@gmail.com")) {
             return true;
         }
         return false;
-        
+
     }
 
     private boolean containsUppercaseLetterAndNumber(String password) {
         boolean containsUppercase = false;
         boolean containsNumber = false;
-        
+
         for (char c : password.toCharArray()) {
             if (Character.isUpperCase(c)) {
                 containsUppercase = true;
@@ -119,13 +116,13 @@ public class UserService {
                 containsNumber = true;
             }
         }
-        
+
         return containsUppercase && containsNumber;
     }
-    
+
     public boolean passwordValid(String password) {
         return password.length() >= 8 &&
-               containsUppercaseLetterAndNumber(password);
+                containsUppercaseLetterAndNumber(password);
     }
 
     public void setCreditCardNumber(String email, String cardNumber) {
@@ -133,7 +130,8 @@ public class UserService {
         user.setCardNumber(cardNumber);
         userRepo.save(user);
     }
-    public void setStatus(String email, String status){
+
+    public void setStatus(String email, String status) {
         User user = userRepo.findByEmail(email);
         user.setStatus(status);
         userRepo.save(user);
@@ -143,7 +141,7 @@ public class UserService {
         if (newPassword.equals(password)) {
             return false;
         }
-    
+
         User user = userRepo.findByEmail(email);
         if (user != null && user.getPassword().equals(password)) {
             user.setPassword(newPassword);
@@ -155,20 +153,22 @@ public class UserService {
 
     public boolean validateResetPasswordForm(String password, String newPassword, String confirmPassword) {
         return password.length() >= 8 && newPassword.length() >= 8 &&
-               containsUppercaseLetterAndNumber(newPassword) && newPassword.equals(confirmPassword);
+                containsUppercaseLetterAndNumber(newPassword) && newPassword.equals(confirmPassword);
     }
-    
+
     public User saveUserProfile(User user) {
         if (user.getPhoto() == null || user.getPhoto().isEmpty()) {
             user.setPhoto("avatar1.jpg");
         }
         return userRepo.save(user);
     }
+
     public void updateExpiredUsersStatus() {
         LocalDate today = LocalDate.now();
         int updatedCount = userRepo.updateExpiredUsers(today);
         System.out.println(updatedCount + " users have been updated to 'Inactive'.");
     }
+
     public User getUserById(int userId) {
         // Use the userRepository to find the user by ID
         return userRepo.findById(userId).orElse(null);

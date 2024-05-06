@@ -1,6 +1,5 @@
 package com.fitness.fitness.controller;
 
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,9 +27,6 @@ import com.fitness.fitness.service.TrainerService;
 import com.fitness.fitness.service.UserService;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-
-
 @Controller
 public class AppointmentController {
 
@@ -41,144 +37,140 @@ public class AppointmentController {
     private final PlanService planService;
 
     @Autowired
-    public AppointmentController(UserService userService, AppointmentService appointmentService,  TrainerService trainerService, FitnessClassService fitnessClassService,  PlanService planService) {
+    public AppointmentController(UserService userService, AppointmentService appointmentService,
+            TrainerService trainerService, FitnessClassService fitnessClassService, PlanService planService) {
         this.userService = userService;
         this.appointmentService = appointmentService;
         this.trainerService = trainerService;
         this.fitnessClassService = fitnessClassService;
         this.planService = planService;
-        
+
     }
-    
 
     @GetMapping("/userAppointment")
     public String userAppointment(Model model, @SessionAttribute("user") User user) {
         // Update the status of past appointments to "inactive"
         appointmentService.deactivatePastAppointments();
         List<FitnessClass> classList = fitnessClassService.getAllClasses();
-        List<Trainer> trainerList =trainerService.getAllTrainers();
-    
+        List<Trainer> trainerList = trainerService.getAllTrainers();
+
         User retrievedUser = userService.getUserByEmail(user.getEmail());
         model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
         int userId = retrievedUser.getUserId(); // ID from user email
-    
+
         List<Integer> appointmentIds = appointmentService.getAppointmentIdsByUserId(userId);
         model.addAttribute("appointmentIds", appointmentIds);
         model.addAttribute("classList", classList);
         model.addAttribute("trainerList", trainerList);
-    
-        return "userViewAppointments"; 
+
+        return "userViewAppointments";
     }
-
-
 
     public String getTrainerNameByAppointmentId(int appointmentId) {
         return appointmentService.getTrainerNameByAppointmentId(appointmentId);
     }
+
     public String getClassNameByAppointmentId(int appointmentId) {
         return appointmentService.getClassNameByAppointmentId(appointmentId);
     }
-    public LocalDateTime getDateTimeByAppointmentId(int appointmentId){
+
+    public LocalDateTime getDateTimeByAppointmentId(int appointmentId) {
         return appointmentService.getDateTimeByAppointmentId(appointmentId);
     }
 
-    public String getStatusByAppointmentId(int appointmentId){
+    public String getStatusByAppointmentId(int appointmentId) {
         return appointmentService.getStatusByAppointmentId(appointmentId);
     }
 
-    public int getUserIdByAppointmentId(int appointmentId){
+    public int getUserIdByAppointmentId(int appointmentId) {
         return appointmentService.getUserIdByAppointmentId(appointmentId);
     }
 
-    
-    
     @GetMapping("/filterAppointments")
-    public String filterAppointments(Model model, 
-                                    @SessionAttribute("user") User user,
-                                    @RequestParam(name = "classId", required = false) Integer classId,
-                                    @RequestParam(name = "trainerId", required = false) Integer trainerId,
-                                    @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                    @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        
+    public String filterAppointments(Model model,
+            @SessionAttribute("user") User user,
+            @RequestParam(name = "classId", required = false) Integer classId,
+            @RequestParam(name = "trainerId", required = false) Integer trainerId,
+            @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
         LocalDateTime startDateTime = startDate != null ? startDate.atStartOfDay() : null;
         LocalDateTime endDateTime = endDate != null ? endDate.atTime(23, 59, 59) : null;
         User retrievedUser = userService.getUserByEmail(user.getEmail());
         model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
         int userId = retrievedUser.getUserId(); // ID from user email
-    
+
         List<Appointment> filteredAppointments = appointmentService.findAppointmentsByFilters(
-        userId, classId, trainerId, startDateTime, endDateTime);
+                userId, classId, trainerId, startDateTime, endDateTime);
         model.addAttribute("appointments", filteredAppointments);
 
         return "filterappointments";
-                                    }
-    
-    
-    
+    }
 
     @GetMapping("/book_appointment")
-    public String bookAppointment(Model model, 
-                              @RequestParam(name = "classId", required = false) Integer classId,
-                              @RequestParam(name = "className", required = false) String className,
-                              @SessionAttribute("user") User user) {
+    public String bookAppointment(Model model,
+            @RequestParam(name = "classId", required = false) Integer classId,
+            @RequestParam(name = "className", required = false) String className,
+            @SessionAttribute("user") User user) {
         try {
-        //this is for if you choose book appointment from trainer or home page
+            // this is for if you choose book appointment from trainer or home page
             if (classId == null) {
                 List<FitnessClass> classList = fitnessClassService.getAllClasses();
-        User retrievedUser = userService.getUserByEmail(user.getEmail());
-        model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
-        int planTypeId = planService.findByPlanType(retrievedUser.getStatus()).getId();
-        List<Trainer> trainerList = trainerService.getTrainersByPlanId(planTypeId);
+                User retrievedUser = userService.getUserByEmail(user.getEmail());
+                model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
+                int planTypeId = planService.findByPlanType(retrievedUser.getStatus()).getId();
+                List<Trainer> trainerList = trainerService.getTrainersByPlanId(planTypeId);
 
+                // Formatting date and time for the frontend
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+                String formattedDateTimeNow = now.format(formatter);
+                LocalDateTime Activenow = LocalDateTime.now();
+                DateTimeFormatter Activeformatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+                LocalDate activeDate = user.getActiveDate(); // Assuming this is a LocalDate
+                LocalDateTime endOfActiveDate = activeDate.atTime(23, 59); // End of the active date
 
-        // Formatting date and time for the frontend
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        String formattedDateTimeNow = now.format(formatter);
-        LocalDateTime Activenow = LocalDateTime.now();
-        DateTimeFormatter Activeformatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        LocalDate activeDate = user.getActiveDate(); // Assuming this is a LocalDate
-        LocalDateTime endOfActiveDate = activeDate.atTime(23, 59); // End of the active date
-        
-        model.addAttribute("formattedDateTimeNow", Activenow.format(Activeformatter));
-        model.addAttribute("endOfActiveDate", endOfActiveDate.format(formatter)); // Pass as LocalDateTime formatted 
-        model.addAttribute("classList", classList);
-        model.addAttribute("trainerList", trainerList);
-        model.addAttribute("formattedDateTimeNow", formattedDateTimeNow);
+                model.addAttribute("formattedDateTimeNow", Activenow.format(Activeformatter));
+                model.addAttribute("endOfActiveDate", endOfActiveDate.format(formatter)); // Pass as LocalDateTime
+                                                                                          // formatted
+                model.addAttribute("classList", classList);
+                model.addAttribute("trainerList", trainerList);
+                model.addAttribute("formattedDateTimeNow", formattedDateTimeNow);
             } else {
-        // if you choose book appointment from view class
-        List<FitnessClass> classList = fitnessClassService.getAllClasses();
-        User retrievedUser = userService.getUserByEmail(user.getEmail());
-        model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
-        int planTypeId = planService.findByPlanType(retrievedUser.getStatus()).getId();
-        List<Trainer> trainerList = trainerService.getTrainersByPlanId(planTypeId);
+                // if you choose book appointment from view class
+                List<FitnessClass> classList = fitnessClassService.getAllClasses();
+                User retrievedUser = userService.getUserByEmail(user.getEmail());
+                model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
+                int planTypeId = planService.findByPlanType(retrievedUser.getStatus()).getId();
+                List<Trainer> trainerList = trainerService.getTrainersByPlanId(planTypeId);
 
-
-        // Formatting date and time for the frontend
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        String formattedDateTimeNow = now.format(formatter);
-        LocalDateTime Activenow = LocalDateTime.now();
-        DateTimeFormatter Activeformatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        LocalDate activeDate = user.getActiveDate(); // Assuming this is a LocalDate
-        LocalDateTime endOfActiveDate = activeDate.atTime(23, 59); // End of the active date
-        // Fetch the selected class by ID
-        FitnessClass fitnessClass = fitnessClassService.getClassById(classId);
-        model.addAttribute("classId", classId);
-        // Add the selected class to the model
-        model.addAttribute("fitnessClass", fitnessClass);
-        // Pass the class name as a model attribute
-        model.addAttribute("className", className);
-        model.addAttribute("formattedDateTimeNow", Activenow.format(Activeformatter));
-        model.addAttribute("endOfActiveDate", endOfActiveDate.format(formatter)); // Pass as LocalDateTime formatted 
-        model.addAttribute("classList", classList);
-        model.addAttribute("trainerList", trainerList);
-        model.addAttribute("formattedDateTimeNow", formattedDateTimeNow);
+                // Formatting date and time for the frontend
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+                String formattedDateTimeNow = now.format(formatter);
+                LocalDateTime Activenow = LocalDateTime.now();
+                DateTimeFormatter Activeformatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+                LocalDate activeDate = user.getActiveDate(); // Assuming this is a LocalDate
+                LocalDateTime endOfActiveDate = activeDate.atTime(23, 59); // End of the active date
+                // Fetch the selected class by ID
+                FitnessClass fitnessClass = fitnessClassService.getClassById(classId);
+                model.addAttribute("classId", classId);
+                // Add the selected class to the model
+                model.addAttribute("fitnessClass", fitnessClass);
+                // Pass the class name as a model attribute
+                model.addAttribute("className", className);
+                model.addAttribute("formattedDateTimeNow", Activenow.format(Activeformatter));
+                model.addAttribute("endOfActiveDate", endOfActiveDate.format(formatter)); // Pass as LocalDateTime
+                                                                                          // formatted
+                model.addAttribute("classList", classList);
+                model.addAttribute("trainerList", trainerList);
+                model.addAttribute("formattedDateTimeNow", formattedDateTimeNow);
             }
 
-        return "bookAppointment";}
-        catch (Exception e) {
-            // If any exception occurs, it will be caught here and redirected to the error page
+            return "bookAppointment";
+        } catch (Exception e) {
+            // If any exception occurs, it will be caught here and redirected to the error
+            // page
             return "errorStatus";
         }
     }
@@ -251,40 +243,41 @@ public String bookAppointment(@ModelAttribute Appointment appointment,
 
 
     @GetMapping("/edit_appointment_page")
-    public String editAppointmentPage(@RequestParam("appointmentId") int appointmentId, Model model, @SessionAttribute("user") User user) {
-        try{
-        Appointment appointment = appointmentService.getAppointmentById(appointmentId);
-        List<FitnessClass> classList = fitnessClassService.getAllClasses();
+    public String editAppointmentPage(@RequestParam("appointmentId") int appointmentId, Model model,
+            @SessionAttribute("user") User user) {
+        try {
+            Appointment appointment = appointmentService.getAppointmentById(appointmentId);
+            List<FitnessClass> classList = fitnessClassService.getAllClasses();
 
-        User retrievedUser = userService.getUserByEmail(user.getEmail());
-        model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
-        int userId = retrievedUser.getUserId(); // ID from user email
-        int planTypeId = planService.findByPlanType(retrievedUser.getStatus()).getId();
-        List<Trainer> trainerList = trainerService.getTrainersByPlanId(planTypeId);
+            User retrievedUser = userService.getUserByEmail(user.getEmail());
+            model.addAttribute("retrievedUser", retrievedUser); // Add retrievedUser to the model as an attribute
+            int userId = retrievedUser.getUserId(); // ID from user email
+            int planTypeId = planService.findByPlanType(retrievedUser.getStatus()).getId();
+            List<Trainer> trainerList = trainerService.getTrainersByPlanId(planTypeId);
 
+            // Formatting date and time for the frontend
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            String formattedDateTimeNow = now.format(formatter);
+            String formattedAppointmentDateTime = appointment.getDate().format(formatter);
 
-        // Formatting date and time for the frontend
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        String formattedDateTimeNow = now.format(formatter);
-        String formattedAppointmentDateTime = appointment.getDate().format(formatter);
+            model.addAttribute("userId", userId);
+            model.addAttribute("appointment", appointment);
+            model.addAttribute("classList", classList);
+            model.addAttribute("trainerList", trainerList);
+            model.addAttribute("status", appointment.getStatus());
+            model.addAttribute("formattedDateTimeNow", formattedDateTimeNow);
+            model.addAttribute("formattedAppointmentDateTime", formattedAppointmentDateTime);
 
-        model.addAttribute("userId", userId);
-        model.addAttribute("appointment", appointment);
-        model.addAttribute("classList", classList);
-        model.addAttribute("trainerList", trainerList);
-        model.addAttribute("status", appointment.getStatus());
-        model.addAttribute("formattedDateTimeNow", formattedDateTimeNow);
-        model.addAttribute("formattedAppointmentDateTime", formattedAppointmentDateTime);
-        
-        return "editAppointment";}
+            return "editAppointment";
+        }
 
         catch (Exception e) {
-            // If any exception occurs, it will be caught here and redirected to the error page
+            // If any exception occurs, it will be caught here and redirected to the error
+            // page
             return "errorStatus";
         }
     }
-    
 
     @PostMapping("/save_appointment")
     public String saveAppointment(@ModelAttribute Appointment appointment, 
@@ -353,7 +346,7 @@ public String bookAppointment(@ModelAttribute Appointment appointment,
     public String cancelAppointment(@RequestParam("appointmentId") int appointmentId) {
         // Retrieve the appointment by ID
         Appointment appointment = appointmentService.getAppointmentById(appointmentId);
-        
+
         // Check if the appointment status is "active"
         if (appointment.getStatus().equals("active")) {
             // Update the status to "inactive"
@@ -361,17 +354,15 @@ public String bookAppointment(@ModelAttribute Appointment appointment,
             // Save the updated appointment
             appointmentService.updateAppointment(appointment);
         }
-        
+
         // Redirect to the user's appointment page
         return "redirect:/userAppointment";
     }
 
-
-
-    
-    // // Method to fetch trainer ID by appointment ID for Thymeleaf template JGN DI HAPUS KERJA KERAS 6 JAM
+    // // Method to fetch trainer ID by appointment ID for Thymeleaf template JGN DI
+    // HAPUS KERJA KERAS 6 JAM
     // public int getTrainerIdByAppointmentId(int appointmentId) {
-    //     return appointmentService.getTrainerIdByAppointmentId(appointmentId);
+    // return appointmentService.getTrainerIdByAppointmentId(appointmentId);
     // }
 
 }

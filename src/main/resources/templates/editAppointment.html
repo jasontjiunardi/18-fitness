@@ -1,110 +1,134 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Edit Appointment</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            color: #4a154b;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        color: #4a154b;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
 
-        h1 {
-            color: #4a154b;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+      h1 {
+        color: #4a154b;
+        text-align: center;
+        margin-bottom: 20px;
+      }
 
-        form {
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff;
-        }
+      form {
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+      }
 
-        input[type="text"], input[type="password"], input[type="datetime-local"], select, button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #4a154b;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
+      input[type="text"],
+      input[type="password"],
+      input[type="datetime-local"],
+      select,
+      button {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #4a154b;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
 
-        button {
-            background-color: #4a154b;
-            color: #ffffff;
-            cursor: pointer;
-        }
+      button {
+        background-color: #4a154b;
+        color: #ffffff;
+        cursor: pointer;
+      }
 
-        button:hover {
-            background-color: #310b33;
-        }
+      button:hover {
+        background-color: #310b33;
+      }
 
-        a {
-            display: block;
-            text-align: center;
-            color: #4a154b;
-            text-decoration: none;
-            margin-top: 10px;
-        }
+      a {
+        display: block;
+        text-align: center;
+        color: #4a154b;
+        text-decoration: none;
+        margin-top: 10px;
+      }
 
-        a:hover {
-            text-decoration: underline;
-        }
+      a:hover {
+        text-decoration: underline;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Edit Appointment</h1>
-    <form th:action="@{/save_appointment}" th:object="${appointment}" method="post">
-        <!-- Hidden fields -->
-        <input type="hidden" th:field="*{appointmentId}" />
-        <input type="hidden" name="userId" th:value="${userId}" />
-        <input type="hidden" name="status" th:value="${status}" />
+    <form
+      th:action="@{/save_appointment}"
+      th:object="${appointment}"
+      method="post"
+    >
+      <!-- Hidden fields -->
+      <input type="hidden" th:field="*{appointmentId}" />
+      <input type="hidden" name="userId" th:value="${userId}" />
+      <input type="hidden" name="status" th:value="${status}" />
 
-        <!-- Class Selection Dropdown -->
-        <div>
-            <label for="classId">Class:</label>
-            <select id="classId" name="classId" required>
-                <option value="">Select Class</option>
-                <option th:each="class : ${classList}" th:value="${class.classId}" th:text="${class.className}"></option>
-            </select>
-        </div>
+      <!-- Class Selection Dropdown -->
+      <div>
+        <label for="classId">Class:</label>
+        <select id="classId" name="classId" required>
+          <option value="">Select Class</option>
+          <option
+            th:each="class : ${classList}"
+            th:value="${class.classId}"
+            th:text="${class.className}"
+          ></option>
+        </select>
+      </div>
 
-        <!-- Trainer Selection Dropdown -->
-        <div>
-            <label for="trainerId">Trainer:</label>
-            <select id="trainerId" name="trainerId" required>
-                <option value="">Select Trainer</option>
-                <option th:each="trainer : ${trainerList}" th:value="${trainer.id}" th:text="${trainer.name}"></option>
-            </select>
-        </div>
+      <!-- Trainer Selection Dropdown -->
+      <div>
+        <label for="trainerId">Trainer:</label>
+        <select id="trainerId" name="trainerId" required>
+          <option value="">Select Trainer</option>
+          <option
+            th:each="trainer : ${trainerList}"
+            th:value="${trainer.id}"
+            th:text="${trainer.name}"
+          ></option>
+        </select>
+      </div>
 
-        <!-- Date and Time Input -->
-        <div>
-            <label for="datetime">Date and Time:</label>
-            <input type="datetime-local" id="datetime" name="datetime" th:value="${formattedDateTimeNow}" th:min="${formattedDateTimeNow}" th:max="${endOfActiveDate}" required/>
-        </div>
+      <!-- Date and Time Input -->
+      <div>
+        <label for="datetime">Date and Time:</label>
+        <input
+          type="datetime-local"
+          id="datetime"
+          name="datetime"
+          th:value="${formattedDateTimeNow}"
+          th:min="${formattedDateTimeNow}"
+          th:max="${endOfActiveDate}"
+          required
+        />
+      </div>
 
         <!-- Error Message -->
         <p class="error-message" th:if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></p>
 
-        <!-- Submit Button -->
-        <button type="submit">Save Appointment</button>
+      <!-- Submit Button -->
+      <button type="submit">Save Appointment</button>
 
-        <!-- Back to Appointments Link -->
-        <a th:href="@{/userAppointment}">Back to Appointments</a>
+      <!-- Back to Appointments Link -->
+      <a th:href="@{/userAppointment}">Back to Appointments</a>
     </form>
-</body>
+  </body>
 </html>

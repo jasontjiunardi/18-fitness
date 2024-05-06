@@ -13,6 +13,7 @@ public class PaymentTransactionService {
     public PaymentTransactionService(PaymentTransactionRepo paymentTransactionRepo) {
         this.paymentTransactionRepo = paymentTransactionRepo;
     }
+
     public void deleteAllPaymentTransactionsbyUserId(int userId) {
         // TODO Auto-generated method stub
         List<PaymentTransaction> paymentTransactions = paymentTransactionRepo.findByUserUserId(userId);

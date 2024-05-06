@@ -1,144 +1,182 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Add Appointment</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    />
     <!-- Custom CSS -->
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #ffffff; /* White background */
-            color: #4a154b; /* Purple text color */
-            font-family: Arial, sans-serif;
-        }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #ffffff; /* White background */
+        color: #4a154b; /* Purple text color */
+        font-family: Arial, sans-serif;
+      }
 
-        .container {
-            width: 100%;
-            max-width: 400px;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff; /* White background for container */
-        }
+      .container {
+        width: 100%;
+        max-width: 400px;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff; /* White background for container */
+      }
 
-        h1 {
-            font-size: 36px; /* Larger font size for heading */
-            color: #4a154b; /* Purple heading color */
-            text-align: center;
-            margin-bottom: 50px; /* Added margin to bottom */
-        }
+      h1 {
+        font-size: 36px; /* Larger font size for heading */
+        color: #4a154b; /* Purple heading color */
+        text-align: center;
+        margin-bottom: 50px; /* Added margin to bottom */
+      }
 
-        form {
-            width: 100%;
-        }
+      form {
+        width: 100%;
+      }
 
-        label {
-            color: #4a154b; /* Purple label color */
-        }
+      label {
+        color: #4a154b; /* Purple label color */
+      }
 
-        select,
-        input[type="datetime-local"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #4a154b; /* Purple border */
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
+      select,
+      input[type="datetime-local"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #4a154b; /* Purple border */
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
 
-        button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            background-color: #4a154b; /* Purple button background */
-            color: #ffffff; /* White text color for button */
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+      button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        background-color: #4a154b; /* Purple button background */
+        color: #ffffff; /* White text color for button */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
 
-        button:hover {
-            background-color: #310b33; /* Darker purple on hover */
-        }
+      button:hover {
+        background-color: #310b33; /* Darker purple on hover */
+      }
 
-        .btn-secondary {
-            background-color: #6c308f; /* Darker purple for secondary button */
-            margin-top: 10px;
-        }
+      .btn-secondary {
+        background-color: #6c308f; /* Darker purple for secondary button */
+        margin-top: 10px;
+      }
 
-        .btn-secondary:hover {
-            background-color: #543c67; /* Darker purple on hover */
-        }
+      .btn-secondary:hover {
+        background-color: #543c67; /* Darker purple on hover */
+      }
 
-        p {
-            color: red; /* Red color for error message */
-            text-align: center;
-            margin-top: 10px;
-        }
+      p {
+        color: red; /* Red color for error message */
+        text-align: center;
+        margin-top: 10px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>Add Appointment</h1>
-        <form th:action="@{/manager_add_appointment}" method="post">
-            <!-- Customer Email Dropdown -->
-            <div class="form-group">
-                <label for="customerEmail">Customer Email:</label>
-                <select class="form-control" name="customerEmail" id="customerEmail" required>
-                    <option value="">Select Customer</option>
-                    <!-- Iterate over userList and display only email addresses -->
-                    <option th:each="user : ${userList}" th:value="${user.userId}" th:text="${user.email}"></option>
-                </select>
-            </div>
-            <!-- Class Selection Dropdown -->
-            <div class="form-group">
-                <label for="classId">Class:</label>
-                <select class="form-control" id="classId" name="classId" required>
-                    <option value="">Select Class</option>
-                    <!-- Iterate over classList and display className -->
-                    <option th:each="class : ${classList}" th:value="${class.classId}" th:text="${class.className}"
-                            th:selected="${class.classId == classId}"></option>
-                </select>
-            </div>
+      <h1>Add Appointment</h1>
+      <form th:action="@{/manager_add_appointment}" method="post">
+        <!-- Customer Email Dropdown -->
+        <div class="form-group">
+          <label for="customerEmail">Customer Email:</label>
+          <select
+            class="form-control"
+            name="customerEmail"
+            id="customerEmail"
+            required
+          >
+            <option value="">Select Customer</option>
+            <!-- Iterate over userList and display only email addresses -->
+            <option
+              th:each="user : ${userList}"
+              th:value="${user.userId}"
+              th:text="${user.email}"
+            ></option>
+          </select>
+        </div>
+        <!-- Class Selection Dropdown -->
+        <div class="form-group">
+          <label for="classId">Class:</label>
+          <select class="form-control" id="classId" name="classId" required>
+            <option value="">Select Class</option>
+            <!-- Iterate over classList and display className -->
+            <option
+              th:each="class : ${classList}"
+              th:value="${class.classId}"
+              th:text="${class.className}"
+              th:selected="${class.classId == classId}"
+            ></option>
+          </select>
+        </div>
 
-            <!-- Trainer Selection Dropdown -->
-            <div class="form-group">
-                <label for="trainerId">Trainer:</label>
-                <select class="form-control" id="trainerId" name="trainerId" required>
-                    <option value="">Select Trainer</option>
-                    <!-- Iterate over trainerList and display trainer's name -->
-                    <option th:each="trainer : ${trainerList}" th:value="${trainer.id}" th:text="${trainer.name}"></option>
-                </select>
-            </div>
-        
-            <!-- Date and Time Input -->
-            <div class="form-group">
-                <label for="datetime">Date and Time:</label>
-                <input type="datetime-local" class="form-control" id="datetime" name="datetime"
-                       th:value="${formattedDateTimeNow}" th:min="${formattedDateTimeNow}"
-                       th:max="${endOfActiveDate}" required/>
-            </div>
-            <!-- Submit Button -->
-            <button type="submit" onclick="validateUpdate(event)">Book Appointment</button>
-        
-            <!-- Button to go back to Appointments -->
-            <button class="btn btn-secondary" onclick="window.location.href='/manager_home_page'">Back</button>
-            <!-- Feedback messages -->
-            <p th:text="${error}"></p>
-            <p th:text="${message}"></p>
-        </form>
+        <!-- Trainer Selection Dropdown -->
+        <div class="form-group">
+          <label for="trainerId">Trainer:</label>
+          <select class="form-control" id="trainerId" name="trainerId" required>
+            <option value="">Select Trainer</option>
+            <!-- Iterate over trainerList and display trainer's name -->
+            <option
+              th:each="trainer : ${trainerList}"
+              th:value="${trainer.id}"
+              th:text="${trainer.name}"
+            ></option>
+          </select>
+        </div>
+
+        <!-- Date and Time Input -->
+        <div class="form-group">
+          <label for="datetime">Date and Time:</label>
+          <input
+            type="datetime-local"
+            class="form-control"
+            id="datetime"
+            name="datetime"
+            th:value="${formattedDateTimeNow}"
+            th:min="${formattedDateTimeNow}"
+            th:max="${endOfActiveDate}"
+            required
+          />
+        </div>
+        <!-- Submit Button -->
+        <button type="submit" onclick="validateUpdate(event)">
+          Book Appointment
+        </button>
+
+        <!-- Button to go back to Appointments -->
+        <button
+          class="btn btn-secondary"
+          onclick="window.location.href='/manager_home_page'"
+        >
+          Back
+        </button>
+        <!-- Feedback messages -->
+        <p th:text="${error}"></p>
+        <p th:text="${message}"></p>
+      </form>
     </div>
 
     <!-- Bootstrap JS and jQuery -->
@@ -146,13 +184,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <script>   
-        function validateUpdate(event) {
-            event.preventDefault(); // Prevent form submission
-            if (confirm("Are you sure you want to add this appointment?")) {
-                event.target.form.submit(); // Submit the form only if confirmed
-            }
+    <script>
+      function validateUpdate(event) {
+        event.preventDefault(); // Prevent form submission
+        if (confirm("Are you sure you want to add this appointment?")) {
+          event.target.form.submit(); // Submit the form only if confirmed
         }
+      }
     </script>
-</body>
+  </body>
 </html>

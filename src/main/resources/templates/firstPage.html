@@ -1,75 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Page Selection</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7; /* Light gray background */
-            color: #333333; /* Dark text color */
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7; /* Light gray background */
+        color: #333333; /* Dark text color */
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
 
-        h1, p {
-            width: 100%; /* Full width to align with the animation */
-            text-align: center;
-            margin-bottom: 20px;
-            opacity: 0;
-            animation: fadeIn 1s forwards; /* Animation name, duration, fill mode */
-        }
+      h1,
+      p {
+        width: 100%; /* Full width to align with the animation */
+        text-align: center;
+        margin-bottom: 20px;
+        opacity: 0;
+        animation: fadeIn 1s forwards; /* Animation name, duration, fill mode */
+      }
 
-        h1 {
-            font-size: 36px; /* Larger font size for heading */
-            animation-delay: 0.5s; /* Delay for heading */
-        }
+      h1 {
+        font-size: 36px; /* Larger font size for heading */
+        animation-delay: 0.5s; /* Delay for heading */
+      }
 
-        p {
-            animation-delay: 1s; /* Delay for paragraph */
-        }
+      p {
+        animation-delay: 1s; /* Delay for paragraph */
+      }
 
-        button {
-            padding: 10px 20px;
-            margin: 10px; /* Added margin around buttons */
-            border: none;
-            border-radius: 5px;
-            background-color: #4a154b; /* Purple button background */
-            color: #ffffff; /* White text color for button */
-            cursor: pointer;
-            opacity: 0; /* Start with a transparent button */
-            animation: fadeIn 0.5s forwards; /* Animation name, duration, fill mode */
-            animation-delay: calc(1.5s + var(--button-order) * 0.5s); /* Delay based on order */
-        }
+      button {
+        padding: 10px 20px;
+        margin: 10px; /* Added margin around buttons */
+        border: none;
+        border-radius: 5px;
+        background-color: #4a154b; /* Purple button background */
+        color: #ffffff; /* White text color for button */
+        cursor: pointer;
+        opacity: 0; /* Start with a transparent button */
+        animation: fadeIn 0.5s forwards; /* Animation name, duration, fill mode */
+        animation-delay: calc(
+          1.5s + var(--button-order) * 0.5s
+        ); /* Delay based on order */
+      }
 
-        button:hover {
-            background-color: #310b33; /* Darker purple on hover */
-        }
+      button:hover {
+        background-color: #310b33; /* Darker purple on hover */
+      }
 
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(-20px); /* Start from above */
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0); /* End at current position */
-            }
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(-20px); /* Start from above */
         }
+        100% {
+          opacity: 1;
+          transform: translateY(0); /* End at current position */
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Welcome To 18-Fitness Website!</h1>
     <p>Please select an option:</p>
-    <button style="--button-order:1;" onclick="window.location.href='/register_user'">User Signup</button>
-    <button style="--button-order:2;" onclick="window.location.href='/user_signin'">User Login</button>
-    <button style="--button-order:3;" onclick="window.location.href='/manager_signin'">Manager Login</button>
-    <button style="--button-order:4;" onclick="window.location.href='/browse_plans'">Browse Available Plans</button>
-</body>
+    <button
+      style="--button-order: 1"
+      onclick="window.location.href='/register_user'"
+    >
+      User Signup
+    </button>
+    <button
+      style="--button-order: 2"
+      onclick="window.location.href='/user_signin'"
+    >
+      User Login
+    </button>
+    <button
+      style="--button-order: 3"
+      onclick="window.location.href='/manager_signin'"
+    >
+      Manager Login
+    </button>
+    <button
+      style="--button-order: 4"
+      onclick="window.location.href='/browse_plans'"
+    >
+      Browse Available Plans
+    </button>
+  </body>
 </html>
