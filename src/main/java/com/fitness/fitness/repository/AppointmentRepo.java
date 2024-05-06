@@ -9,12 +9,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.fitness.fitness.model.Appointment;
+import com.fitness.fitness.model.Review;
+import com.fitness.fitness.model.Trainer;
 
 import jakarta.transaction.Transactional;
 
 
 @Repository
 public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
+    List<Appointment> findByTrainer(Trainer trainer);
     Appointment getAppointmentByAppointmentId(int appointmentId);
     
     @Query("SELECT a.appointmentId FROM Appointment a WHERE a.user.id = :userId")

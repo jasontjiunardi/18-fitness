@@ -121,6 +121,37 @@
         .logout i {
             margin-right: 10px; /* Add space between icon and text */
         }
+
+        .active-link {
+            background-color: #575757; /* Adjust the color as needed */
+        }
+
+        .content {
+            display: none; 
+        }
+
+        .collapsible {
+            background-color: #111; 
+            color: white;
+            padding: 10px 15px;
+            text-align: left;
+            text-decoration: none;
+            display: block;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            outline: none;
+            font-size: 18px;
+        }
+
+        .collapsible.active {
+            background-color: #000000; 
+        }
+
+        .sub {
+            padding-left: 40px; 
+            font-size: 16px;
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
@@ -203,20 +234,59 @@
         function refreshTable() {
             location.reload();
         }
+        document.addEventListener("DOMContentLoaded", function() {
+            var currentPath = window.location.pathname;
+            if (currentPath === '/managerViewTrainers') {
+                document.getElementById('viewTrainersLink').classList.add('active-link');
+            }
+        });
     </script>
 </head>
 <body>
     <div class="sidebar">
-        <a href="/managerViewTrainers">View Trainers</a>
+        <a href="/managerViewTrainers" style="background-color: #575757;">View Trainers</a>
         <a href="/manager_appointment">Appointment Records</a>
         <a href="/managerViewUsers">View Customers</a>
         <a href="/manager_view_plans">View Plans</a>
+        <button class="button collapsible">View Reports &#9660;</button>
+        <!-- Sub-buttons -->
+        <div class="content">
+            <a href="#" id="income" class="sub button">Income</a>
+            <a href="#" id="profit" class="sub button">Profit</a>
+            <a href="#" id="expenses" class="sub button">Expenses</a>
+        </div>
         <!-- Logout button with an icon -->
         <a href="/first_page" class="logout">
             <i class="fa fa-sign-out"></i> <!-- Use any suitable icon library -->
-            Log Out
+            Log Out 
         </a>
     </div>
+
+    <script>
+        var toggleButton = document.querySelector('.collapsible');
+        var subMenu = document.querySelector('.content');
+
+        toggleButton.addEventListener('click', function() {
+            subMenu.style.display = subMenu.style.display === 'block' ? 'none' : 'block';
+            toggleButton.classList.toggle('active');
+        });
+
+        // Function to handle click on each sub-menu
+        function handleSubMenuClick(event) {
+            // Get today's date in 'YYYY-MM-DD' format
+            var today = new Date().toISOString().slice(0, 10);
+            // Get the ID of the clicked link
+            var id = event.target.id;
+            // Redirect to URL by appending today's date as 'startDate' and 'endDate' parameters
+            window.location.href = '/' + id + '?startDate=' + today + '&endDate=' + today;
+        }
+
+        document.querySelectorAll('.sub').forEach(function(sub) {
+            sub.addEventListener('click', handleSubMenuClick);
+        });
+    </script>
+
+
     <div class="main-content">
         <h1><b>Trainers List</b></h1>
         <button onclick="refreshTable()" class="btn btn-secondary refresh-btn"><i class="fas fa-sync-alt"></i> Refresh</button> <!-- Refresh Button -->
@@ -224,7 +294,7 @@
         <table class="table table-striped table-bordered table-hover" id="trainersTable">
             <thead class="thead-light">
                 <tr>
-                    <th>Profile Picture</th>
+                    <th class="no-sort">Profile Picture</th>
                     <th onclick="sortTable(1, 'number')">ID</th>
                     <th onclick="sortTable(2, 'string')">Name</th>
                     <th onclick="sortTable(3, 'number')">Age</th>
@@ -234,8 +304,9 @@
                     <th onclick="sortTable(7, 'string')">Phone</th>
                     <th onclick="sortTable(8, 'string')">Since</th>
                     <th onclick="sortTable(9, 'number')">Rank</th>
-                    <th class="no-sort">Promote/Demote</th> <!-- Added class "no-sort" -->
-                    <th class="no-sort">Edit</th> <!-- Added class "no-sort" -->
+                    <th class="no-sort">Promote/Demote</th>
+                    <th class="no-sort">Edit</th>
+                    <th class="no-sort">Customer Reviews</th>
                 </tr>
             </thead>
             <tbody>
@@ -259,6 +330,14 @@
                         </form>
                     </td>
                     <td><a th:href="@{'/editTrainer/' + ${trainer.id}}" class="btn btn-primary" style="background-color: #4a154b; border-color: #4a154b;">Edit</a ></td>
+                        <td>
+                            <form method="get" action="/managerviewtrainerReview">
+                                <input type="hidden" name="trainerId" th:value="${trainer.id}">
+                                <button type="submit" class="btn btn-primary" style="background-color: #4a154b; border-color: #4a154b;">
+                                    Customer Reviews
+                                </button>
+                            </form>                    
+                        </td>                                                
                 </tr>
             </tbody>
         </table>

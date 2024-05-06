@@ -111,6 +111,13 @@
         <div th:each="review : ${reviews}" class="review-box">
             <p>Date added: <span th:text="${#temporals.format(review.date, 'yyyy-MM-dd HH:mm')}"></span></p>
             <p>Comment: <span th:text="${review.comment}"></span></p>
+            <!-- Render the "Remove Review" button if the logged-in user owns the review -->
+            <div th:if="${review.user.userId == session.user.userId}">
+                <form th:action="@{/removeReview}" method="post">
+                    <input type="hidden" name="reviewId" th:value="${review.id}" />
+                    <button type="submit">Remove Review</button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -120,6 +127,8 @@
         <button type="submit">Add Review</button>
     </form>
 </div>
+
+
 
 
 

@@ -3,6 +3,7 @@ package com.fitness.fitness.controller;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.fitness.fitness.model.FitnessClass;
+import com.fitness.fitness.model.User;
+import com.fitness.fitness.service.FitnessClassService;
 
 import com.fitness.FileUploadUtil;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -29,10 +33,14 @@ import com.fitness.fitness.model.Income;
 import com.fitness.fitness.model.Manager;
 import com.fitness.fitness.model.PaymentTransaction;
 import com.fitness.fitness.model.Appointment;
+import com.fitness.fitness.model.Expense;
+import com.fitness.fitness.model.FitnessClass;
 import com.fitness.fitness.model.Manager;
 import com.fitness.fitness.model.Plan;
+import com.fitness.fitness.model.Review;
 import com.fitness.fitness.model.Trainer;
 import com.fitness.fitness.model.User;
+import com.fitness.fitness.repository.ExpenseRepo;
 import com.fitness.fitness.repository.IncomeRepo;
 import com.fitness.fitness.repository.PaymentTransactionRepo;
 import com.fitness.fitness.repository.PlanRepo;
@@ -42,6 +50,7 @@ import com.fitness.fitness.service.AppointmentService;
 import com.fitness.fitness.service.EmailService;
 import com.fitness.fitness.service.ManagerService;
 import com.fitness.fitness.service.PlanService;
+import com.fitness.fitness.service.ReviewService;
 import com.fitness.fitness.service.TrainerService;
 import com.fitness.fitness.service.UserService;
 
@@ -74,6 +83,8 @@ public class ManagerController {
     @Autowired
     private IncomeRepo incomeRepo;
 
+    @Autowired
+    private ReviewService reviewService;
     
     //  cb cek ulang ini
     @Autowired
@@ -85,57 +96,11 @@ public class ManagerController {
     @Autowired
     private PlanRepo planRepo;
 
-    // cb cek ulang ini
-    // @GetMapping("/manager_add_appointment")
-    // public String showAddAppointmentForm(Model model) {
-    // List<Trainer> trainers = trainerRepo.findAll();
-    // Manager manager = new Manager();
-    // LocalDate currentDate = LocalDate.now();
-    // model.addAttribute("trainers", trainers);
-    // model.addAttribute("appointment", manager);
-    // model.addAttribute("currentDate", currentDate);
-    // return "manager-add-appointment";
-    // }
+    @Autowired
 
-    // @PostMapping("/manager_add_appointment")
-    // public String addAppointment(@ModelAttribute("appointment") Manager manager,
-    // Model model) {
-    // LocalDate currentDate = LocalDate.now();
-    // LocalTime currentTime = LocalTime.now();
+    private ExpenseRepo expenseRepo;
 
-    // // Check if the entered email corresponds to an existing user
-    // User user = userService.getUserByEmail(manager.getCustomerEmail());
-    // if (user == null) {
-    // model.addAttribute("error", "No user found with the entered email.");
-    // // Retrieve the list of trainers and add it to the model
-    // List<Trainer> trainers = trainerRepo.findAll();
-    // model.addAttribute("trainers", trainers);
-    // model.addAttribute("currentDate", currentDate); // Add currentDate to the
-    // model
-    // return "manager-add-appointment";
-    // }
-
-    // if (manager.getPreferredTrainer().isEmpty()
-    // || manager.getClassName().isEmpty() || manager.getDate() == null
-    // || manager.getTimeSlot() == null) {
-    // model.addAttribute("error", "All fields are required.");
-    // } else if (manager.getDate().isBefore(currentDate) ||
-    // (manager.getDate().isEqual(currentDate) &&
-    // manager.getTimeSlot().isBefore(currentTime))) {
-    // model.addAttribute("error", "You cannot book appointments in the past.");
-    // } else {
-    // managerService.manageraddAppointment(manager);
-    // model.addAttribute("message", "Appointment added successfully!");
-    // }
-
-    // // Retrieve the list of trainers and add it to the model
-    // List<Trainer> trainers = trainerRepo.findAll();
-    // model.addAttribute("trainers", trainers);
-    // model.addAttribute("currentDate", currentDate); // Add currentDate to the
-    // model
-
-    // return "manager-add-appointment";
-    // }
+    private FitnessClassService fitnessClassService;
 
     @GetMapping("/manager_home_page")
     public String getHomePage(Model model, @SessionAttribute("manager") Manager manager) {
@@ -248,9 +213,13 @@ public class ManagerController {
     }
 
     @PostMapping("/removeTrainer/{id}")
-    public String removeTrainer(@PathVariable("id") int id) {
-        // Remove the trainer from the database
-        trainerService.removeTrainer(id);
+    public String removeTrainer(@PathVariable("id") int id, RedirectAttributes redirectAttributes) {
+        try {
+            trainerService.removeTrainer(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Trainer removed successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error removing trainer: " + e.getMessage());
+        }
         return "redirect:/managerViewTrainers";
     }
 
@@ -291,14 +260,10 @@ public class ManagerController {
                                     @RequestParam("endDate") LocalDate endDate,
                                     Model model) {             
         
-        // Cari transaksi pembayaran sesuai rentang tanggal yang dipilih
         List<PaymentTransaction> paymentTransactions = paymentTransactionRepo.findByPurchasedDateBetween(startDate, endDate);
-        // Iterasi melalui setiap transaksi pembayaran
         for (PaymentTransaction transaction : paymentTransactions) {
-            // Cek apakah sudah ada entri pendapatan dengan incomeId yang sama
             Income existingIncome = incomeRepo.findByIncomeId(transaction.getTransactionId());
             if (existingIncome == null) {
-                // Jika tidak ada, buat entri baru
                 Income income = new Income();
                 income.setAmount(transaction.getPrice());
                 income.setDate(transaction.getPurchasedDate());
@@ -307,34 +272,72 @@ public class ManagerController {
                 incomeRepo.save(income);
             } 
         }
-        // Cari data pendapatan sesuai rentang tanggal yang dipilih
         List<Income> incomeList = incomeRepo.findByDateBetween(startDate, endDate);
-        // Hitung total amount
         double totalAmount = 0;
         for (Income income : incomeList) {
             totalAmount += income.getAmount();
         }
-        // Tambahkan data pendapatan ke model untuk ditampilkan di HTML
         model.addAttribute("incomeList", incomeList);
         model.addAttribute("totalAmount", totalAmount);
         return "income_report";
     }
 
-    @GetMapping("/cashflows")
-    public String showCashflowsReport(Model model) {
-        // Logika untuk menampilkan laporan arus kas
-        return "cashflows_report"; 
+    @GetMapping("/profit")
+    public String showProfitReport(@RequestParam("startDate") LocalDate startDate,
+                                    @RequestParam("endDate") LocalDate endDate,
+                                    Model model) {
+        List<Income> incomeList = incomeRepo.findByDateBetween(startDate, endDate);
+        List<Expense> expenseList = expenseRepo.findByDateBetween(startDate, endDate);
+        double totalIncome = calculateTotalIncome(incomeList);
+        double totalExpenses = calculateTotalExpenses(expenseList);
+        double totalProfit = totalIncome - totalExpenses;
+        
+        model.addAttribute("incomeList", incomeList);
+        model.addAttribute("expenseList", expenseList);
+        model.addAttribute("totalProfit", totalProfit);
+        
+        return "profit_report"; 
     }
 
-    @GetMapping("/expenses")
-    public String showExpensesReport(Model model) {
-        // Logika untuk menampilkan laporan biaya
-        return "expenses_report"; 
+    
+    private double calculateTotalIncome(List<Income> incomeList) {
+        double totalIncome = 0;
+        for (Income income : incomeList) {
+            totalIncome += income.getAmount();
+        }
+        return totalIncome;
     }
+    
+    private double calculateTotalExpenses(List<Expense> expenseList) {
+        double totalExpenses = 0;
+        for (Expense expense : expenseList) {
+            totalExpenses += expense.getAmount();
+        }
+        return totalExpenses;
+    }
+    
+
+    @GetMapping("/expenses")
+    public String showExpensesReport(@RequestParam("startDate") LocalDate startDate,
+                                     @RequestParam("endDate") LocalDate endDate,
+                                     Model model) {
+        List<Expense> expenseList = expenseRepo.findByDateBetween(startDate, endDate);
+       
+        double totalExpenses = 0;
+        for (Expense expense : expenseList) {
+            totalExpenses += expense.getAmount();
+        }
+    
+        model.addAttribute("expenseList", expenseList);
+        model.addAttribute("totalExpenses", totalExpenses);
+    
+        return "expenses_report";
+    }
+
     
     @PostMapping("/removeUser/{email}")
     public String removeUser(@PathVariable("email") String email) {
-        // Remove the trainer from the database
+
         userService.removeUser(email);
         return "redirect:/managerViewUsers";
     }
@@ -392,5 +395,97 @@ public ResponseEntity<String> sendEmail(@PathVariable("email") String email) {
     }
 }
 
+
+    @GetMapping("/manager_add_appointment")
+    public String showAddAppointmentForm(@RequestParam(name = "classId", required = false) Integer classId,
+                                         @RequestParam(name = "className", required = false) String className,
+                                         @ModelAttribute User user, Model model, 
+                                         @ModelAttribute("trainer") Trainer trainer,
+                                         @SessionAttribute("manager") Manager manager) 
+        {
+      
+        List<FitnessClass> classList = fitnessClassService.getAllClasses();
+        List<User> userList = userService.getAllUsers();
+        List<Trainer> trainerList = trainerService.getAllTrainers();
+
+        // Formatting date and time for the frontend
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        String formattedDateTimeNow = now.format(formatter);
+        LocalDateTime Activenow = LocalDateTime.now();
+        DateTimeFormatter Activeformatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        User existingUser = userService.getUserByEmail(user.getEmail());
+
+        model.addAttribute("formattedDateTimeNow", Activenow.format(Activeformatter));
+        model.addAttribute("classList", classList);
+        model.addAttribute("formattedDateTimeNow", formattedDateTimeNow);
+        model.addAttribute("manager", manager);
+        model.addAttribute("user", existingUser);
+        model.addAttribute("userList", userList);
+        model.addAttribute("trainerList", trainerList);
+
+        return "manager-add-appointment";
+    }
+
+   
+        
+    
+    
+
+   
+
+    @PostMapping("/manager_add_appointment")
+    public String addAppointment(@ModelAttribute Appointment appointment, 
+                                @RequestParam("customerEmail") int userId,
+                                @RequestParam("classId") int classId,
+                                @RequestParam("trainerId") int trainerId,
+                                @RequestParam("datetime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime datetime,
+                                Model model) {
+
+        // Fetch the related FitnessClass and Trainer objects based on the IDs provided
+        FitnessClass fitnessClass = fitnessClassService.getClassById(classId);
+        Trainer trainer = trainerService.getTrainerById(trainerId);
+        User user = userService.getUserById(userId);
+
+        // Set the fetched entities to the appointment
+        appointment.setFitnessClass(fitnessClass);
+        appointment.setTrainer(trainer);
+        
+        // Set the user obtained from the form submission
+        User retrivedUser = userService.getUserByEmail(user.getEmail());
+        appointment.setUser(retrivedUser);
+        appointment.setUser(user);
+
+        // Set the date and time for the appointment
+        appointment.setDate(datetime);
+
+        // Set the status of the appointment to "active"
+        appointment.setStatus("active");
+
+        // Save the appointment to the database
+        appointmentService.saveAppointment(appointment);
+        
+        return "redirect:/manager_home_page";
+        }
+        
+        @GetMapping("/managerviewtrainerReview")
+        public String viewReviews(Model model, @RequestParam("trainerId") int trainerId) {
+        List<Trainer> trainers = trainerService.getAllTrainers();
+        model.addAttribute("trainers", trainers);
+
+        Trainer trainer = trainerService.getTrainerById(trainerId);
+        List<Review> reviews = reviewService.findByTrainer(trainer);
+        model.addAttribute("reviews", reviews);
+
+        model.addAttribute("trainer", trainer);
+
+        return "managerViewReviews";
+    }
+    
+    @PostMapping("/removeReview/{id}")
+    public String removeReviewById(@PathVariable("id") int id) {
+        reviewService.deleteReview(id);
+        return "redirect:/managerViewTrainers";
+    }
 
 }

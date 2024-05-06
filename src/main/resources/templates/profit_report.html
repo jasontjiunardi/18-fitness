@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Income Report</title>
+    <title>Profit Report</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
@@ -75,7 +75,7 @@
             background-color: #f2f2f2;
         }
 
-        #totalAmount {
+        #totalProfit {
             color: black;
             font-weight: bold;
         }
@@ -154,7 +154,7 @@
 </head>
 <body>
     <div class="container">
-        <h1><b>Income Report</b></h1>
+        <h1><b>Profit Report</b></h1>
 
         <form id="dateRangeForm">
             <label for="startDate">Start Date:</label>
@@ -172,19 +172,26 @@
                     <th>Amount <button onclick="sortAmount(2)" class="btn btn-link"><i class="fas fa-sort"></i></button></th>
                 </tr>
             </thead>
-            <tbody id="incomeTableBody">
-                <!-- Income data will be displayed here -->
-                <!-- <%-- This is using Thymeleaf, use as per the templating framework being used --%> -->
+            <tbody id="profitTableBody">
+                <!-- Data Expenses -->
+                <tr th:each="expense : ${expenseList}">
+                    <td th:text="${expense.date}"></td>
+                    <td th:text="${expense.description}"></td>
+                    <td th:text="${expense.amount}"></td>
+                </tr>
+                <!-- Data Incomes -->
                 <tr th:each="income : ${incomeList}">
                     <td th:text="${income.date}"></td>
                     <td th:text="${income.description}"></td>
                     <td th:text="${income.amount}"></td>
                 </tr>
             </tbody>
+            <tfoot>
+             
+            </tfoot>
         </table>
 
-        <!-- Element to display total amount -->
-        <div>Total Income: <span id="totalAmount" th:text="${totalAmount}">0.00</span></div>
+        <div>Total Profit: <span id="totalProfit" th:text="${totalProfit}">0.00</span></div>
     </div>
 
     <!-- Sidebar -->
@@ -196,8 +203,8 @@
         <button class="button collapsible">View Reports &#9660;</button>
         <!-- Sub-buttons -->
         <div class="content">
-            <a href="#" id="income" class="sub button" style="background-color: #575757;">Income</a>
-            <a href="#" id="profit" class="sub button">Profit</a>
+            <a href="#" id="income" class="sub button">Income</a>
+            <a href="#" id="profit" class="sub button" style="background-color: #575757;">Profit</a>
             <a href="#" id="expenses" class="sub button">Expenses</a>
         </div>
         <!-- Logout button with an icon -->
@@ -216,13 +223,9 @@
             toggleButton.classList.toggle('active');
         });
 
-        // Function to handle click on each sub-menu
         function handleSubMenuClick(event) {
-            // Get today's date in 'YYYY-MM-DD' format
             var today = new Date().toISOString().slice(0, 10);
-            // Get the ID of the clicked link
             var id = event.target.id;
-            // Redirect to URL by appending today's date as 'startDate' and 'endDate' parameters
             window.location.href = '/' + id + '?startDate=' + today + '&endDate=' + today;
         }
 
@@ -240,25 +243,30 @@
                 return;
             }
 
-            // Set URL with selected dates
-            var url = new URL("http://localhost:8080/income");
+            var url = new URL("http://localhost:8080/profit");
             var params = {startDate: startDate, endDate: endDate};
             url.search = new URLSearchParams(params).toString();
 
-            // Update URL
             window.location.href = url;
 
-            // Send request to backend
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    // Update table with income data received from backend
-                    var tableBody = document.getElementById("incomeTableBody");
+                    var tableBody = document.getElementById("profitTableBody");
                     tableBody.innerHTML = "";
-                    data.forEach(income => {
+                    var totalExpenses = 0;
+                    var totalIncome = 0;
+                    data.expenses.forEach(expense => {
                         var row = document.createElement("tr");
-                        row.innerHTML = "<td>" + income.date + "</td><td>" + income.description + "</td><td>" + income.amount + "</td><td>" + income.IncomeId + "</td>";
+                        row.innerHTML = "<td>" + expense.date + "</td><td>" + expense.description + "</td><td>" + expense.amount + "</td>";
                         tableBody.appendChild(row);
+                        totalExpenses += parseFloat(expense.amount);
+                    });
+                    data.incomes.forEach(income => {
+                        var row = document.createElement("tr");
+                        row.innerHTML = "<td>" + income.date + "</td><td>" + income.description + "</td><td>" + income.amount + "</td>";
+                        tableBody.appendChild(row);
+                        totalIncome += parseFloat(income.amount);
                     });
                 })
                 .catch(error => console.error('Error:', error));

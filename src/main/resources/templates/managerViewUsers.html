@@ -25,6 +25,22 @@
             padding-top: 20px;
         }
 
+        .sidebar button {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .sidebar button:hover, .sidebar button:focus {
+            background-color: #575757;
+        }
+
         .sidebar a {
             padding: 10px 15px;
             text-decoration: none;
@@ -83,6 +99,53 @@
         .refresh-btn:hover, .refresh-btn:focus {
             background-color: #310b33; /* Darker background color on hover */
         }
+
+        .logout {
+            position: absolute;
+            bottom: 20px; 
+            left: 20px; 
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .logout:hover {
+            background-color: #575757; 
+        }
+
+        .logout i {
+            margin-right: 10px; 
+        }
+
+        .content {
+            display: none; 
+        }
+
+        .collapsible {
+            background-color: #111; 
+            color: white;
+            padding: 10px 15px;
+            text-align: left;
+            text-decoration: none;
+            display: block;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            outline: none;
+            font-size: 18px;
+        }
+
+        .collapsible.active {
+            background-color: #000000; 
+        }
+
+        .sub {
+            padding-left: 40px; 
+            font-size: 16px;
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
@@ -90,10 +153,47 @@
 </head>
 <body>
     <div class="sidebar">
-        <a href="/managerViewTrainers">View Trainers</a>
-        <a href="/manager_appointment">Appointment Records</a>
-        <a href="/managerViewUsers">View Customers</a>
+        <button onclick="window.location='/managerViewTrainers'">View Trainers</button>
+        <button onclick="window.location='/manager_appointment'">Appointment Records</button>
+        <button onclick="window.location='/managerViewUsers'" style="background-color: #575757;">View Customers</button>
+        <button onclick="window.location='/manager_view_plans'">View Plans</button>
+        <button class="button collapsible">View Reports &#9660;</button>
+        <!-- Sub-buttons -->
+        <div class="content">
+            <a href="#" id="income" class="sub button">Income</a>
+            <a href="#" id="profit" class="sub button">Profit</a>
+            <a href="#" id="expenses" class="sub button">Expenses</a>
+        </div>
+        <a href="/first_page" class="logout">
+            <i class="fa fa-sign-out"></i> 
+            Log Out
+        </a>
     </div>
+
+    <script>
+        var toggleButton = document.querySelector('.collapsible');
+        var subMenu = document.querySelector('.content');
+
+        toggleButton.addEventListener('click', function() {
+            subMenu.style.display = subMenu.style.display === 'block' ? 'none' : 'block';
+            toggleButton.classList.toggle('active');
+        });
+
+        // Function to handle click on each sub-menu
+        function handleSubMenuClick(event) {
+            // Get today's date in 'YYYY-MM-DD' format
+            var today = new Date().toISOString().slice(0, 10);
+            // Get the ID of the clicked link
+            var id = event.target.id;
+            // Redirect to URL by appending today's date as 'startDate' and 'endDate' parameters
+            window.location.href = '/' + id + '?startDate=' + today + '&endDate=' + today;
+        }
+
+        document.querySelectorAll('.sub').forEach(function(sub) {
+            sub.addEventListener('click', handleSubMenuClick);
+        });
+    </script>
+
     <div class="container main-content"> <!-- Added main-content class -->
         <h1 class="mb-4"><b>Users List</b></h1> <!-- Added margin-bottom for separation -->
         <table class="table table-striped table-bordered table-hover">
