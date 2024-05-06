@@ -14,17 +14,17 @@ import jakarta.persistence.criteria.From;
 import jakarta.transaction.Transactional;
 
 @Repository
-public interface UserRepo extends JpaRepository<User, Integer>{
+public interface UserRepo extends JpaRepository<User, Integer> {
     public User findByEmail(String email);
+
     @Modifying
     @Transactional
     @Query("UPDATE User u SET u.password = :password WHERE u.email = :email")
     void updatePasswordByEmail(@Param("email") String email, @Param("password") String password);
+
     @Modifying
     @Transactional
     @Query("UPDATE User u SET u.status = 'Inactive', u.activeDate = NULL WHERE u.activeDate < ?1")
     int updateExpiredUsers(LocalDate currentDate);
-
-
 
 }

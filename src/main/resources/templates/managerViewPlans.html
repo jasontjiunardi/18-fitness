@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Manage Plans</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <style>
-        .header {
-            text-align: center;
-        }
-        .return-button {
-            text-align: center;
-            margin-top: 20px;
-        }
+      .header {
+        text-align: center;
+      }
+      .return-button {
+        text-align: center;
+        margin-top: 20px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="header">
-        <h1>View and Edit Plans</h1>
+      <h1>View and Edit Plans</h1>
     </div>
     <div class="wrapper">
-        <div th:each="plan : ${plans}">
-            <div class="card">
-                <div class="card-content">
-                    <h3 th:text="${plan.planType}">Plan Type</h3>
-                    <p th:text="'Details: ' + ${plan.planDetails}">Plan Details</p>
-                    <a th:href="@{/editPlan/{id}(id=${plan.id})}" class="button">Edit</a>
-                </div>
-            </div>
+      <div th:each="plan : ${plans}">
+        <div class="card">
+          <div class="card-content">
+            <h3 th:text="${plan.planType}">Plan Type</h3>
+            <p th:text="'Details: ' + ${plan.planDetails}">Plan Details</p>
+            <a th:href="@{/editPlan/{id}(id=${plan.id})}" class="button"
+              >Edit</a
+            >
+          </div>
         </div>
+      </div>
     </div>
     <div class="return-button">
-        <a href="/manager_home_page" class="button">Return to Home</a>
+      <a href="/manager_home_page" class="button">Return to Home</a>
     </div>
-    
-</body>
+  </body>
 </html>

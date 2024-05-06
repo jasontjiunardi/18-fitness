@@ -10,11 +10,9 @@ import com.fitness.fitness.repository.AppointmentRepo;
 
 import jakarta.transaction.Transactional;
 
-
 @Service
 public class AppointmentService {
 
-    
     private AppointmentRepo appointmentRepo;
 
     @Autowired
@@ -34,7 +32,7 @@ public class AppointmentService {
         return appointmentRepo.findTrainerNameByAppointmentId(appointmentId);
     }
 
-    public String getClassNameByAppointmentId(int appointmentId){
+    public String getClassNameByAppointmentId(int appointmentId) {
         return appointmentRepo.findClassNameByAppointmentId(appointmentId);
     }
 
@@ -42,36 +40,42 @@ public class AppointmentService {
         return appointmentRepo.findDateTimeByAppointmentId(appointmentId);
     }
 
-    public String getStatusByAppointmentId(int appointmentId){
+    public String getStatusByAppointmentId(int appointmentId) {
         return appointmentRepo.findStatusByappointmentId(appointmentId);
     }
 
     public int getUserIdByAppointmentId(int appointmentId) {
-    Appointment appointment = appointmentRepo.findById(appointmentId).orElseThrow();
-    return appointment.getUser().getUserId();
+        Appointment appointment = appointmentRepo.findById(appointmentId).orElseThrow();
+        return appointment.getUser().getUserId();
     }
 
     public int deactivatePastAppointments() {
-    LocalDateTime currentDateTime = LocalDateTime.now();
-    return appointmentRepo.updateStatusForPastAppointments(currentDateTime);
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        return appointmentRepo.updateStatusForPastAppointments(currentDateTime);
     }
 
     @Transactional
     public void updateAppointment(Appointment appointment) {
-            appointmentRepo.save(appointment); // save method handles both insert and update
+        appointmentRepo.save(appointment); // save method handles both insert and update
 
     }
-//its the same as the update appointment above but this one i just create a separate method to make it more separate and clear - herman
+
+    // its the same as the update appointment above but this one i just create a
+    // separate method to make it more separate and clear - herman
     @Transactional
     public void saveAppointment(Appointment appointment) {
         appointmentRepo.save(appointment);
     }
-    public List<Appointment> findAllAppointment(){
+
+    public List<Appointment> findAllAppointment() {
         return appointmentRepo.findAll();
     }
-    public List<Appointment> findAppointmentsByFilters(int userId, Integer classId, Integer trainerId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+
+    public List<Appointment> findAppointmentsByFilters(int userId, Integer classId, Integer trainerId,
+            LocalDateTime startDateTime, LocalDateTime endDateTime) {
         return appointmentRepo.findAppointmentsByFilters(userId, classId, trainerId, startDateTime, endDateTime);
     }
+
     public void deleteAllAppointmentbyUserId(int userId) {
         List<Integer> appointments = appointmentRepo.findAppointmentIdsByUserId(userId);
         for (int id : appointments) {
@@ -79,12 +83,3 @@ public class AppointmentService {
         }
     }
 }
-    
-
-    
-
-
-
-
-    
-

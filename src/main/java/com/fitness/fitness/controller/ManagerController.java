@@ -7,7 +7,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -57,12 +56,11 @@ import com.fitness.fitness.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @Controller
 public class ManagerController {
     @Autowired
     private EmailService emailService;
-    
+
     @Autowired
     private ManagerService managerService;
 
@@ -79,14 +77,14 @@ public class ManagerController {
 
     @Autowired
     private PaymentTransactionRepo paymentTransactionRepo;
-    
+
     @Autowired
     private IncomeRepo incomeRepo;
 
     @Autowired
     private ReviewService reviewService;
-    
-    //  cb cek ulang ini
+
+    // cb cek ulang ini
     @Autowired
     private AppointmentService appointmentService;
 
@@ -97,9 +95,9 @@ public class ManagerController {
     private PlanRepo planRepo;
 
     @Autowired
-
     private ExpenseRepo expenseRepo;
 
+    @Autowired
     private FitnessClassService fitnessClassService;
 
     @GetMapping("/manager_home_page")
@@ -142,44 +140,45 @@ public class ManagerController {
     }
 
     @PostMapping("/managerSaveTrainer")
-    public String saveTrainer(@RequestParam("image") MultipartFile multipartFile, @ModelAttribute("trainer") Trainer trainer, Model model,
+    public String saveTrainer(@RequestParam("image") MultipartFile multipartFile,
+            @ModelAttribute("trainer") Trainer trainer, Model model,
             @SessionAttribute("manager") Manager manager) throws IOException {
-                trainerService.saveTrainer(trainer);
-                planRepo.findAll().forEach(plan -> {
-                Set<Trainer> trainers = plan.getTrainers();
-                switch (plan.getPlanType()) {
+        trainerService.saveTrainer(trainer);
+        planRepo.findAll().forEach(plan -> {
+            Set<Trainer> trainers = plan.getTrainers();
+            switch (plan.getPlanType()) {
                 case "Silver":
-                if(trainer.getRank() <=3){
-                trainers.add(trainer);
-                }
-                break;
-                case "Gold":
-                if(trainer.getRank() <=4){
-                trainers.add(trainer);
-                }
-                break;
-                case "Diamond":
-                if(trainer.getRank() <=5){
-                trainers.add(trainer);
-                }
-                break;
-                }
-                plan.setTrainers(trainers);
-                planRepo.save(plan);
-                });
-
-                if (!multipartFile.isEmpty()) {
-                    String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-                    trainer.setPhoto(fileName);
-                    String upload = "src/main/resources/static/images/"; // Adjust this URL as needed
-                    FileUploadUtil.saveFile(upload, fileName, multipartFile);
-        
-                } else {
-                    if (trainer.getPhoto().isEmpty()) {
-                        trainer.setPhoto("wechat_icon.jpg");
-                        trainerService.updateTrainer(trainer);
+                    if (trainer.getRank() <= 3) {
+                        trainers.add(trainer);
                     }
-                }
+                    break;
+                case "Gold":
+                    if (trainer.getRank() <= 4) {
+                        trainers.add(trainer);
+                    }
+                    break;
+                case "Diamond":
+                    if (trainer.getRank() <= 5) {
+                        trainers.add(trainer);
+                    }
+                    break;
+            }
+            plan.setTrainers(trainers);
+            planRepo.save(plan);
+        });
+
+        if (!multipartFile.isEmpty()) {
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            trainer.setPhoto(fileName);
+            String upload = "src/main/resources/static/images/"; // Adjust this URL as needed
+            FileUploadUtil.saveFile(upload, fileName, multipartFile);
+
+        } else {
+            if (trainer.getPhoto().isEmpty()) {
+                trainer.setPhoto("wechat_icon.jpg");
+                trainerService.updateTrainer(trainer);
+            }
+        }
         trainerService.saveTrainer(trainer);
         return "redirect:/managerViewTrainers";
     }
@@ -254,13 +253,14 @@ public class ManagerController {
         model.addAttribute("Users", userService.getAllUsers());
         return "managerViewUsers";
     }
-    
+
     @GetMapping("/income")
     public String showIncomeReport(@RequestParam("startDate") LocalDate startDate,
-                                    @RequestParam("endDate") LocalDate endDate,
-                                    Model model) {             
-        
-        List<PaymentTransaction> paymentTransactions = paymentTransactionRepo.findByPurchasedDateBetween(startDate, endDate);
+            @RequestParam("endDate") LocalDate endDate,
+            Model model) {
+
+        List<PaymentTransaction> paymentTransactions = paymentTransactionRepo.findByPurchasedDateBetween(startDate,
+                endDate);
         for (PaymentTransaction transaction : paymentTransactions) {
             Income existingIncome = incomeRepo.findByIncomeId(transaction.getTransactionId());
             if (existingIncome == null) {
@@ -270,7 +270,7 @@ public class ManagerController {
                 income.setDescription(transaction.getPlanType());
                 income.setIncomeId(transaction.getTransactionId());
                 incomeRepo.save(income);
-            } 
+            }
         }
         List<Income> incomeList = incomeRepo.findByDateBetween(startDate, endDate);
         double totalAmount = 0;
@@ -284,22 +284,21 @@ public class ManagerController {
 
     @GetMapping("/profit")
     public String showProfitReport(@RequestParam("startDate") LocalDate startDate,
-                                    @RequestParam("endDate") LocalDate endDate,
-                                    Model model) {
+            @RequestParam("endDate") LocalDate endDate,
+            Model model) {
         List<Income> incomeList = incomeRepo.findByDateBetween(startDate, endDate);
         List<Expense> expenseList = expenseRepo.findByDateBetween(startDate, endDate);
         double totalIncome = calculateTotalIncome(incomeList);
         double totalExpenses = calculateTotalExpenses(expenseList);
         double totalProfit = totalIncome - totalExpenses;
-        
+
         model.addAttribute("incomeList", incomeList);
         model.addAttribute("expenseList", expenseList);
         model.addAttribute("totalProfit", totalProfit);
-        
-        return "profit_report"; 
+
+        return "profit_report";
     }
 
-    
     private double calculateTotalIncome(List<Income> incomeList) {
         double totalIncome = 0;
         for (Income income : incomeList) {
@@ -307,7 +306,7 @@ public class ManagerController {
         }
         return totalIncome;
     }
-    
+
     private double calculateTotalExpenses(List<Expense> expenseList) {
         double totalExpenses = 0;
         for (Expense expense : expenseList) {
@@ -315,39 +314,37 @@ public class ManagerController {
         }
         return totalExpenses;
     }
-    
 
     @GetMapping("/expenses")
     public String showExpensesReport(@RequestParam("startDate") LocalDate startDate,
-                                     @RequestParam("endDate") LocalDate endDate,
-                                     Model model) {
+            @RequestParam("endDate") LocalDate endDate,
+            Model model) {
         List<Expense> expenseList = expenseRepo.findByDateBetween(startDate, endDate);
-       
+
         double totalExpenses = 0;
         for (Expense expense : expenseList) {
             totalExpenses += expense.getAmount();
         }
-    
+
         model.addAttribute("expenseList", expenseList);
         model.addAttribute("totalExpenses", totalExpenses);
-    
+
         return "expenses_report";
     }
 
-    
     @PostMapping("/removeUser/{email}")
     public String removeUser(@PathVariable("email") String email) {
 
         userService.removeUser(email);
         return "redirect:/managerViewUsers";
     }
+
     @PostMapping("sendNotification/{email}")
     public String sendNotification(@PathVariable("email") String email) {
         // Send notification to the user
-        
+
         return "redirect:/managerViewUsers";
     }
-    
 
     // without session for now
     @GetMapping("/manager_appointment")
@@ -365,7 +362,7 @@ public class ManagerController {
     public String managerBrowsePlans(Model model) {
         List<Plan> plans = planService.findAllPlans();
         model.addAttribute("plans", plans);
-        return "managerViewPlans"; 
+        return "managerViewPlans";
     }
 
     @GetMapping("/editPlan/{id}")
@@ -383,27 +380,27 @@ public class ManagerController {
         planService.savePlan(plan);
         return "redirect:/manager_view_plans";
     }
-    @PostMapping("/send-email/{email}")
-public ResponseEntity<String> sendEmail(@PathVariable("email") String email) {
-    try {
-        User user = userService.getUserByEmail(email);
-        emailService.sendMembershipReminderEmail(email, user.getName(), user.getActiveDate());
-        return ResponseEntity.ok("{\"message\": \"Email sent successfully to " + email + "\"}");
-    } catch (Exception e) {
-        e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Failed to send email due to an error\"}");
-    }
-}
 
+    @PostMapping("/send-email/{email}")
+    public ResponseEntity<String> sendEmail(@PathVariable("email") String email) {
+        try {
+            User user = userService.getUserByEmail(email);
+            emailService.sendMembershipReminderEmail(email, user.getName(), user.getActiveDate());
+            return ResponseEntity.ok("{\"message\": \"Email sent successfully to " + email + "\"}");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("{\"message\": \"Failed to send email due to an error\"}");
+        }
+    }
 
     @GetMapping("/manager_add_appointment")
     public String showAddAppointmentForm(@RequestParam(name = "classId", required = false) Integer classId,
-                                         @RequestParam(name = "className", required = false) String className,
-                                         @ModelAttribute User user, Model model, 
-                                         @ModelAttribute("trainer") Trainer trainer,
-                                         @SessionAttribute("manager") Manager manager) 
-        {
-      
+            @RequestParam(name = "className", required = false) String className,
+            @ModelAttribute User user, Model model,
+            @ModelAttribute("trainer") Trainer trainer,
+            @SessionAttribute("manager") Manager manager) {
+
         List<FitnessClass> classList = fitnessClassService.getAllClasses();
         List<User> userList = userService.getAllUsers();
         List<Trainer> trainerList = trainerService.getAllTrainers();
@@ -427,20 +424,13 @@ public ResponseEntity<String> sendEmail(@PathVariable("email") String email) {
         return "manager-add-appointment";
     }
 
-   
-        
-    
-    
-
-   
-
     @PostMapping("/manager_add_appointment")
-    public String addAppointment(@ModelAttribute Appointment appointment, 
-                                @RequestParam("customerEmail") int userId,
-                                @RequestParam("classId") int classId,
-                                @RequestParam("trainerId") int trainerId,
-                                @RequestParam("datetime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime datetime,
-                                Model model) {
+    public String addAppointment(@ModelAttribute Appointment appointment,
+            @RequestParam("customerEmail") int userId,
+            @RequestParam("classId") int classId,
+            @RequestParam("trainerId") int trainerId,
+            @RequestParam("datetime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime datetime,
+            Model model) {
 
         // Fetch the related FitnessClass and Trainer objects based on the IDs provided
         FitnessClass fitnessClass = fitnessClassService.getClassById(classId);
@@ -450,7 +440,7 @@ public ResponseEntity<String> sendEmail(@PathVariable("email") String email) {
         // Set the fetched entities to the appointment
         appointment.setFitnessClass(fitnessClass);
         appointment.setTrainer(trainer);
-        
+
         // Set the user obtained from the form submission
         User retrivedUser = userService.getUserByEmail(user.getEmail());
         appointment.setUser(retrivedUser);
@@ -464,12 +454,12 @@ public ResponseEntity<String> sendEmail(@PathVariable("email") String email) {
 
         // Save the appointment to the database
         appointmentService.saveAppointment(appointment);
-        
+
         return "redirect:/manager_home_page";
-        }
-        
-        @GetMapping("/managerviewtrainerReview")
-        public String viewReviews(Model model, @RequestParam("trainerId") int trainerId) {
+    }
+
+    @GetMapping("/managerviewtrainerReview")
+    public String viewReviews(Model model, @RequestParam("trainerId") int trainerId) {
         List<Trainer> trainers = trainerService.getAllTrainers();
         model.addAttribute("trainers", trainers);
 
@@ -481,7 +471,7 @@ public ResponseEntity<String> sendEmail(@PathVariable("email") String email) {
 
         return "managerViewReviews";
     }
-    
+
     @PostMapping("/removeReview/{id}")
     public String removeReviewById(@PathVariable("id") int id) {
         reviewService.deleteReview(id);

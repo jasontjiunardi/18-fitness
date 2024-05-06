@@ -1,136 +1,148 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>View Reviews</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 80%;
-            margin: 20px auto;
-            padding: 20px;
-        }
-        h1 {
-            font-weight: bold;
-        }
-        .review-box {
-            border: 2px solid #4a154b; /* Purple border */
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 10px;
-            background-color: #f9f9f9;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: background-color 0.3s ease;
-        }
-        .review-box:hover {
-            background-color: #f0f0f0;
-        }
-        .review-box p {
-            margin: 10px 0;
-        }
-        button {
-            background-color: #4a154b;
-            color: white;
-            padding: 10px 20px;
-            margin: 20px 10px 20px 0;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #763087;
-        }
-        .back-btn {
-            background-color: #4a154b;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .back-btn:hover {
-            background-color: #763087;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        width: 80%;
+        margin: 20px auto;
+        padding: 20px;
+      }
+      h1 {
+        font-weight: bold;
+      }
+      .review-box {
+        border: 2px solid #4a154b; /* Purple border */
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+      }
+      .review-box:hover {
+        background-color: #f0f0f0;
+      }
+      .review-box p {
+        margin: 10px 0;
+      }
+      button {
+        background-color: #4a154b;
+        color: white;
+        padding: 10px 20px;
+        margin: 20px 10px 20px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #763087;
+      }
+      .back-btn {
+        background-color: #4a154b;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .back-btn:hover {
+        background-color: #763087;
+      }
 
-        .header-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #4a154b;
-    color: white;
-    text-decoration: none;
-    border: 2px solid white;
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-    padding: 5px 10px; /* Provides padding for better click area */
-    border-radius: 2px; /* Slightly rounded corners */
-}
-.header-button.home-button {
-    position: relative;
-    display: inline-block; /* Ensure inline-block for proper sizing */
-    padding: 10px; /* Adjust padding for additional clickable area */
-    width: 50px;
-    height: 50px;
-}
-.header-button.home-button i {
-    font-size: 1.2em;
-    position: absolute; /* Ensure icon is positioned relative to its parent */
-    z-index: 2; /* Ensure the icon is above the overlay */
-}
+      .header-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #4a154b;
+        color: white;
+        text-decoration: none;
+        border: 2px solid white;
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        padding: 5px 10px; /* Provides padding for better click area */
+        border-radius: 2px; /* Slightly rounded corners */
+      }
+      .header-button.home-button {
+        position: relative;
+        display: inline-block; /* Ensure inline-block for proper sizing */
+        padding: 10px; /* Adjust padding for additional clickable area */
+        width: 50px;
+        height: 50px;
+      }
+      .header-button.home-button i {
+        font-size: 1.2em;
+        position: absolute; /* Ensure icon is positioned relative to its parent */
+        z-index: 2; /* Ensure the icon is above the overlay */
+      }
 
-.header-button.home-button:hover, .header-button.sign-in-button:hover, .header-button.sign-up-button:hover {
-    background-color: white; /* White background on hover */
-    color: #4a154b; /* Purple text on hover */
-    border-color: #4a154b; /* Border color change on hover */
-}
+      .header-button.home-button:hover,
+      .header-button.sign-in-button:hover,
+      .header-button.sign-up-button:hover {
+        background-color: white; /* White background on hover */
+        color: #4a154b; /* Purple text on hover */
+        border-color: #4a154b; /* Border color change on hover */
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="header">
-        <a th:href="@{/trainer_profile(id=${trainer.trainerId})}" class="header-button home-button">
-            <i class="fas fa-arrow-left"></i>
-        </a>
+      <a
+        th:href="@{/trainer_profile(id=${trainer.trainerId})}"
+        class="header-button home-button"
+      >
+        <i class="fas fa-arrow-left"></i>
+      </a>
     </div>
-    
-<div class="container">
-   
 
-    <h1><span style="font-weight:bold">Reviews for</span> <span th:text="${trainer.name}"></span></h1>
+    <div class="container">
+      <h1>
+        <span style="font-weight: bold">Reviews for</span>
+        <span th:text="${trainer.name}"></span>
+      </h1>
 
-    <!-- Display the list of reviews -->
-    <div>
+      <!-- Display the list of reviews -->
+      <div>
         <div th:if="${reviews.isEmpty()}">
-            <p>No reviews available for this trainer.</p>
+          <p>No reviews available for this trainer.</p>
         </div>
         <div th:each="review : ${reviews}" class="review-box">
-            <p>Date added: <span th:text="${#temporals.format(review.date, 'yyyy-MM-dd HH:mm')}"></span></p>
-            <p>Comment: <span th:text="${review.comment}"></span></p>
-            <!-- Render the "Remove Review" button if the logged-in user owns the review -->
-            <div th:if="${review.user.userId == session.user.userId}">
-                <form th:action="@{/removeReview}" method="post">
-                    <input type="hidden" name="reviewId" th:value="${review.id}" />
-                    <button type="submit">Remove Review</button>
-                </form>
-            </div>
+          <p>
+            Date added:
+            <span
+              th:text="${#temporals.format(review.date, 'yyyy-MM-dd HH:mm')}"
+            ></span>
+          </p>
+          <p>Comment: <span th:text="${review.comment}"></span></p>
+          <!-- Render the "Remove Review" button if the logged-in user owns the review -->
+          <div th:if="${review.user.userId == session.user.userId}">
+            <form th:action="@{/removeReview}" method="post">
+              <input type="hidden" name="reviewId" th:value="${review.id}" />
+              <button type="submit">Remove Review</button>
+            </form>
+          </div>
         </div>
-    </div>
+      </div>
 
-    <!-- Add Review Button -->
-    <form th:action="@{/addReview}" method="get">
+      <!-- Add Review Button -->
+      <form th:action="@{/addReview}" method="get">
         <input type="hidden" name="trainerId" th:value="${trainer.trainerId}" />
         <button type="submit">Add Review</button>
-    </form>
-</div>
-
-
-
-
-
-</body>
+      </form>
+    </div>
+  </body>
 </html>

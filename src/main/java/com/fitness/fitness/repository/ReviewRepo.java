@@ -16,7 +16,9 @@ import jakarta.transaction.Transactional;
 @Repository
 public interface ReviewRepo extends JpaRepository<Review, Integer> {
     List<Review> findByTrainer(Trainer trainer);
+
     List<Review> findByUserUserId(int userId);
+
     @Modifying
     @Transactional
     @Query("DELETE FROM Review r  WHERE r.user.id = :id")

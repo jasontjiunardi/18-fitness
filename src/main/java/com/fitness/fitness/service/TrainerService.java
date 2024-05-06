@@ -21,6 +21,7 @@ import com.fitness.fitness.repository.ReviewRepo;
 import com.fitness.fitness.repository.TrainerRepo;
 
 import jakarta.transaction.Transactional;
+
 @Service
 public class TrainerService {
     @Autowired
@@ -44,9 +45,10 @@ public class TrainerService {
 
     public List<Trainer> getAllTrainers() {
         // // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'getAllTrainers'");
-            return trainerRepo.findAll();
-        }
+        // throw new UnsupportedOperationException("Unimplemented method
+        // 'getAllTrainers'");
+        return trainerRepo.findAll();
+    }
 
     public Trainer getTrainerById(Integer id) {
         Optional<Trainer> optionalTrainer = trainerRepo.findById(id);
@@ -56,6 +58,7 @@ public class TrainerService {
     public Trainer findTrainerByName(String name) {
         return trainerRepo.findByName(name);
     }
+
     public Trainer saveTrainer(Trainer trainer) {
         return trainerRepo.save(trainer);
     }
@@ -71,13 +74,13 @@ public class TrainerService {
         // Remove all reviews associated with this trainer
         List<Review> reviews = reviewRepo.findByTrainer(trainer);
         if (!reviews.isEmpty()) {
-            reviewRepo.deleteAll(reviews);  // Delete reviews directly
+            reviewRepo.deleteAll(reviews); // Delete reviews directly
         }
 
         // Remove all appointments associated with this trainer
         List<Appointment> appointments = appointmentRepo.findByTrainer(trainer);
         if (!appointments.isEmpty()) {
-            appointmentRepo.deleteAll(appointments);  // Delete appointments directly
+            appointmentRepo.deleteAll(appointments); // Delete appointments directly
         }
 
         // Remove trainer from any plans
@@ -85,16 +88,13 @@ public class TrainerService {
         plans.forEach(plan -> {
             if (plan.getTrainers().contains(trainer)) {
                 plan.getTrainers().remove(trainer);
-                planRepo.save(plan);  // Save the updated plan
+                planRepo.save(plan); // Save the updated plan
             }
         });
 
         // Finally, delete the trainer
         trainerRepo.delete(trainer);
     }
-
-
-
 
     public Trainer getTrainerByName(String trainerName) {
         return trainerRepo.findByName(trainerName);
@@ -105,25 +105,25 @@ public class TrainerService {
     }
 }
 
-    // public void updateEligiblePlans(Trainer trainer) {
-    //     Set<Plan> eligiblePlans = new HashSet<>();
-    //     switch (trainer.getRank()) {
-    //         case 3:
-    //             eligiblePlans.addAll(planRepo.findByPlanTypeIn(Arrays.asList("silver", "gold", "diamond")));
-    //             break;
-    //         case 4:
-    //             eligiblePlans.addAll(planRepo.findByPlanTypeIn(Arrays.asList("silver", "gold")));
-    //             break;
-    //         case 5:
-    //             eligiblePlans.addAll(planRepo.findByPlanTypeIn(Collections.singletonList("gold")));
-    //             break;
-    //         default:
-    //             break; // No eligible plans for other ranks
-    //     }
-    //     trainer.setEligiblePlans(eligiblePlans);
-    //     trainerRepo.save(trainer);
-    // }
+// public void updateEligiblePlans(Trainer trainer) {
+// Set<Plan> eligiblePlans = new HashSet<>();
+// switch (trainer.getRank()) {
+// case 3:
+// eligiblePlans.addAll(planRepo.findByPlanTypeIn(Arrays.asList("silver",
+// "gold", "diamond")));
+// break;
+// case 4:
+// eligiblePlans.addAll(planRepo.findByPlanTypeIn(Arrays.asList("silver",
+// "gold")));
+// break;
+// case 5:
+// eligiblePlans.addAll(planRepo.findByPlanTypeIn(Collections.singletonList("gold")));
+// break;
+// default:
+// break; // No eligible plans for other ranks
+// }
+// trainer.setEligiblePlans(eligiblePlans);
+// trainerRepo.save(trainer);
+// }
 
-
-
-    // You can add more methods here depending on your business logic
+// You can add more methods here depending on your business logic

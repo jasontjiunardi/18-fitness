@@ -26,22 +26,27 @@ public class FitnessClassDataSeeder implements CommandLineRunner {
 
     private void seedFitnessClasses() {
         List<FitnessClass> classes = new ArrayList<>();
-    
-        // Create sample fitness classes
-        FitnessClass class1 = new FitnessClass("Yoga", "Relaxing yoga session that focuses on meditation, relaxation and sense of relief", "1 hour", "fitnessclass1.jpg");
-        FitnessClass class2 = new FitnessClass("Zumba", "High-energy dance workout that focuses on rhythmic movements with upbeat music", "45 minutes", "fitnessclass2.jpeg");
-        FitnessClass class3 = new FitnessClass("Pilates", "Core-strengthening exercises that focuses abs and mobility", "50 minutes", "fitnessclass3.jpeg");
-        FitnessClass class4 = new FitnessClass("HIIT", "this is a very intense exercise that aims to burn fat and cardio", "60 min", "fitnessclass4.jpg");
 
-    
+        // Create sample fitness classes
+        FitnessClass class1 = new FitnessClass("Yoga",
+                "Relaxing yoga session that focuses on meditation, relaxation and sense of relief", "1 hour",
+                "fitnessclass1.jpg");
+        FitnessClass class2 = new FitnessClass("Zumba",
+                "High-energy dance workout that focuses on rhythmic movements with upbeat music", "45 minutes",
+                "fitnessclass2.jpeg");
+        FitnessClass class3 = new FitnessClass("Pilates", "Core-strengthening exercises that focuses abs and mobility",
+                "50 minutes", "fitnessclass3.jpeg");
+        FitnessClass class4 = new FitnessClass("HIIT",
+                "this is a very intense exercise that aims to burn fat and cardio", "60 min", "fitnessclass4.jpg");
+
         // Add classes to the list
         classes.add(class1);
         classes.add(class2);
         classes.add(class3);
         classes.add(class4);
-    
+
         // Save all classes to the database
         fitnessClassRepo.saveAll(classes);
     }
-    
+
 }

@@ -32,12 +32,6 @@ import com.fitness.fitness.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
-
-
-
-
-
-
 @Controller
 @SessionAttributes("user")
 public class planController {
@@ -48,20 +42,21 @@ public class planController {
     private UserService userService;
     @Autowired
     private PaymentTransactionRepo paymentTransactionRepo;
+
     @GetMapping("/browse_plans")
-    public String browsePlans(Model model,  HttpSession session) {
+    public String browsePlans(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         LinkedHashMap<String, Double> sortedStartingPrices = planService.getSortedPrices();
         List<String> sortedPlanTypes = new ArrayList<>(sortedStartingPrices.keySet());
         Map<String, List<Benefit>> planBenefits = planService.sortedBenefits();
-        if(user != null){
+        if (user != null) {
             User existingUser = userService.getUserByEmail(user.getEmail());
             model.addAttribute("user", existingUser);
         }
         model.addAttribute("planTypes", sortedPlanTypes);
         model.addAttribute("startingPrices", sortedStartingPrices);
         model.addAttribute("planBenefits", planBenefits);
-        
+
         return "plans";
 
     }
@@ -70,18 +65,18 @@ public class planController {
     public String browsePlan(@PathVariable("planType") String planType, Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         Plan planDetails = planService.findByPlanType(planType);
-    
+
         if (planDetails == null) {
             throw new RuntimeException("Plan type not found");
         }
         List<Benefit> sortedBenefits = planDetails.getBenefits().stream()
-                                              .sorted(Comparator.comparing(Benefit::getDescription))
-                                              .collect(Collectors.toList());
-       
+                .sorted(Comparator.comparing(Benefit::getDescription))
+                .collect(Collectors.toList());
+
         Set<PlanDurationPrice> sortedDurationPrices = planDetails.getPlanDurationPrices().stream()
-        .sorted(Comparator.comparing(PlanDurationPrice::getPlanDuration))
-        .collect(Collectors.toCollection(LinkedHashSet::new));
-        if(user != null){
+                .sorted(Comparator.comparing(PlanDurationPrice::getPlanDuration))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+        if (user != null) {
             User existingUser = userService.getUserByEmail(user.getEmail());
             model.addAttribute("user", existingUser);
         }
@@ -95,10 +90,10 @@ public class planController {
 
     @GetMapping("/browsePlan/{planType}/purchaseForm")
     public String showPurchaseForm(@PathVariable("planType") String planType,
-                                   @RequestParam("duration") String duration, 
-                                   @RequestParam("price") Double price, Model model, HttpSession session) {
+            @RequestParam("duration") String duration,
+            @RequestParam("price") Double price, Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
-        if(user != null){
+        if (user != null) {
             User existingUser = userService.getUserByEmail(user.getEmail());
             model.addAttribute("user", existingUser);
         }
@@ -109,36 +104,33 @@ public class planController {
     }
 
     @PostMapping("/finalizePurchase")
-    public String finalizePurchase(@RequestParam("userAgreement") boolean userAgreement, 
-                                    @RequestParam("paymentMethod") String paymentMethod,
-                                    @RequestParam(value = "cardNumber", required = false) String cardNumber,
-                                    @RequestParam("planType") String planType,
-                                    @RequestParam("duration") String duration,
-                                    @RequestParam("price") Double price, 
-                                    Model model,
-                                    HttpSession session) {
+    public String finalizePurchase(@RequestParam("userAgreement") boolean userAgreement,
+            @RequestParam("paymentMethod") String paymentMethod,
+            @RequestParam(value = "cardNumber", required = false) String cardNumber,
+            @RequestParam("planType") String planType,
+            @RequestParam("duration") String duration,
+            @RequestParam("price") Double price,
+            Model model,
+            HttpSession session) {
         if (userAgreement) {
             String transactionId = UUID.randomUUID().toString();
-    
+
             // Retrieve logged-in user from session
             User loggedInUser = (User) session.getAttribute("user");
             if (loggedInUser == null) {
                 // Handle the case where user is not logged in
-                return "redirect:/login"; 
+                return "redirect:/login";
             }
-    
-            
+
             PaymentTransaction paymentTransaction = new PaymentTransaction();
-            if(loggedInUser.getStatus().equals(planType)){
+            if (loggedInUser.getStatus().equals(planType)) {
                 long durationChosen = Integer.parseInt(duration.split(" ")[0]);
                 LocalDate newActiveDate = loggedInUser.getActiveDate().plusMonths(durationChosen);
                 loggedInUser.setActiveDate(newActiveDate);
                 paymentTransaction.setDuration((double) durationChosen);
                 paymentTransaction.setActiveDate(newActiveDate);
-                
-                
-            }
-            else{
+
+            } else {
                 loggedInUser.setStatus(planType);
                 long durationChosen = Integer.parseInt(duration.split(" ")[0]);
                 LocalDate now = LocalDate.now().plusMonths(durationChosen);
@@ -146,11 +138,10 @@ public class planController {
                 paymentTransaction.setDuration((double) durationChosen);
                 paymentTransaction.setActiveDate(now);
             }
-            if(cardNumber.toString().length() == 16 && loggedInUser.getCardNumber() == null){
+            if (cardNumber.toString().length() == 16 && loggedInUser.getCardNumber() == null) {
                 loggedInUser.setCardNumber(cardNumber);
             }
             userService.saveUser(loggedInUser);
-
 
             paymentTransaction.setTransactionId(transactionId);
             paymentTransaction.setUser(loggedInUser);
@@ -165,18 +156,18 @@ public class planController {
 
             // Save the payment transaction to the database
             paymentTransactionRepo.save(paymentTransaction);
-            
-            return "purchaseConfirmation"; 
+
+            return "purchaseConfirmation";
         } else {
             model.addAttribute("error", "You must agree to the user agreement to proceed!");
-            return "purchaseForm"; 
+            return "purchaseForm";
         }
     }
 
     @GetMapping("/browseChangeSubscription")
     public String changeSubscription(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
-        if(user != null){
+        if (user != null) {
             User existingUser = userService.getUserByEmail(user.getEmail());
             LinkedHashMap<String, Double> sortedStartingPrices = planService.getSortedPrices();
             List<String> sortedPlanTypes = new ArrayList<>(sortedStartingPrices.keySet());
@@ -185,25 +176,26 @@ public class planController {
             model.addAttribute("planTypes", sortedPlanTypes);
             model.addAttribute("planBenefits", planBenefits);
         }
-        
+
         return "changeSubscription";
     }
+
     @GetMapping("/changeSubscription/{planType}")
     public String changeUserPlanType(@PathVariable("planType") String planType, Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         Plan planDetails = planService.findByPlanType(planType);
-    
+
         if (planDetails == null) {
             throw new RuntimeException("Plan type not found");
         }
-    
+
         List<Benefit> sortedBenefits = planDetails.getBenefits().stream()
-                                              .sorted(Comparator.comparing(Benefit::getDescription))
-                                              .collect(Collectors.toList());
-        if(user != null){
+                .sorted(Comparator.comparing(Benefit::getDescription))
+                .collect(Collectors.toList());
+        if (user != null) {
             User existingUser = userService.getUserByEmail(user.getEmail());
             Double price = planService.specificPlanStartDurationStartPrice(planType, existingUser);
-            model.addAttribute("price",price);
+            model.addAttribute("price", price);
             model.addAttribute("user", existingUser);
             model.addAttribute("planType", planType);
             model.addAttribute("planDetails", planDetails.getPlanDetails());
@@ -212,17 +204,18 @@ public class planController {
         return "changeSubscriptionForm";
 
     }
+
     @PostMapping("/changeSubscription/{planType}")
     public String updateSubscription(@PathVariable("planType") String planType, Model model, HttpSession session,
-                                    @RequestParam("paymentMethod") String paymentMethod,
-                                    @RequestParam(value = "cardNumber", required = false) String cardNumber,
-                                    @RequestParam("price") Double price) {
+            @RequestParam("paymentMethod") String paymentMethod,
+            @RequestParam(value = "cardNumber", required = false) String cardNumber,
+            @RequestParam("price") Double price) {
         User loggedInUser = (User) session.getAttribute("user");
-        if(loggedInUser != null){
+        if (loggedInUser != null) {
             PaymentTransaction paymentTransaction = new PaymentTransaction();
             loggedInUser.setStatus(planType);
             paymentTransaction.setActiveDate(loggedInUser.getActiveDate());
-            if(cardNumber.toString().length() == 16 && loggedInUser.getCardNumber() == null){
+            if (cardNumber.toString().length() == 16 && loggedInUser.getCardNumber() == null) {
                 loggedInUser.setCardNumber(cardNumber);
             }
             userService.saveUser(loggedInUser);
@@ -231,23 +224,23 @@ public class planController {
             Double remainingMonths = (double) ChronoUnit.MONTHS.between(today, activeDate);
             String transactionId = UUID.randomUUID().toString();
             paymentTransaction.setTransactionId(transactionId);
-            paymentTransaction.setUser(loggedInUser); 
-            paymentTransaction.setPlanType(planType); 
+            paymentTransaction.setUser(loggedInUser);
+            paymentTransaction.setPlanType(planType);
             paymentTransaction.setPaymentMethod(paymentMethod);
             paymentTransaction.setPrice(price);
             paymentTransaction.setDuration(remainingMonths);
             paymentTransaction.setPlan(planService.findByPlanType(planType));
-            if(price>0.0){
+            if (price > 0.0) {
                 paymentTransaction.setPaymentType("Upgrade");
+            } else {
+                paymentTransaction.setPaymentType("Downgrade");
             }
-            else{           
-                paymentTransaction.setPaymentType("Downgrade");}
             paymentTransaction.setPurchasedDate(today);
 
             // Save the payment transaction to the database
             paymentTransactionRepo.save(paymentTransaction);
-            
-            return "changeSubscriptionConfirmation"; 
+
+            return "changeSubscriptionConfirmation";
         }
         return "changeSubscriptionForm";
     }
@@ -256,16 +249,12 @@ public class planController {
     public String viewPlanPurchaseHistory(Model model, HttpSession session) {
         User loggedInUser = (User) session.getAttribute("user");
         if (loggedInUser != null) {
-            int userId = loggedInUser.getUserId(); 
-             List<PaymentTransaction> purchaseHistory = paymentTransactionRepo.findByUserUserId(userId);
+            int userId = loggedInUser.getUserId();
+            List<PaymentTransaction> purchaseHistory = paymentTransactionRepo.findByUserUserId(userId);
             model.addAttribute("purchaseHistory", purchaseHistory);
         } else {
         }
         return "planPurchaseHistory";
     }
-    
-    
 
-       
 }
-

@@ -1,102 +1,107 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Filter Appointments</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7; /* Light gray background */
-            color: #333333; /* Dark text color */
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7; /* Light gray background */
+        color: #333333; /* Dark text color */
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
 
-        h1 {
-            font-size: 36px; /* Larger font size for heading */
-            color: #333333; /* Dark heading color */
-            text-align: center;
-            margin-bottom: 20px;
-        }
+      h1 {
+        font-size: 36px; /* Larger font size for heading */
+        color: #333333; /* Dark heading color */
+        text-align: center;
+        margin-bottom: 20px;
+      }
 
-        table {
-            width: 80%; /* Set table width */
-            border-collapse: collapse; /* Collapse borders between cells */
-            margin-bottom: 20px; /* Add margin to bottom of table */
-        }
+      table {
+        width: 80%; /* Set table width */
+        border-collapse: collapse; /* Collapse borders between cells */
+        margin-bottom: 20px; /* Add margin to bottom of table */
+      }
 
-        th, td {
-            padding: 10px; /* Add padding to table cells */
-            text-align: left; /* Align text to the left */
-            border-bottom: 1px solid #dddddd; /* Add bottom border to table cells */
-        }
+      th,
+      td {
+        padding: 10px; /* Add padding to table cells */
+        text-align: left; /* Align text to the left */
+        border-bottom: 1px solid #dddddd; /* Add bottom border to table cells */
+      }
 
-        th {
-            background-color: #f2f2f2; /* Light gray background for table header */
-            font-weight: bold; /* Make table header text bold */
-        }
+      th {
+        background-color: #f2f2f2; /* Light gray background for table header */
+        font-weight: bold; /* Make table header text bold */
+      }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9; /* Alternate row background color */
-        }
+      tr:nth-child(even) {
+        background-color: #f9f9f9; /* Alternate row background color */
+      }
 
-        button {
-            padding: 10px 20px; /* Add padding to buttons */
-            margin-top: 20px; /* Add margin to top of button */
-            border: none; /* Remove button border */
-            border-radius: 5px; /* Rounded corners for buttons */
-            background-color: #4a154b; /* Purple button background */
-            color: #ffffff; /* White text color for button */
-            cursor: pointer; /* Change cursor to pointer on hover */
-        }
+      button {
+        padding: 10px 20px; /* Add padding to buttons */
+        margin-top: 20px; /* Add margin to top of button */
+        border: none; /* Remove button border */
+        border-radius: 5px; /* Rounded corners for buttons */
+        background-color: #4a154b; /* Purple button background */
+        color: #ffffff; /* White text color for button */
+        cursor: pointer; /* Change cursor to pointer on hover */
+      }
 
-        button:hover {
-            background-color: #310b33; /* Darker purple on hover */
-        }
+      button:hover {
+        background-color: #310b33; /* Darker purple on hover */
+      }
 
-        /* Style the link button */
-        a button {
-            background-color: #cccccc; /* Light gray background */
-            color: #333333; /* Dark text color */
-        }
+      /* Style the link button */
+      a button {
+        background-color: #cccccc; /* Light gray background */
+        color: #333333; /* Dark text color */
+      }
 
-        a button:hover {
-            background-color: #aaaaaa; /* Darker gray on hover */
-        }
+      a button:hover {
+        background-color: #aaaaaa; /* Darker gray on hover */
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Filter Appointments</h1>
 
     <!-- Results Table -->
     <table>
-        <thead>
-            <tr>
-                <th>Appointment ID</th>
-                <th>Trainer Name</th>
-                <th>Class Name</th>
-                <th>Date</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="appointment : ${appointments}">
-                <td th:text="${appointment.appointmentId}"></td>
-                <td th:text="${appointment.trainer.name}"></td>
-                <td th:text="${appointment.fitnessClass.className}"></td>
-                <td th:text="${#temporals.format(appointment.date, 'dd MMM yyyy HH:mm')}"></td>
-                <td th:text="${appointment.status}"></td>
-            </tr>
-        </tbody>
+      <thead>
+        <tr>
+          <th>Appointment ID</th>
+          <th>Trainer Name</th>
+          <th>Class Name</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="appointment : ${appointments}">
+          <td th:text="${appointment.appointmentId}"></td>
+          <td th:text="${appointment.trainer.name}"></td>
+          <td th:text="${appointment.fitnessClass.className}"></td>
+          <td
+            th:text="${#temporals.format(appointment.date, 'dd MMM yyyy HH:mm')}"
+          ></td>
+          <td th:text="${appointment.status}"></td>
+        </tr>
+      </tbody>
     </table>
 
     <!-- Back to View Appointment Button -->
-    <a th:href="@{/userAppointment}"><button>Back To View Appointment</button></a>
-</body>
+    <a th:href="@{/userAppointment}"
+      ><button>Back To View Appointment</button></a
+    >
+  </body>
 </html>

@@ -1,96 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Choose Profile Picture</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            margin: 20px;
-            padding: 0;
-            line-height: 1.6;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 20px;
+        padding: 0;
+        line-height: 1.6;
+      }
 
-        h1 {
-            color: #4a154b;
-            text-align: center;
-        }
+      h1 {
+        color: #4a154b;
+        text-align: center;
+      }
 
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+      }
 
-        .image-button {
-            border: none;
-            background: none;
-            padding: 0;
-            margin: 10px;
-            transition: transform 0.3s ease;
-        }
+      .image-button {
+        border: none;
+        background: none;
+        padding: 0;
+        margin: 10px;
+        transition: transform 0.3s ease;
+      }
 
-        .image-button img {
-            width: 150px;
-            height: auto;
-            cursor: pointer;
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
-        }
+      .image-button img {
+        width: 150px;
+        height: auto;
+        cursor: pointer;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
+      }
 
-        .image-button img:hover {
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-        }
+      .image-button img:hover {
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      }
 
-        button {
-            background-color: #4a154b;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+      button {
+        background-color: #4a154b;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
 
-        button:hover {
-            background-color: #68236d;
-        }
+      button:hover {
+        background-color: #68236d;
+      }
 
-        .cancel-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
+      .cancel-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Choose Profile Picture</h1>
 
     <div class="container">
-        <!-- Form for avatar2.jpg -->
-        <form method="POST" action="/save_profile_picture">
-            <button class="image-button" type="submit" name="avatar" value="avatar2.jpg">
-                <img src="/images/avatar2.jpg" alt="Avatar 2">
-            </button>
-        </form>
+      <!-- Form for avatar2.jpg -->
+      <form method="POST" action="/save_profile_picture">
+        <button
+          class="image-button"
+          type="submit"
+          name="avatar"
+          value="avatar2.jpg"
+        >
+          <img src="/images/avatar2.jpg" alt="Avatar 2" />
+        </button>
+      </form>
 
-        <!-- Form for avatar3.jpg -->
-        <form method="POST" action="/save_profile_picture">
-            <button class="image-button" type="submit" name="avatar" value="avatar3.jpg">
-                <img src="/images/avatar3.jpg" alt="Avatar 3">
-            </button>
-        </form>
+      <!-- Form for avatar3.jpg -->
+      <form method="POST" action="/save_profile_picture">
+        <button
+          class="image-button"
+          type="submit"
+          name="avatar"
+          value="avatar3.jpg"
+        >
+          <img src="/images/avatar3.jpg" alt="Avatar 3" />
+        </button>
+      </form>
     </div>
 
     <div class="cancel-container">
-        <form method="GET" action="/edit_profile">
-            <button>Cancel</button>
-        </form>
+      <form method="GET" action="/edit_profile">
+        <button>Cancel</button>
+      </form>
     </div>
-</body>
+  </body>
 </html>

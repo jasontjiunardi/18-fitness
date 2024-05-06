@@ -16,7 +16,7 @@ public class PlanDurationPrice {
     @ManyToOne
     @JoinColumn(name = "plan_id", nullable = false)
     private Plan plan;
-    private int planDuration; 
+    private int planDuration;
     private double planPrice;
 
     public PlanDurationPrice(Plan plan, int planDuration, double planPrice) {
@@ -59,5 +59,5 @@ public class PlanDurationPrice {
     public void setPlanPrice(double planPrice) {
         this.planPrice = planPrice;
     }
-    
+
 }

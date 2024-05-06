@@ -13,12 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
-
-
-
 @Controller
 public class FitnessClassController {
-    
+
     @Autowired
     private final FitnessClassService fitnessClassService;
     private final UserService userService;
@@ -27,7 +24,6 @@ public class FitnessClassController {
         this.fitnessClassService = fitnessClassService;
         this.userService = userService;
     }
-   
 
     @GetMapping("/showFitnessClasses")
     public String showAllFitnessClasses(Model model, @SessionAttribute("user") User user) {
@@ -38,4 +34,3 @@ public class FitnessClassController {
         return "fitnessclasses"; // Assuming "allfitnessclasses" is the name of your HTML template
     }
 }
-    

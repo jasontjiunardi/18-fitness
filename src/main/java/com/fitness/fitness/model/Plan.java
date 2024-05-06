@@ -18,10 +18,10 @@ import java.util.Set;
 public class Plan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-  
+
     private int id;
     private String planType;
-    private String planDetails; 
+    private String planDetails;
 
     public Plan() {
     }
@@ -33,20 +33,11 @@ public class Plan {
     private Set<PaymentTransaction> PaymentTransaction = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-        name = "plan_benefit",
-        joinColumns = @JoinColumn(name = "plan_id"),
-        inverseJoinColumns = @JoinColumn(name = "benefit_id")
-    )
+    @JoinTable(name = "plan_benefit", joinColumns = @JoinColumn(name = "plan_id"), inverseJoinColumns = @JoinColumn(name = "benefit_id"))
     private Set<Benefit> benefits = new HashSet<>();
-    
 
     @ManyToMany
-    @JoinTable(
-        name = "plan_trainer",
-        joinColumns = @JoinColumn(name = "plan_id"),
-        inverseJoinColumns = @JoinColumn(name = "trainer_id")
-    )
+    @JoinTable(name = "plan_trainer", joinColumns = @JoinColumn(name = "plan_id"), inverseJoinColumns = @JoinColumn(name = "trainer_id"))
     private Set<Trainer> trainers = new HashSet<>();
 
     // Getter and setter for trainers

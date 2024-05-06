@@ -24,8 +24,8 @@ import jakarta.servlet.http.HttpSession;
 public class TrainerController {
     @Autowired
     private TrainerService trainerService;
-   // @Autowired
-    //private ReviewService reviewService;
+    // @Autowired
+    // private ReviewService reviewService;
 
     @Autowired
     private UserService userService;
@@ -36,9 +36,10 @@ public class TrainerController {
     }
 
     @GetMapping("/view_trainers")
-    public String viewTrainers(@RequestParam(value = "rank", required = false) Integer rank, Model model, HttpSession session) {
-         User user = (User) session.getAttribute("user");
-         if(user != null){
+    public String viewTrainers(@RequestParam(value = "rank", required = false) Integer rank, Model model,
+            HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
             User existingUser = userService.getUserByEmail(user.getEmail());
             model.addAttribute("user", existingUser);
         }
@@ -55,18 +56,17 @@ public class TrainerController {
     @GetMapping("/trainer_profile")
     public String trainerProfile(@RequestParam(value = "id", required = false) Integer id, Model model) {
         Trainer trainer = trainerService.findById(id);
-        //List<Review> reviews = reviewService.findByTrainer(trainer); // Get reviews for the trainer
+        // List<Review> reviews = reviewService.findByTrainer(trainer); // Get reviews
+        // for the trainer
         model.addAttribute("trainer", trainer);
-        //model.addAttribute("reviews", reviews); 
+        // model.addAttribute("reviews", reviews);
         return "trainerprofile";
     }
 
-
-    
     // @GetMapping("book_appointment")
-    // public String getMethodName(@RequestParam (value = "trainer.id", required=false)Integer trainerId, Model model) {
-    //     return new String();
+    // public String getMethodName(@RequestParam (value = "trainer.id",
+    // required=false)Integer trainerId, Model model) {
+    // return new String();
     // }
-    
-    
+
 }

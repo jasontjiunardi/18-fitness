@@ -1,169 +1,234 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Edit Trainer</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #ffffff; /* White background */
-            color: #4a154b; /* Purple text color */
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff; /* White background */
+        color: #4a154b; /* Purple text color */
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
 
-        h2 {
-            font-size: 36px; /* Larger font size for heading */
-            color: #4a154b; /* Purple heading color */
-            text-align: center;
-            margin-bottom: 50px; /* Added margin to bottom */
-        }
+      h2 {
+        font-size: 36px; /* Larger font size for heading */
+        color: #4a154b; /* Purple heading color */
+        text-align: center;
+        margin-bottom: 50px; /* Added margin to bottom */
+      }
 
-        form {
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff; /* White background for form */
-        }
+      form {
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff; /* White background for form */
+      }
 
-        input[type="text"],
-        input[type="password"],
-        button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #4a154b; /* Purple border */
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
+      input[type="text"],
+      input[type="password"],
+      button {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #4a154b; /* Purple border */
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
 
-        button {
-            background-color: #4a154b; /* Purple button background */
-            color: #ffffff; /* White text color for button */
-            cursor: pointer;
-        }
+      button {
+        background-color: #4a154b; /* Purple button background */
+        color: #ffffff; /* White text color for button */
+        cursor: pointer;
+      }
 
-        button:hover {
-            background-color: #310b33; /* Darker purple on hover */
-        }
+      button:hover {
+        background-color: #310b33; /* Darker purple on hover */
+      }
 
-        a {
-            display: block;
-            text-align: center; /* Centered link */
-            color: #4a154b; /* Purple link color */
-            text-decoration: none;
-            font-size: 14px;
-            margin-top: 10px;
-        }
+      a {
+        display: block;
+        text-align: center; /* Centered link */
+        color: #4a154b; /* Purple link color */
+        text-decoration: none;
+        font-size: 14px;
+        margin-top: 10px;
+      }
 
-        a:hover {
-            text-decoration: underline; /* Underline on hover */
-        }
+      a:hover {
+        text-decoration: underline; /* Underline on hover */
+      }
 
-        .btn-cancel {
-            width: 100%; /* Full width */
-            text-align: center; /* Centered cancel button */
-        }
+      .btn-cancel {
+        width: 100%; /* Full width */
+        text-align: center; /* Centered cancel button */
+      }
 
-        /* Make the submit button purple */
-        button[type="submit"] {
-            background-color: #4a154b;
-            border-color: #4a154b;
-        }
+      /* Make the submit button purple */
+      button[type="submit"] {
+        background-color: #4a154b;
+        border-color: #4a154b;
+      }
 
-        button[type="submit"]:hover {
-            background-color: #310b33;
-            border-color: #310b33;
-        }
+      button[type="submit"]:hover {
+        background-color: #310b33;
+        border-color: #310b33;
+      }
 
-        .btn-danger {
-            width: 100%; /* Full width */
-            margin-top: 10px; /* Add margin between buttons */
-        }
+      .btn-danger {
+        width: 100%; /* Full width */
+        margin-top: 10px; /* Add margin between buttons */
+      }
     </style>
-</head>
-<body>
-    <h2 style="font-weight: bold;">Edit Trainer</h2>
+  </head>
+  <body>
+    <h2 style="font-weight: bold">Edit Trainer</h2>
     <!-- Form for updating trainer information -->
-    <form method="POST" action="/updateTrainer" th:object="${trainer}" enctype="multipart/form-data">
-        <!-- Hidden field for trainer ID -->
-        <input type="hidden" name="id" th:value="${trainer.id}" />
+    <form
+      method="POST"
+      action="/updateTrainer"
+      th:object="${trainer}"
+      enctype="multipart/form-data"
+    >
+      <!-- Hidden field for trainer ID -->
+      <input type="hidden" name="id" th:value="${trainer.id}" />
 
-        <!-- Trainer information fields -->
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" class="form-control" id="name" name="name" th:value="${trainer.name}" />
-        </div>
-        <div class="form-group">
-            <label for="age">Age:</label>
-            <input type="number" class="form-control" id="age" name="age" th:value="${trainer.age}" />
-        </div>
-        <div class="form-group">
-            <label for="dob">Date of Birth:</label>
-            <input type="date" class="form-control" id="dob" name="dob" th:value="${trainer.dob}" />
-        </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email" th:value="${trainer.email}" />
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone:</label>
-            <input type="text" class="form-control" id="phone" name="phone" th:value="${trainer.phone}" />
-        </div>
-        <div class="form-group">
-            <label for="rank">Rank (3-5):</label>
-            <input type="number" class="form-control" id="rank" name="rank" th:value="${trainer.rank}" min="3" max="5" />
-        </div>
-        <div class="form-group">
-            <label for="trainerSince">Trainer Since:</label>
-            <input type="date" class="form-control" id="trainerSince" name="trainerSince" th:value="${trainer.trainerSince}" />
-        </div>
-        <div class="form-group">
-            <!-- <input type="hidden" th:field="${trainer.image}"/> -->
-            <label for="fileImage">Profile Picture:</label>
-            <input type="file" id="fileImage" name="image" accept="image/png, image/jpg, image/jpeg"> 
-        </div>
-        
-        <!-- Confirm changes button -->
-        <button type="submit" class="btn btn-primary" onclick="validateUpdate()">Confirm Changes</button>
-        <!-- Back button -->
-        <a href="/managerViewTrainers" class="btn btn-secondary btn-cancel">Back</a>
+      <!-- Trainer information fields -->
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          th:value="${trainer.name}"
+        />
+      </div>
+      <div class="form-group">
+        <label for="age">Age:</label>
+        <input
+          type="number"
+          class="form-control"
+          id="age"
+          name="age"
+          th:value="${trainer.age}"
+        />
+      </div>
+      <div class="form-group">
+        <label for="dob">Date of Birth:</label>
+        <input
+          type="date"
+          class="form-control"
+          id="dob"
+          name="dob"
+          th:value="${trainer.dob}"
+        />
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          name="email"
+          th:value="${trainer.email}"
+        />
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="phone"
+          name="phone"
+          th:value="${trainer.phone}"
+        />
+      </div>
+      <div class="form-group">
+        <label for="rank">Rank (3-5):</label>
+        <input
+          type="number"
+          class="form-control"
+          id="rank"
+          name="rank"
+          th:value="${trainer.rank}"
+          min="3"
+          max="5"
+        />
+      </div>
+      <div class="form-group">
+        <label for="trainerSince">Trainer Since:</label>
+        <input
+          type="date"
+          class="form-control"
+          id="trainerSince"
+          name="trainerSince"
+          th:value="${trainer.trainerSince}"
+        />
+      </div>
+      <div class="form-group">
+        <!-- <input type="hidden" th:field="${trainer.image}"/> -->
+        <label for="fileImage">Profile Picture:</label>
+        <input
+          type="file"
+          id="fileImage"
+          name="image"
+          accept="image/png, image/jpg, image/jpeg"
+        />
+      </div>
+
+      <!-- Confirm changes button -->
+      <button type="submit" class="btn btn-primary" onclick="validateUpdate()">
+        Confirm Changes
+      </button>
+      <!-- Back button -->
+      <a href="/managerViewTrainers" class="btn btn-secondary btn-cancel"
+        >Back</a
+      >
     </form>
 
-        <!-- Separate form for removing the trainer -->
-        <form id="removeTrainerForm" th:action="@{/removeTrainer/{id}(id=${trainer.id})}" method="post">
-            <button type="button" class="btn btn-danger" onclick="confirmRemove()">Remove Trainer</button>
-        </form>
-
-
+    <!-- Separate form for removing the trainer -->
+    <form
+      id="removeTrainerForm"
+      th:action="@{/removeTrainer/{id}(id=${trainer.id})}"
+      method="post"
+    >
+      <button type="button" class="btn btn-danger" onclick="confirmRemove()">
+        Remove Trainer
+      </button>
+    </form>
 
     <script>
-        function validateUpdate() {
-            event.preventDefault();
-            var rank = document.getElementById("rank").value;
-            if (rank < 3 || rank > 5) {
-                alert("Rank must be between 3 and 5.");
-                return false;
-            }
-            if (confirm("Are you sure you want to update this trainer?")) {
-                event.target.form.submit();
-            }
+      function validateUpdate() {
+        event.preventDefault();
+        var rank = document.getElementById("rank").value;
+        if (rank < 3 || rank > 5) {
+          alert("Rank must be between 3 and 5.");
+          return false;
         }
+        if (confirm("Are you sure you want to update this trainer?")) {
+          event.target.form.submit();
+        }
+      }
 
-        function confirmRemove(event) {
-            if (confirm("Are you sure you want to remove this trainer?")) {
-                document.getElementById('removeTrainerForm').submit();
-            }
+      function confirmRemove(event) {
+        if (confirm("Are you sure you want to remove this trainer?")) {
+          document.getElementById("removeTrainerForm").submit();
         }
+      }
     </script>
-</body>
+  </body>
 </html>

@@ -1,7 +1,5 @@
 package com.fitness.fitness.model;
 
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashSet;
@@ -24,7 +22,7 @@ public class FitnessClass {
     private String classDescription;
     private String classDuration;
     private String image;
-    
+
     @OneToMany(mappedBy = "fitnessClass", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Appointment> appointments;
 
@@ -36,8 +34,8 @@ public class FitnessClass {
 
     }
 
-    public FitnessClass(){
-        
+    public FitnessClass() {
+
     }
 
     public int getClassId() {
@@ -72,11 +70,11 @@ public class FitnessClass {
         this.classDuration = classDuration;
     }
 
-    public String getImage(){
+    public String getImage() {
         return image;
     }
 
-    public void setImage(String image){
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -85,4 +83,3 @@ public class FitnessClass {
         throw new UnsupportedOperationException("Unimplemented method 'getFitnessClassId'");
     }
 }
-

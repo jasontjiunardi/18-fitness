@@ -21,9 +21,9 @@ import jakarta.persistence.ManyToOne;
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "appointment_id") 
+    @Column(name = "appointment_id")
     private int appointmentId;
-    
+
     public Appointment() {
     }
 
@@ -31,20 +31,20 @@ public class Appointment {
     private LocalDateTime date;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "class_Id", nullable = false )  // Assuming the column name in Appointment table
+    @JoinColumn(name = "class_Id", nullable = false) // Assuming the column name in Appointment table
     private FitnessClass fitnessClass;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="trainer_Id" ,nullable = false )
+    @JoinColumn(name = "trainer_Id", nullable = false)
     private Trainer trainer;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="user_Id" ,nullable = false )
+    @JoinColumn(name = "user_Id", nullable = false)
     private User user;
 
     private String status;
 
-    public Appointment( LocalDateTime date, String status) {
+    public Appointment(LocalDateTime date, String status) {
         this.date = date;
         this.status = status;
 
@@ -54,11 +54,9 @@ public class Appointment {
         return fitnessClass;
     }
 
-
     public void setFitnessClass(FitnessClass fitnessClass) {
         this.fitnessClass = fitnessClass;
     }
-
 
     public Trainer getTrainer() {
         return trainer;
@@ -68,11 +66,9 @@ public class Appointment {
         this.trainer = trainer;
     }
 
-
     public User getUser() {
         return user;
     }
-
 
     public void setUser(User user) {
         this.user = user;
@@ -82,11 +78,9 @@ public class Appointment {
         return status;
     }
 
-
     public void setStatus(String status) {
         this.status = status;
     }
-
 
     public LocalDateTime getDate() {
         return date;

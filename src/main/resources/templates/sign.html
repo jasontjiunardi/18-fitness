@@ -1,87 +1,89 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #ffffff; /* White background */
-            color: #4a154b; /* Purple text color */
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff; /* White background */
+        color: #4a154b; /* Purple text color */
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
 
-        h1 {
-            font-size: 36px; /* Larger font size for heading */
-            color: #4a154b; /* Purple heading color */
-            text-align: center;
-            margin-bottom: 50px; /* Added margin to bottom */
-        }
+      h1 {
+        font-size: 36px; /* Larger font size for heading */
+        color: #4a154b; /* Purple heading color */
+        text-align: center;
+        margin-bottom: 50px; /* Added margin to bottom */
+      }
 
-        form {
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff; /* White background for form */
-        }
+      form {
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff; /* White background for form */
+      }
 
-        input[type="text"],
-        input[type="password"],
-        button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #4a154b; /* Purple border */
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
+      input[type="text"],
+      input[type="password"],
+      button {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #4a154b; /* Purple border */
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
 
-        button {
-            background-color: #4a154b; /* Purple button background */
-            color: #ffffff; /* White text color for button */
-            cursor: pointer;
-        }
+      button {
+        background-color: #4a154b; /* Purple button background */
+        color: #ffffff; /* White text color for button */
+        cursor: pointer;
+      }
 
-        button:hover {
-            background-color: #310b33; /* Darker purple on hover */
-        }
+      button:hover {
+        background-color: #310b33; /* Darker purple on hover */
+      }
 
-        .back-button {
-            text-decoration: underline; /* Underline for the button */
-        }
+      .back-button {
+        text-decoration: underline; /* Underline for the button */
+      }
 
-        a {
-            display: block;
-            text-align: right;
-            color: #4a154b; /* Purple link color */
-            text-decoration: none;
-            font-size: 14px;
-            margin-top: 10px;
-        }
+      a {
+        display: block;
+        text-align: right;
+        color: #4a154b; /* Purple link color */
+        text-decoration: none;
+        font-size: 14px;
+        margin-top: 10px;
+      }
 
-        a:hover {
-            text-decoration: underline; /* Underline on hover */
-        }
+      a:hover {
+        text-decoration: underline; /* Underline on hover */
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Login</h1>
     <form method="post" action="/user_signin">
-        Email: <input type="text" name="email" required><br />
-        Password: <input type="password" name="password" required><br />
-        <button type="submit">Login</button>
-        <button class="back-button" onclick="window.location.href='/first_page'">Back to First Page</button>
-        <a href="/forget_password">Forget password?</a>
-        <a href="/register_user">Dont have an account?</a>
+      Email: <input type="text" name="email" required /><br />
+      Password: <input type="password" name="password" required /><br />
+      <button type="submit">Login</button>
+      <button class="back-button" onclick="window.location.href='/first_page'">
+        Back to First Page
+      </button>
+      <a href="/forget_password">Forget password?</a>
+      <a href="/register_user">Dont have an account?</a>
     </form>
-</body>
+  </body>
 </html>

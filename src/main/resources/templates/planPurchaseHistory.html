@@ -1,107 +1,111 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Plan Purchase History</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    />
     <style>
-        body {
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-        }
-        .header {
-            background-color: #4a154b;
-            color: #fff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-        }
-        .header-center {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .header-button {
-            color: #fff;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        .header-button:hover {
-            background-color: #310b33;
-        }
-        .table {
-            margin: 20px;
-            width: calc(100% - 40px);
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 8px;
-            border: 1px solid #ccc;
-            vertical-align: middle;
-        }
-        th {
-            background-color: #4a154b;
-            color: #fff;
-        }
-        .submit-button {
-            display: inline-block;
-            margin: 20px;
-            padding: 8px 16px;
-            background-color: #4a154b;
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        .submit-button:hover {
-            background-color: #310b33;
-        }
+      body {
+        margin: 0;
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+      }
+      .header {
+        background-color: #4a154b;
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+      }
+      .header-center {
+        font-size: 24px;
+        font-weight: bold;
+      }
+      .header-button {
+        color: #fff;
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+      .header-button:hover {
+        background-color: #310b33;
+      }
+      .table {
+        margin: 20px;
+        width: calc(100% - 40px);
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 8px;
+        border: 1px solid #ccc;
+        vertical-align: middle;
+      }
+      th {
+        background-color: #4a154b;
+        color: #fff;
+      }
+      .submit-button {
+        display: inline-block;
+        margin: 20px;
+        padding: 8px 16px;
+        background-color: #4a154b;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+      .submit-button:hover {
+        background-color: #310b33;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="header">
-        <a href="/home_page" class="header-button home-button">
-            <i class="fas fa-arrow-left"></i>
-        </a>
-        <div class="header-center">My Purchase History</div> 
+      <a href="/home_page" class="header-button home-button">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div class="header-center">My Purchase History</div>
     </div>
 
     <!-- Check if purchaseHistory is empty -->
     <th:block th:if="${purchaseHistory.empty}">
-        <p>No purchase history available.</p>
-        <div>
-            <a href="/home_page" class="submit-button">Back to Home</a>
-        </div>
+      <p>No purchase history available.</p>
+      <div>
+        <a href="/home_page" class="submit-button">Back to Home</a>
+      </div>
     </th:block>
     <!-- If purchaseHistory is not empty, display the table -->
     <th:block th:unless="${purchaseHistory.empty}">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Transaction ID</th>
-                    <th>Payment Method</th>
-                    <th>Plan Type</th>
-                    <th>Price</th>
-                    <th>Purchased Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Iterate through the purchase history -->
-                <tr th:each="transaction : ${purchaseHistory}">
-                    <td th:text="${transaction.transactionId}"></td>
-                    <td th:text="${transaction.paymentMethod}"></td>
-                    <td th:text="${transaction.planType}"></td>
-                    <td th:text="${transaction.price}"></td>
-                    <td th:text="${transaction.purchasedDate}"></td>
-                </tr>
-            </tbody>
-        </table>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Transaction ID</th>
+            <th>Payment Method</th>
+            <th>Plan Type</th>
+            <th>Price</th>
+            <th>Purchased Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Iterate through the purchase history -->
+          <tr th:each="transaction : ${purchaseHistory}">
+            <td th:text="${transaction.transactionId}"></td>
+            <td th:text="${transaction.paymentMethod}"></td>
+            <td th:text="${transaction.planType}"></td>
+            <td th:text="${transaction.price}"></td>
+            <td th:text="${transaction.purchasedDate}"></td>
+          </tr>
+        </tbody>
+      </table>
     </th:block>
-</body>
+  </body>
 </html>

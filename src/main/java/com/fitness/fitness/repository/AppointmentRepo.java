@@ -14,21 +14,21 @@ import com.fitness.fitness.model.Trainer;
 
 import jakarta.transaction.Transactional;
 
-
 @Repository
 public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
     List<Appointment> findByTrainer(Trainer trainer);
+
     Appointment getAppointmentByAppointmentId(int appointmentId);
-    
+
     @Query("SELECT a.appointmentId FROM Appointment a WHERE a.user.id = :userId")
     List<Integer> findAppointmentIdsByUserId(@Param("userId") int userId);
-    
+
     @Query("SELECT t.name FROM Trainer t WHERE t.id = (SELECT a.trainer.id FROM Appointment a WHERE a.appointmentId = :appointmentId)")
     String findTrainerNameByAppointmentId(@Param("appointmentId") int appointmentId);
-    
+
     @Query("SELECT f.className FROM Appointment a JOIN a.fitnessClass f WHERE a.appointmentId = :appointmentId")
     String findClassNameByAppointmentId(@Param("appointmentId") int appointmentId);
-    
+
     @Query("SELECT a.date FROM Appointment a WHERE a.appointmentId = :appointmentId")
     LocalDateTime findDateTimeByAppointmentId(@Param("appointmentId") int appointmentId);
 
@@ -38,27 +38,22 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
     @Transactional
     @Modifying
     @Query("UPDATE Appointment a SET a.status = 'inactive' WHERE a.date < :currentDateTime")
-    int updateStatusForPastAppointments(@Param("currentDateTime") LocalDateTime currentDateTime); 
+    int updateStatusForPastAppointments(@Param("currentDateTime") LocalDateTime currentDateTime);
 
     @Modifying
     @Transactional
     @Query("DELETE FROM Appointment a  WHERE a.user.id = :id")
     void deleteAppointmentByUserId(@Param("id") int id);
-    
 
     @Query("SELECT a FROM Appointment a " +
-    "WHERE a.user.userId = :userId " +
-    "AND (:classId IS NULL OR a.fitnessClass.classId = :classId) " +
-    "AND (:trainerId IS NULL OR a.trainer.id = :trainerId) " +
-    "AND a.date >= :startOfDay AND a.date <= :endOfDay")
+            "WHERE a.user.userId = :userId " +
+            "AND (:classId IS NULL OR a.fitnessClass.classId = :classId) " +
+            "AND (:trainerId IS NULL OR a.trainer.id = :trainerId) " +
+            "AND a.date >= :startOfDay AND a.date <= :endOfDay")
     List<Appointment> findAppointmentsByFilters(
-    @Param("userId") int userId,
-    @Param("classId") Integer classId,
-    @Param("trainerId") Integer trainerId,
-    @Param("startOfDay") LocalDateTime startOfDay,
-    @Param("endOfDay") LocalDateTime endOfDay);
+            @Param("userId") int userId,
+            @Param("classId") Integer classId,
+            @Param("trainerId") Integer trainerId,
+            @Param("startOfDay") LocalDateTime startOfDay,
+            @Param("endOfDay") LocalDateTime endOfDay);
 }
-    
-    
-
-

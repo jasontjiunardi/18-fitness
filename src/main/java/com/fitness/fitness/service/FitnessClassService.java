@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class FitnessClassService {
 
@@ -26,15 +25,10 @@ public class FitnessClassService {
     public FitnessClass getClassByName(String className) {
         return fitnessClassRepository.findByClassName(className);
     }
+
     public FitnessClass getClassById(int classId) {
         return fitnessClassRepository.findById(classId);
     }
 
-
 }
-    // pblic FitnessClass getFitnessClassById(int id) {
-    //     return fitnessClassRepository.findById(id).orElse(null);
-    // }
-
-
 
