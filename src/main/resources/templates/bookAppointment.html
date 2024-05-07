@@ -95,24 +95,7 @@
                         th:selected="${class.classId == classId}"></option>
             </select>
         </div>
-    <form
-      th:action="@{/book_appointment}"
-      th:object="${appointment}"
-      method="post"
-    >
-      <!-- Class Selection Dropdown -->
-      <div>
-        <label for="classId">Class:</label>
-        <select id="classId" name="classId" required>
-          <option value="">Select Class</option>
-          <option
-            th:each="class : ${classList}"
-            th:value="${class.classId}"
-            th:text="${class.className}"
-            th:selected="${class.classId == classId}"
-          ></option>
-        </select>
-      </div>
+
 
       <!-- Trainer Selection Dropdown -->
       <div>
