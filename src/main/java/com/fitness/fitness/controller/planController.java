@@ -119,7 +119,7 @@ public class planController {
             User loggedInUser = (User) session.getAttribute("user");
             if (loggedInUser == null) {
                 // Handle the case where user is not logged in
-                return "redirect:/login";
+                return "redirect:/user_signin";
             }
 
             PaymentTransaction paymentTransaction = new PaymentTransaction();

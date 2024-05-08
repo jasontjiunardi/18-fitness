@@ -245,7 +245,7 @@ public String bookAppointment(@ModelAttribute Appointment appointment,
     // Save the appointment to the database
     appointmentService.saveAppointment(appointment);
 
-    return "redirect:/userViewAppointments"; // Redirect to a confirmation or listing page
+    return "redirect:/userAppointment"; // Redirect to a confirmation or listing page
 }
 
 
@@ -348,7 +348,7 @@ public String bookAppointment(@ModelAttribute Appointment appointment,
         // Save the appointment to the database
         appointmentService.updateAppointment(appointment);
     
-        return "redirect:/userViewAppointments"; // Redirect to a confirmation or listing page
+        return "redirect:/userAppointment"; // Redirect to a confirmation or listing page
     }
     
 
@@ -366,7 +366,7 @@ public String bookAppointment(@ModelAttribute Appointment appointment,
         }
         
         // Redirect to the user's appointment page
-        return "redirect:/userViewAppointments";
+        return "redirect:/userAppointment";
     }
 
 

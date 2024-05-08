@@ -131,7 +131,7 @@ public class UserController {
         if (existingUser != null) {
             model.addAttribute("user", existingUser);
         } else {
-            return "error";
+            return "errorStatus";
         }
         return "editProfile";
     }
@@ -182,7 +182,7 @@ public class UserController {
             model.addAttribute("user", u);
             return "home";
         } else {
-            return "login";
+            return "redirect:/user_signin";
         }
     }
 

@@ -89,8 +89,9 @@
           class="fitness-class"
         >
           <!-- Dynamically generate image URL based on classId -->
-          <img
-            th:src="@{'images/fitnessclass' + ${fitnessClass.classId} + '.jpg'}"
+
+          <img 
+            th:src="${fitnessClass.photo}"
             alt="Class Image"
             style="width: 400px; height: 250px; margin-bottom: 10px"
           />

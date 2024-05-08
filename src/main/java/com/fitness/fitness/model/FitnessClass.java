@@ -21,16 +21,16 @@ public class FitnessClass {
     private String className;
     private String classDescription;
     private String classDuration;
-    private String image;
+    private String photo;
 
     @OneToMany(mappedBy = "fitnessClass", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Appointment> appointments;
 
-    public FitnessClass(String className, String classDescription, String classDuration, String image) {
+    public FitnessClass(String className, String classDescription, String classDuration, String photo) {
         this.className = className;
         this.classDescription = classDescription;
         this.classDuration = classDuration;
-        this.image = image;
+        this.photo = photo;
 
     }
 
@@ -70,12 +70,12 @@ public class FitnessClass {
         this.classDuration = classDuration;
     }
 
-    public String getImage() {
-        return image;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public void getFitnessClassId(int classId2) {

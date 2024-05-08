@@ -76,7 +76,7 @@ public class ReviewController {
 
         Trainer trainer = trainerService.getTrainerById(trainerId); // Make sure the trainer exists
         if (trainer == null) {
-            return "redirect:/errorPage"; // Or handle this more gracefully
+            return "errorStatus"; 
         }
 
         review.setUser(user); // Ensure user is set from session if not already
@@ -105,7 +105,7 @@ public class ReviewController {
         } else {
             // If review doesn't exist or doesn't belong to the logged-in user, handle error
             model.addAttribute("error", "You are not authorized to remove this review.");
-            return "errorPage";
+            return "errorStatus";
         }
     }
 

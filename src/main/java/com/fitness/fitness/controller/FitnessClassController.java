@@ -30,7 +30,11 @@ public class FitnessClassController {
         User retrievedUser = userService.getUserByEmail(user.getEmail());
         model.addAttribute("retrievedUser", retrievedUser);
         List<FitnessClass> allClasses = fitnessClassService.getAllClasses();
+        for (FitnessClass fitnessClass : allClasses) {
+            System.out.println(fitnessClass.getPhoto());
+        }
         model.addAttribute("allClasses", allClasses);
+
         return "fitnessclasses"; // Assuming "allfitnessclasses" is the name of your HTML template
     }
 }
