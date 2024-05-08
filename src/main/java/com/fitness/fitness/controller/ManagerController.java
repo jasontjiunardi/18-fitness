@@ -478,4 +478,6 @@ public class ManagerController {
         return "redirect:/managerViewTrainers";
     }
 
+    
+
 }
