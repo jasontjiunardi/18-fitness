@@ -40,7 +40,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/first_page")
+    @GetMapping("/")
     public String firstPage(Model model) {
         return "firstPage";
     }
