@@ -42,7 +42,7 @@ public class UserController {
 
     @GetMapping("/first_page")
     public String firstPage(Model model) {
-        return "firstpage";
+        return "firstPage";
     }
 
     @GetMapping("/register_user")
@@ -70,7 +70,7 @@ public class UserController {
         User retrievedUser = userService.getUserByEmail(user.getEmail());
         Integer recoveryCode = retrievedUser.getRecoveryCode();
         model.addAttribute("recoveryCode", recoveryCode);
-        return "recoverycode";
+        return "recoveryCode";
     }
 
     @PostMapping("/user_signin")

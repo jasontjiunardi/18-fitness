@@ -110,7 +110,7 @@ public class AppointmentController {
         userId, classId, trainerId, startDateTime, endDateTime);
         model.addAttribute("appointments", filteredAppointments);
 
-        return "filterappointments";
+        return "filterAppointments";
                                     }
     
     
@@ -245,7 +245,7 @@ public String bookAppointment(@ModelAttribute Appointment appointment,
     // Save the appointment to the database
     appointmentService.saveAppointment(appointment);
 
-    return "redirect:/userAppointment"; // Redirect to a confirmation or listing page
+    return "redirect:/userViewAppointments"; // Redirect to a confirmation or listing page
 }
 
 
@@ -348,7 +348,7 @@ public String bookAppointment(@ModelAttribute Appointment appointment,
         // Save the appointment to the database
         appointmentService.updateAppointment(appointment);
     
-        return "redirect:/userAppointment"; // Redirect to a confirmation or listing page
+        return "redirect:/userViewAppointments"; // Redirect to a confirmation or listing page
     }
     
 
@@ -366,7 +366,7 @@ public String bookAppointment(@ModelAttribute Appointment appointment,
         }
         
         // Redirect to the user's appointment page
-        return "redirect:/userAppointment";
+        return "redirect:/userViewAppointments";
     }
 
 
