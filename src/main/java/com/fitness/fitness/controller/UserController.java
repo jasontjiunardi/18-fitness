@@ -188,8 +188,8 @@ public class UserController {
 
     @GetMapping("/choose_profile_picture")
     public String chooseProfilePicture(Model model) {
-        model.addAttribute("avatar2", "avatar2.jpg");
-        model.addAttribute("avatar3", "avatar3.jpg");
+        model.addAttribute("avatar2", "https://tse3.mm.bing.net/th?id=OIP.wmvvjFLDEqM52RZJ1EQdwAHaIE&pid=Api&P=0&h=220");
+        model.addAttribute("avatar3", "https://tse2.mm.bing.net/th?id=OIP.Rb9OlFCyhJnF730UEbgRcAHaHa&pid=Api&P=0&h=220");
         return "profilePicture";
     }
 
@@ -208,7 +208,7 @@ public class UserController {
     public String removeProfilePicture(HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user != null) {
-            user.setPhoto("avatar1.jpg");
+            user.setPhoto("https://tse2.mm.bing.net/th?id=OIP.PoS7waY4-VeqgNuBSxVUogAAAA&pid=Api&P=0&h=220");
             userService.saveUserProfile(user);
             session.setAttribute("user", user);
         }

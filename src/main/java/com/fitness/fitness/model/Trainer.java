@@ -24,7 +24,7 @@ public class Trainer {
     private String gender;
     private String dob;
     private String email;
-    private String photo = "defaultTrainer.png";
+    private String photo;
     private String phone;
     @Column(name = "`rank`")
     private int rank; // 3 for 3 star. 4 for 4 star, 5 for 5 star
@@ -169,6 +169,9 @@ public class Trainer {
     }
 
     public String getPhoto() {
+        if (photo == null) {
+            photo ="https://tse2.mm.bing.net/th?id=OIP.PoS7waY4-VeqgNuBSxVUogAAAA&pid=Api&P=0&h=220";
+        }
         return photo;
     }
 

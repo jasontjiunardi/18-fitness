@@ -70,10 +70,9 @@
         <div class="wrapper">
         <div th:each="trainer : ${trainers}" >
             <div class="card" th:classappend="${planType} + (iterStat.even ? ' even' : ' odd')">
-              <div class="card-content">
                 <div class="imgbox">
                   <div class="img">
-                  <img th:src="@{'images/' + ${trainer.photo}}" alt="Trainer image" />
+                  <img th:src="${trainer.photo != null ? trainer.photo : 'https://tse2.mm.bing.net/th?id=OIP.PoS7waY4-VeqgNuBSxVUogAAAA&pid=Api&P=0&h=220'}" alt="Trainer image" />
                   </div>
                 </div>
                 <h3 th:text="${trainer.name}">Trainer name</h3>
@@ -83,7 +82,7 @@
                 </p>  
                 </div>
                 <a th:href="@{'/trainer_profile?id=' + ${trainer.id}}"> View trainer profile</a>
-              </div>
+
             </div>
           <br>
         </div>

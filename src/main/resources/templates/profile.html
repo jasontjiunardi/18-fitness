@@ -282,7 +282,7 @@
       <h1>User Profile</h1>
       <div class="profile-container">
         <div class="profile-picture-box">
-          <img th:src="@{'/images/' + ${user.photo}}" alt="User Image" />
+          <img th:src="${user.photo}" alt="User Image" />
         </div>
         <div class="user-details">
           <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>

@@ -33,7 +33,7 @@ public class User {
     private LocalDate activeDate = null;
     private int recoveryCode;
     private String cardNumber;
-    private String photo = "defaultUser.jpeg";
+    private String photo;
     private String gender;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
@@ -169,6 +169,9 @@ public class User {
     }
 
     public String getPhoto() {
+        if (photo == null) {
+            photo ="https://tse2.mm.bing.net/th?id=OIP.PoS7waY4-VeqgNuBSxVUogAAAA&pid=Api&P=0&h=220";
+        }
         return photo;
     }
 

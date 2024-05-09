@@ -11,7 +11,7 @@
 
     <div class="profile-container">
       <div class="profile-picture-box">
-        <img th:src="@{'/images/' + ${user.photo}}" alt="User Image" />
+        <img th:src="${user.photo}" alt="User Image" />
       </div>
       <a href="/choose_profile_picture" class="button-link"
         >Change Profile Picture</a

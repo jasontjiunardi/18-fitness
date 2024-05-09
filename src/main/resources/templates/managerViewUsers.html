@@ -241,7 +241,7 @@
             <td th:text="${User.activeDate}"></td>
             <td>
               <img
-                th:src="@{'images/' + ${User.photo}}"
+                th:src="${User.photo}"
                 alt="User image"
                 class="User-img"
               />

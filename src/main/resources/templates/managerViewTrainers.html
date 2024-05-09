@@ -343,7 +343,8 @@
           <tr th:each="trainer : ${trainers}">
             <td>
               <img
-                th:src="@{'images/' + ${trainer.photo}}"
+              
+                th:src="${trainer.photo}"
                 alt="Trainer image"
                 class="trainer-img"
               />
