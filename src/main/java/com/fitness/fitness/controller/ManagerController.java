@@ -333,18 +333,33 @@ public class ManagerController {
     }
 
     @PostMapping("/removeUser/{email}")
-    public String removeUser(@PathVariable("email") String email) {
+    public ResponseEntity<String> removeUser(@PathVariable("email") String email) {
+        try {
+            User u = userService.getUserByEmail(email);
+            String name = u.getName();
+            userService.removeUser(email);
+            return ResponseEntity.ok("{\"message\": \"Successfully deleted customer " + name + "\"}");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body("{\"message\": \"Failed to send email due to an error\"}");
+        }
 
-        userService.removeUser(email);
-        return "redirect:/managerViewUsers";
     }
 
-    @PostMapping("sendNotification/{email}")
-    public String sendNotification(@PathVariable("email") String email) {
-        // Send notification to the user
-
-        return "redirect:/managerViewUsers";
+    @PostMapping("/send-email/{email}")
+    public ResponseEntity<String> sendEmail(@PathVariable("email") String email) {
+        try {
+            User user = userService.getUserByEmail(email);
+            emailService.sendMembershipReminderEmail(email, user.getName(), user.getActiveDate());
+            return ResponseEntity.ok("{\"message\": \"Email sent successfully to " + email + "\"}");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("{\"message\": \"Failed to send email due to an error\"}");
+        }
     }
+
 
     // without session for now
     @GetMapping("/manager_appointment")
@@ -381,18 +396,6 @@ public class ManagerController {
         return "redirect:/manager_view_plans";
     }
 
-    @PostMapping("/send-email/{email}")
-    public ResponseEntity<String> sendEmail(@PathVariable("email") String email) {
-        try {
-            User user = userService.getUserByEmail(email);
-            emailService.sendMembershipReminderEmail(email, user.getName(), user.getActiveDate());
-            return ResponseEntity.ok("{\"message\": \"Email sent successfully to " + email + "\"}");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("{\"message\": \"Failed to send email due to an error\"}");
-        }
-    }
 
     @GetMapping("/manager_add_appointment")
     public String showAddAppointmentForm(@RequestParam(name = "classId", required = false) Integer classId,
