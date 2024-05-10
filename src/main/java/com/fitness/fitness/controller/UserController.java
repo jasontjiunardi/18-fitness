@@ -264,7 +264,7 @@ public class UserController {
     public String pauseAccount(Model model, @SessionAttribute("user") User user) {
         User existingUser = userService.getUserByEmail(user.getEmail());
 
-        if ("paused".equals(existingUser.getStatus())) {
+        if ("Paused".equals(existingUser.getStatus())) {
             // User already paused, no need to create new PauseInfo
             return "redirect:/profile?notification=Your account is already paused.";
         }
@@ -275,7 +275,7 @@ public class UserController {
             // Update existing PauseInfo
             existingPauseInfo.setPauseStartDate(LocalDate.now());
             existingPauseInfo.setPauseEndDate(LocalDate.now().plusDays(30));
-            existingUser.setStatus("paused");
+            existingUser.setStatus("Paused");
             userService.saveUser(existingUser);
         } else {
             // Create new PauseInfo
@@ -285,7 +285,7 @@ public class UserController {
             pauseInfo.setUser(existingUser);
             pauseInfo.setStatus(existingUser.getStatus());
             existingUser.setPauseInfo(pauseInfo);
-            existingUser.setStatus("paused");
+            existingUser.setStatus("Paused");
             userService.saveUser(existingUser);
         }
 
@@ -296,7 +296,7 @@ public class UserController {
     public String unpauseAccount(Model model, @SessionAttribute("user") User user) {
         User existingUser = userService.getUserByEmail(user.getEmail());
 
-        if ("paused".equals(existingUser.getStatus())) {
+        if ("Paused".equals(existingUser.getStatus())) {
             PauseInfo pauseInfo = existingUser.getPauseInfo();
             LocalDate pauseStartDate = pauseInfo.getPauseStartDate();
             LocalDate today = LocalDate.now();
