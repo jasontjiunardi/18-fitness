@@ -344,8 +344,8 @@
             <td>
               <img
               
-                th:src="${trainer.photo}"
-                alt="Trainer image"
+              th:src="${trainer.photo.contains('http') ? trainer.photo : 'images/' + trainer.photo}"
+              alt="Trainer Photo"
                 class="trainer-img"
               />
             </td>

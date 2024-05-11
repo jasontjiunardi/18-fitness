@@ -11,7 +11,8 @@
 
     <div class="profile-container">
       <div class="profile-picture-box">
-        <img th:src="${user.photo}" alt="User Image" />
+        <img th:src="${user.photo.contains('http') ? user.photo : 'images/' + user.photo}"
+        alt="User Photo" />
       </div>
       <a href="/choose_profile_picture" class="button-link"
         >Change Profile Picture (please upload a file image less than 2 MB):</a
