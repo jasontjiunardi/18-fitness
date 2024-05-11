@@ -255,8 +255,9 @@
             <td th:text="${User.activeDate}"></td>
             <td>
               <img
-              th:src="${user.photo.contains('http') ? user.photo : 'images/' + user.photo}"
+              th:src="${User.photo.contains('http') ? User.photo : 'images/' + User.photo}"
               alt="User Photo"
+                class="User-img"
               />
             </td>
             <td>

@@ -73,8 +73,8 @@
                 <div class="imgbox">
                   <div class="img">
                   <img th:src="${trainer.photo.contains('http') ? trainer.photo : 'images/' + trainer.photo}"
-                  alt="Trainer Photo">
-                </div>
+                  alt="Trainer Photo"> />
+                  </div>
                 </div>
                 <h3 th:text="${trainer.name}">Trainer name</h3>
                 <p class="rank">Rank
