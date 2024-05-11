@@ -72,7 +72,8 @@
             <div class="card" th:classappend="${planType} + (iterStat.even ? ' even' : ' odd')">
                 <div class="imgbox">
                   <div class="img">
-                  <img th:src="${trainer.photo != null ? trainer.photo : 'https://tse2.mm.bing.net/th?id=OIP.PoS7waY4-VeqgNuBSxVUogAAAA&pid=Api&P=0&h=220'}" alt="Trainer image" />
+                  <img th:src="${trainer.photo.contains('http') ? trainer.photo : 'images/' + trainer.photo}"
+                  alt="Trainer Photo"> />
                   </div>
                 </div>
                 <h3 th:text="${trainer.name}">Trainer name</h3>

@@ -119,7 +119,8 @@
       </a>
     </div>
     <h1>Trainer's Profile</h1>
-    <img th:src="${trainer.photo != null ? trainer.photo : 'https://tse2.mm.bing.net/th?id=OIP.PoS7waY4-VeqgNuBSxVUogAAAA&pid=Api&P=0&h=220'}" alt="Trainer Image" />
+    <img th:src="${trainer.photo.contains('http') ? trainer.photo : 'images/' + trainer.photo}"
+    alt="Trainer Photo" />
     <h2 th:text="${trainer.name}">Trainer Name</h2>
     <h3>
       Trainer Rank:

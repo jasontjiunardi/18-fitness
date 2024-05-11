@@ -282,7 +282,8 @@
       <h1>User Profile</h1>
       <div class="profile-container">
         <div class="profile-picture-box">
-          <img th:src="${user.photo}" alt="User Image" />
+          <img th:src="${user.photo.contains('http') ? user.photo : 'images/' + user.photo}"
+          alt="User Photo" />
         </div>
         <div class="user-details">
           <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
@@ -372,7 +373,7 @@
           accountButton.textContent = "Pause Account";
           accountForm.action = "/pause_account";
           accountButton.disabled = false; // Enable the button
-        } else if (userStatus === "paused") {
+        } else if (userStatus === "Paused") {
           accountButton.textContent = "Unpause Account";
           accountForm.action = "/unpause_account";
           accountButton.disabled = false; // Enable the button

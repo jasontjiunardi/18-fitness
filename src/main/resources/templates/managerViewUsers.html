@@ -154,6 +154,17 @@
         padding-left: 40px;
         font-size: 16px;
       }
+      .refresh-btn {
+        background-color: #4a154b; /* Deep purple color for the refresh button */
+        color: white;
+        border-color: #4a154b;
+      }
+
+      .refresh-btn:hover,
+      .refresh-btn:focus {
+        background-color: #763087; /* Brighter purple for hover */
+        border-color: #763087;
+      }
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
@@ -208,6 +219,9 @@
     </script>
 
     <div class="container main-content">
+      <button onclick="refreshTable()" class="btn btn-secondary refresh-btn">
+        <i class="fas fa-sync-alt"></i> Refresh
+      </button>
       <!-- Added main-content class -->
       <h1 class="mb-4"><b>Users List</b></h1>
       <!-- Added margin-bottom for separation -->
@@ -241,8 +255,8 @@
             <td th:text="${User.activeDate}"></td>
             <td>
               <img
-                th:src="${User.photo}"
-                alt="User image"
+              th:src="${User.photo.contains('http') ? User.photo : 'images/' + User.photo}"
+              alt="User Photo"
                 class="User-img"
               />
             </td>
@@ -266,7 +280,7 @@
                 <button
                   type="button"
                   class="btn btn-danger"
-                  onclick="confirmRemove()"
+                  th:attr="onclick='confirmRemove(\'' + ${User.email} + '\')'"
                 >
                   Remove User
                 </button>
@@ -277,6 +291,9 @@
       </table>
     </div>
     <script>
+      function refreshTable() {
+        location.reload();
+      }
       function sortTable(n, type) {
         var table,
           rows,
@@ -338,8 +355,8 @@
             "Are you sure you want to send a marketing notification to this user?"
           )
         ) {
-          fetch("/send-email/" + email, { method: "POST" })
-            .then((response) => response.json()) // assuming you're expecting a JSON response
+          fetch("/sendNotification/" + email, { method: "POST" })
+            .then((response) => response.json()) 
             .then((data) => alert(data.message))
             .catch((error) => {
               console.error("Error:", error);
@@ -350,10 +367,20 @@
         }
       }
 
-      function confirmRemove() {
-        if (confirm("Are you sure you want to remove this customer?")) {
-          document.getElementById("removeUserForm").submit();
-        }
+      function confirmRemove(email) {
+        if (
+          confirm("Are you sure you want to remove this customer?")) {
+            fetch("/removeUser/" + email, { method: "POST" })
+              .then((response) => response.json())
+              .then((data) => {
+                alert(data.message);
+                location.reload();
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                alert("Failed to remove user. Error: " + error);
+              });
+        } else alert("Action cancelled");
       }
     </script>
   </body>
