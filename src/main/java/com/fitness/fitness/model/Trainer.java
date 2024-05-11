@@ -33,7 +33,7 @@ public class Trainer {
     public Trainer() {
     }
 
-    @ManyToMany(mappedBy = "trainers", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "trainers", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private Set<Plan> plans = new HashSet<>();
 
     // Getter and setter for plans

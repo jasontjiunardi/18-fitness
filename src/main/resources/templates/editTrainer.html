@@ -128,6 +128,14 @@
         />
       </div>
       <div class="form-group">
+        <label for="gender">Gender: <span style="color: red">*</span></label>
+        <select id="gender" class="form-control" th:field="*{gender}" required>
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </div>
+      <div class="form-group">
         <label for="dob">Date of Birth:</label>
         <input
           type="date"
