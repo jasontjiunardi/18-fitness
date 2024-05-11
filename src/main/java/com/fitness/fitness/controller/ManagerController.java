@@ -426,30 +426,43 @@ public class ManagerController {
 
     @PostMapping("/manager_add_appointment")
     public String addAppointment(@ModelAttribute Appointment appointment,
-            @RequestParam("customerEmail") int userId,
-            @RequestParam("classId") int classId,
-            @RequestParam("trainerId") int trainerId,
-            @RequestParam("datetime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime datetime,
-            Model model) {
+        @RequestParam("customerEmail") int userId,
+        @RequestParam("classId") int classId,
+        @RequestParam("trainerId") int trainerId,
+        @RequestParam("datetime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime datetime,
+        Model model, HttpSession session) {
 
         // Fetch the related FitnessClass and Trainer objects based on the IDs provided
         FitnessClass fitnessClass = fitnessClassService.getClassById(classId);
         Trainer trainer = trainerService.getTrainerById(trainerId);
         User user = userService.getUserById(userId);
 
+        // Validate the selected datetime
+        LocalDateTime now = LocalDateTime.now();
+        if (datetime.isBefore(now.plusHours(1)) && datetime.toLocalDate().isEqual(now.toLocalDate())) {
+            // Add error message and return to the form
+            model.addAttribute("errorMessage", "Please select a time at least one hour ahead of the current time.");
+            // Re-populate form data
+            model.addAttribute("appointment", appointment);
+            List<FitnessClass> classList = fitnessClassService.getAllClasses();
+            List<User> userList = userService.getAllUsers();
+            List<Trainer> trainerList = trainerService.getAllTrainers();
+            User existingUser = userService.getUserByEmail(user.getEmail());
+
+            model.addAttribute("classList", classList);
+            model.addAttribute("userList", userList);
+            model.addAttribute("trainerList", trainerList);
+            model.addAttribute("user", existingUser);
+            model.addAttribute("trainer", trainer);
+            model.addAttribute("manager", session.getAttribute("manager"));
+            return "manager-add-appointment";
+        }
+
         // Set the fetched entities to the appointment
         appointment.setFitnessClass(fitnessClass);
         appointment.setTrainer(trainer);
-
-        // Set the user obtained from the form submission
-        User retrivedUser = userService.getUserByEmail(user.getEmail());
-        appointment.setUser(retrivedUser);
         appointment.setUser(user);
-
-        // Set the date and time for the appointment
         appointment.setDate(datetime);
-
-        // Set the status of the appointment to "active"
         appointment.setStatus("active");
 
         // Save the appointment to the database
